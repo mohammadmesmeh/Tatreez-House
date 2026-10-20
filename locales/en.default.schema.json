@@ -1280,6 +1280,23 @@
             "label": "Drawer"
           }
         },
+        "mega_feature": {
+          "content": "Mega menu feature",
+          "info": "An image card shown as the last column of one mega menu. Requires the mega menu type on desktop."
+        },
+        "mega_feature_menu_handle": {
+          "label": "Show in menu item",
+          "info": "Handle of the top-level menu item, for example shop."
+        },
+        "mega_feature_image": {
+          "label": "Image"
+        },
+        "mega_feature_heading": {
+          "label": "Heading"
+        },
+        "mega_feature_link": {
+          "label": "Link"
+        },
         "show_line_separator": {
           "label": "Separator line"
         },

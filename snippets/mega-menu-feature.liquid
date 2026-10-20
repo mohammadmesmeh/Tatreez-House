@@ -1,0 +1,51 @@
+{% doc %}
+  Featured image card shown as the last column of one mega menu (for example "Shop").
+  Content comes from the header section settings, so the merchant chooses the image, heading,
+  link and which top-level menu item shows it. Renders nothing until an image or heading is set.
+
+  @param {object} settings - The header section settings (section.settings). Required.
+  @param {string} link_handle - Handle of the top-level menu link being rendered. Required.
+
+  @example
+  {% render 'mega-menu-feature', settings: section.settings, link_handle: link.handle %}
+{% enddoc %}
+{%- liquid
+  assign feature_for = settings.mega_feature_menu_handle | handleize
+  assign feature_alt = settings.mega_feature_image.alt | default: ''
+  assign show_feature = false
+  if feature_for != blank and feature_for == link_handle
+    if settings.mega_feature_image != blank or settings.mega_feature_heading != blank
+      assign show_feature = true
+    endif
+  endif
+-%}
+{%- if show_feature -%}
+  <li class="mega-menu__feature">
+    <div class="mega-feature">
+      {%- if settings.mega_feature_image != blank -%}
+        <div class="mega-feature__media">
+          {{
+            settings.mega_feature_image
+            | image_url: width: 720
+            | image_tag:
+              loading: 'lazy',
+              sizes: '(min-width: 990px) 24vw, 100vw',
+              widths: '360, 540, 720',
+              alt: feature_alt
+          }}
+        </div>
+      {%- endif -%}
+      {%- if settings.mega_feature_heading != blank -%}
+        <p class="mega-feature__heading h4">
+          {%- if settings.mega_feature_link != blank -%}
+            <a href="{{ settings.mega_feature_link }}" class="mega-feature__link th-link">
+              {{- settings.mega_feature_heading | escape -}}
+            </a>
+          {%- else -%}
+            {{- settings.mega_feature_heading | escape -}}
+          {%- endif -%}
+        </p>
+      {%- endif -%}
+    </div>
+  </li>
+{%- endif -%}

@@ -68,6 +68,7 @@
                       {%- endif -%}
                     </li>
                   {%- endfor -%}
+                  {% render 'mega-menu-feature', settings: section.settings, link_handle: link.handle %}
                 </ul>
               </div>
             </details>

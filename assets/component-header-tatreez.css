@@ -1,0 +1,171 @@
+/*
+  component-header-tatreez.css — header, mega menu, mobile drawer and announcement bar refinements
+  on top of Dawn (docs/DESIGN_SYSTEM.md). Loaded by sections/header.liquid.
+*/
+
+/* Dawn's inline header styles use physical left/right; restate them logically for RTL. */
+header-drawer {
+  margin-left: 0;
+  margin-inline-start: -1.2rem;
+}
+
+summary.list-menu__item {
+  padding-right: 1.2rem;
+  padding-inline-end: 2.7rem;
+}
+
+/* ---------------------------------------------------------------------------
+   Logo text and primary navigation
+*/
+.header__heading-link .h2 {
+  font-family: var(--font-heading-family);
+  font-size: calc(var(--font-heading-scale) * 2.6rem);
+  font-weight: 500;
+  letter-spacing: var(--th-tracking-heading);
+  color: rgb(var(--color-foreground));
+  transition: font-size var(--th-duration) var(--th-ease);
+}
+
+.header__inline-menu .header__menu-item {
+  min-block-size: var(--th-target);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: rgb(var(--color-foreground));
+}
+
+/* Stitched underline replaces Dawn's solid hover underline; the focus outline stays. */
+.header__inline-menu .header__menu-item > span {
+  background-image: repeating-linear-gradient(to right, currentColor 0 0.5rem, transparent 0.5rem 0.8rem);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 0.15rem;
+  padding-block-end: 0.3rem;
+  transition: background-size var(--th-duration) var(--th-ease);
+}
+
+[dir='rtl'] .header__inline-menu .header__menu-item > span {
+  background-position: 100% 100%;
+}
+
+.header__inline-menu .header__menu-item:hover > span,
+.header__inline-menu .header__menu-item:focus-visible > span,
+.header__inline-menu details[open] > .header__menu-item > span,
+.header__inline-menu .header__active-menu-item {
+  text-decoration: none;
+  background-size: 100% 0.15rem;
+}
+
+.header__icon {
+  min-block-size: var(--th-target);
+  min-inline-size: var(--th-target);
+}
+
+/* Sticky header shrinks once scrolled; the background stays the solid scheme colour. */
+.scrolled-past-header .header {
+  padding-block: 0.8rem;
+}
+
+.scrolled-past-header .header__heading-link .h2 {
+  font-size: calc(var(--font-heading-scale) * 2.2rem);
+}
+
+.header-wrapper {
+  background-color: rgb(var(--color-background));
+}
+
+/* ---------------------------------------------------------------------------
+   Mega menu: columns of collections plus a featured card
+*/
+.mega-menu__content {
+  border-block-end: var(--th-border-width) solid rgb(var(--th-border));
+}
+
+.mega-menu__link--level-2 {
+  font-family: var(--font-heading-family);
+  font-size: var(--th-step-h6);
+  font-weight: 500;
+  color: rgb(var(--color-foreground));
+}
+
+.mega-menu__list:has(.mega-menu__feature) {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(24rem, 1.25fr);
+}
+
+.mega-menu__feature {
+  grid-column: -2 / -1;
+  grid-row: 1 / span 3;
+}
+
+.mega-feature {
+  display: grid;
+  gap: var(--th-space-2);
+}
+
+.mega-feature__media {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: var(--th-radius);
+  background-color: rgb(var(--th-surface-alt));
+}
+
+.mega-feature__media img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.mega-feature__heading {
+  margin: 0;
+}
+
+.mega-feature__link {
+  color: rgb(var(--color-foreground));
+}
+
+/* ---------------------------------------------------------------------------
+   Mobile drawer: menus with children (e.g. Shop, Learn) lead as large groups; plain links
+   (e.g. Workshops, About) follow in a quieter group. Every row is a ≥ 56px tap target.
+*/
+.menu-drawer__menu > li > .menu-drawer__menu-item,
+.menu-drawer__menu > li > details > .menu-drawer__menu-item {
+  min-block-size: 5.6rem;
+  display: flex;
+  align-items: center;
+  font-family: var(--font-heading-family);
+  font-size: var(--th-step-h5);
+  font-weight: 500;
+}
+
+.menu-drawer__menu > li:has(details) + li:not(:has(details)) {
+  margin-block-start: var(--th-space-2);
+  padding-block-start: var(--th-space-2);
+  border-block-start: var(--th-border-width) solid rgb(var(--th-border));
+}
+
+.menu-drawer__menu > li:not(:has(details)) > .menu-drawer__menu-item {
+  font-family: var(--font-body-family);
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.menu-drawer__submenu .menu-drawer__menu-item {
+  min-block-size: 5.2rem;
+  display: flex;
+  align-items: center;
+}
+
+/* ---------------------------------------------------------------------------
+   Announcement bar pause control
+*/
+.announcement-bar__autoplay.slider-button {
+  min-inline-size: var(--th-target);
+  block-size: var(--th-target);
+  margin-inline-start: 0.4rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header__heading-link .h2,
+  .header__inline-menu .header__menu-item > span {
+    transition: none;
+  }
+}

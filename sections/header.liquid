@@ -15,6 +15,7 @@
 {%- if section.settings.menu_type_desktop == 'mega' -%}
   <link rel="stylesheet" href="{{ 'component-mega-menu.css' | asset_url }}" media="print" onload="this.media='all'">
 {%- endif -%}
+{{ 'component-header-tatreez.css' | asset_url | stylesheet_tag }}
 
 <style>
   header-drawer {
@@ -570,6 +571,33 @@
       ],
       "default": "dropdown",
       "label": "t:sections.header.settings.menu_type_desktop.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.header.settings.mega_feature.content",
+      "info": "t:sections.header.settings.mega_feature.info"
+    },
+    {
+      "type": "text",
+      "id": "mega_feature_menu_handle",
+      "default": "shop",
+      "label": "t:sections.header.settings.mega_feature_menu_handle.label",
+      "info": "t:sections.header.settings.mega_feature_menu_handle.info"
+    },
+    {
+      "type": "image_picker",
+      "id": "mega_feature_image",
+      "label": "t:sections.header.settings.mega_feature_image.label"
+    },
+    {
+      "type": "text",
+      "id": "mega_feature_heading",
+      "label": "t:sections.header.settings.mega_feature_heading.label"
+    },
+    {
+      "type": "url",
+      "id": "mega_feature_link",
+      "label": "t:sections.header.settings.mega_feature_link.label"
     },
     {
       "type": "select",
