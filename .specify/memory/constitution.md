@@ -1,33 +1,32 @@
 <!--
 Sync Impact Report
 ==================
-Version change: (unratified scaffold) -> 1.0.0
-Rationale: Initial adoption. The scaffold contained only template placeholders; no prior
-governance values existed to preserve, so this is the project's first ratified constitution.
+Version change: 1.0.0 -> 2.0.0 (MAJOR: phase-gate model redefined, principle VII replaced)
+Date: 2026-10-20 (milestone M0, branch 002-foundation)
 
 Modified principles:
-  - [PRINCIPLE_1_NAME] -> I. Shopify-Native Architecture (NON-NEGOTIABLE)
-  - [PRINCIPLE_2_NAME] -> II. Cultural Heritage & Brand Fidelity
-  - [PRINCIPLE_3_NAME] -> III. Font Verification Before Use
-  - [PRINCIPLE_4_NAME] -> IV. Bilingual Localization & Direction
-  - [PRINCIPLE_5_NAME] -> V. Accessibility, Responsiveness & Quality
-  - (added)             -> VI. Evidence-Based Verification
-  - (added)             -> VII. Incremental Milestone Workflow
-  - (added)             -> VIII. Git & Store Safety
+  - III. Font Verification Before Use -> III. Licensed, Verified Fonts
+        (records the decided system: Nunito / Zain / Amiri / Playwrite NZ Basic accent;
+         adds "licence must permit web embedding"; removes the provisional-font TODO)
+  - VII. Incremental Milestone Workflow -> VII. Milestone Loop (plan -> implement -> verify)
+        (per-phase owner-approval gates replaced by one loop per milestone; full spec-kit
+         flow only for complex features)
+  - VIII. Git & Store Safety: scoped commits on feature branches are allowed; push, publish
+        and store-affecting actions still need explicit approval.
 
-Added sections:
-  - Additional Constraints (was [SECTION_2_NAME])
-  - Development Phases, Quality Gates & Testing (was [SECTION_3_NAME])
+Unchanged: I, II, IV, V, VI (all store-safety and honesty rules kept verbatim in substance).
 
-Removed sections: none
+Sections changed:
+  - "Development Phases, Quality Gates & Testing" -> "Milestone Loop, Quality Gates & Testing"
+  - Governance: amendment procedure no longer requires a separate approval phase for
+    milestone-level work; constitution amendments still need owner approval.
 
-Deferred TODOs:
-  - TODO(RATIFICATION_DATE): set to 2026-10-17 assuming adoption on the date of authoring;
-    owner must confirm the actual adoption date.
-  - TODO(FONT_SELECTION): Arabic display/body and English display/body fonts are provisional;
-    see docs/PROJECT_BRIEF.md "Open Decisions". Not a blocker to this constitution.
+Templates requiring updates:
+  - .specify/templates/plan-template.md      ⚠ pending: "Constitution Check" gate names
+  - .specify/templates/tasks-template.md     ⚠ pending: phase-gate wording
+  - specs/001-homepage-hero/*                 ✅ historical; left as written (v1.0.0 era)
 
-Follow-up: remove this report before committing the amended constitution.
+Deferred TODOs: none (TODO(FONT_SELECTION) resolved; ratification date 2026-10-17 kept).
 -->
 
 # Tatreez House | دار التطريز Constitution
@@ -71,23 +70,25 @@ in docs/PROJECT_BRIEF.md.
 Rationale: Brand integrity and cultural respect are non-negotiable constraints, not styling
 preferences.
 
-### III. Font Verification Before Use
+### III. Licensed, Verified Fonts
 
-No font family may be embedded or referenced until its identity and licensing are verified.
+No font family may be embedded or referenced until its identity and licence are verified, and the
+licence MUST permit self-hosted web embedding.
 
-- Before configuring `@font-face`, inspect the actual font files and verify exact family names,
-  available weights, formats, and license terms.
-- Font files MUST NOT be downloaded, overwritten, embedded, or committed until their exact
-  identities and permitted web usage are verified.
-- Only the weights required by the design MAY be loaded; prefer WOFF2 where licensing permits.
-- Every font stack MUST define sensible, language-appropriate system fallbacks.
-- Display/accent fonts MUST be used selectively; product information, navigation, buttons, and
-  long-form content MUST prioritize readability.
-- Arabic shaping, punctuation, mixed Arabic/English text, and RTL rendering MUST be tested before
-  a font is declared final.
+- Before configuring `@font-face`, inspect the actual files and verify family names, weights,
+  formats and licence terms (fontTools). Record sources, versions and hashes in
+  `docs/fonts/README.md` and keep the licence texts in `docs/fonts/licenses/`.
+- The decided system (2026-10-20): Nunito for Latin body, UI and headings; Zain for Arabic body
+  and UI; Amiri for Arabic headings; Playwrite NZ Basic as an opt-in decorative accent only
+  (`.font-accent`), never the default heading face. All SIL OFL 1.1.
+- Only the weights required by the design MAY be loaded; WOFF2, subset by script, scoped with
+  `unicode-range`; one preload per locale.
+- Every font stack MUST define language-appropriate system fallbacks, Latin face first.
+- Arabic shaping, punctuation, mixed Arabic/English text and RTL rendering MUST be checked
+  visually before a font change ships.
 
-Rationale: Font choices are provisional (see docs/PROJECT_BRIEF.md "Open Decisions"); using
-unverified or unlicensed fonts is both a legal and a quality risk.
+Rationale: a font whose licence forbids web embedding was found in the theme and withdrawn in M0;
+licensing is a legal risk, not a styling detail.
 
 ### IV. Bilingual Localization & Direction
 
@@ -136,18 +137,21 @@ No feature may be claimed complete, working, or finished without recorded testin
 
 Rationale: The portfolio's credibility depends on accurate claims backed by tested behavior.
 
-### VII. Incremental Milestone Workflow
+### VII. Milestone Loop (plan -> implement -> verify)
 
-Work MUST proceed in small, reviewable milestones across distinct phases.
+Work proceeds in small, reviewable milestones (M0, M1, …; see docs/PROJECT_BRIEF.md roadmap).
 
-- The phases are: constitution, specification, clarification, planning, tasks, implementation,
-  and testing. Each phase MUST be completed and reviewed before the next begins.
-- Feature implementation MUST NOT occur during the Constitution phase.
-- The first implementation milestone is the custom homepage hero section as defined in
-  docs/PROJECT_BRIEF.md; scope creep beyond the current milestone MUST be deferred.
-- Owner review and approval are REQUIRED at each phase gate before proceeding.
+- Each milestone runs one loop: **plan** (scope, acceptance criteria, verification steps) ->
+  **implement** -> **verify** (record evidence per principle VI) -> owner review of the result.
+- The full spec-kit flow (specify, clarify, plan, tasks, implement, verify) is REQUIRED only for
+  complex features with new data models or flows: the pattern library (metaobjects) and events.
+  Other milestones use the light loop.
+- Scope creep beyond the current milestone MUST be deferred to a later milestone and noted.
+- Explicit STOP points named in a milestone request MUST be honoured; everything else proceeds
+  without per-step approval.
 
-Rationale: Small, gated milestones keep changes reviewable and protect uncommitted work.
+Rationale: per-phase approval gates slowed small changes without adding safety; the safety rules
+live in VI and VIII, which are unchanged.
 
 ### VIII. Git & Store Safety
 
@@ -156,12 +160,14 @@ Existing work and the live store MUST be protected at all times.
 - Existing project instructions and AGENTS.md MUST NOT be overwritten without prior inspection.
 - Existing files and uncommitted changes MUST be preserved; diffs MUST be reviewed before
   modifying or committing files.
+- Small, scoped commits (Conventional Commits, one concern each) on feature branches are allowed
+  during a milestone. Pushing, merging to `main` and rewriting history require owner approval.
 - Credentials, secrets, and store tokens MUST NEVER be committed to Git.
 - Development and testing MUST use the unpublished development theme; the live Horizon theme
   MUST NOT be modified or published.
 - Publishing a theme, deleting store data, changing sensitive store settings, installing paid
   apps, or purchasing services REQUIRES explicit owner approval.
-- No commit, publish, or deploy action occurs without explicit request.
+- No push, publish, or deploy action occurs without explicit request.
 
 Rationale: Irreversible store and Git actions are the highest-risk operations in this project.
 
@@ -179,15 +185,16 @@ Rationale: Irreversible store and Git actions are the highest-risk operations in
 - Digital products and workshop booking MAY require compatible apps or explicitly documented
   prototypes; they MUST NOT be represented as functional until verified.
 
-## Development Phases, Quality Gates & Testing
+## Milestone Loop, Quality Gates & Testing
 
-- Phase gates: constitution -> specification -> clarification -> planning -> tasks ->
-  implementation -> testing. Each gate closes only on owner approval.
-- Quality gate before "done": responsive check, keyboard/accessibility check, contrast check,
-  RTL/LTR check, and confirmation that all strings are localized.
-- Testing gate: acceptance criteria and verification steps MUST exist per feature, and evidence
-  MUST be recorded. Untested behavior MUST be described as untested.
-- Review gate: diffs reviewed before any commit; store-affecting actions require explicit
+- Loop per milestone: plan -> implement -> verify -> owner review. Full spec-kit flow only for
+  the pattern library and events (principle VII).
+- Quality gate before "done": `shopify theme check` with 0 errors and no new warnings, responsive
+  check (360/390/768/1024/1440), keyboard/focus check, contrast check
+  (`node scripts/contrast-check.mjs`), RTL/LTR check, and all strings localized in EN and AR.
+- Testing gate: acceptance criteria and verification steps MUST exist per milestone, and evidence
+  MUST be recorded. Untested behavior MUST be labeled UNTESTED.
+- Review gate: diffs reviewed before every commit; store-affecting actions require explicit
   approval.
 
 ## Governance
@@ -196,6 +203,7 @@ Rationale: Irreversible store and Git actions are the highest-risk operations in
   elsewhere conflicts, this document wins and the conflicting guidance MUST be updated.
 - Amendment procedure: propose the change -> record rationale -> obtain owner approval -> update
   this file with a Sync Impact Report -> commit with a `docs:` message describing the amendment.
+  (v2.0.0 was requested by the owner in the M0 brief, 2026-10-20.)
 - Versioning policy: semantic versioning of governance. MAJOR for backward-incompatible removals
   or redefinitions of principles, MINOR for added or materially expanded principles/sections,
   PATCH for clarifications, wording, and typo fixes.
@@ -206,4 +214,4 @@ Rationale: Irreversible store and Git actions are the highest-risk operations in
   docs/PROJECT_BRIEF.md "Open Decisions") rather than silently invented.
 - Runtime development guidance: AGENTS.md (Dawn theme conventions) and docs/PROJECT_BRIEF.md.
 
-**Version**: 1.0.0 | **Ratified**: 2026-10-17 | **Last Amended**: 2026-10-17
+**Version**: 2.0.0 | **Ratified**: 2026-10-17 | **Last Amended**: 2026-10-20
