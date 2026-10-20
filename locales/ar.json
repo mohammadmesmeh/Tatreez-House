@@ -1,0 +1,166 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero": {
+      "name": "Hero",
+      "settings": {
+        "image": {
+          "label": "الصورة"
+        },
+        "image_alt": {
+          "label": "النص البديل للصورة",
+          "info": "اتركه فارغًا لاستخدام النص البديل للصورة."
+        },
+        "image_height": {
+          "label": "ارتفاع الصورة",
+          "options__1": {
+            "label": "التكيف مع الصورة"
+          },
+          "options__2": {
+            "label": "صغير"
+          },
+          "options__3": {
+            "label": "متوسط"
+          },
+          "options__4": {
+            "label": "كبير"
+          }
+        },
+        "image_overlay_opacity": {
+          "label": "شفافية تراكب الصورة"
+        },
+        "color_scheme": {
+          "label": "نظام الألوان"
+        },
+        "desktop_content_position": {
+          "label": "موضع المحتوى على سطح المكتب",
+          "options__1": {
+            "label": "أعلى اليسار"
+          },
+          "options__2": {
+            "label": "أعلى الوسط"
+          },
+          "options__3": {
+            "label": "أعلى اليمين"
+          },
+          "options__4": {
+            "label": "منتصف اليسار"
+          },
+          "options__5": {
+            "label": "منتصف الوسط"
+          },
+          "options__6": {
+            "label": "منتصف اليمين"
+          },
+          "options__7": {
+            "label": "أسفل اليسار"
+          },
+          "options__8": {
+            "label": "أسفل الوسط"
+          },
+          "options__9": {
+            "label": "أسفل اليمين"
+          }
+        },
+        "desktop_content_alignment": {
+          "label": "محاذاة المحتوى على سطح المكتب",
+          "options__1": {
+            "label": "يسار"
+          },
+          "options__2": {
+            "label": "وسط"
+          },
+          "options__3": {
+            "label": "يمين"
+          }
+        },
+        "mobile_content_alignment": {
+          "label": "محاذاة المحتوى على الهاتف المحمول",
+          "options__1": {
+            "label": "يسار"
+          },
+          "options__2": {
+            "label": "وسط"
+          },
+          "options__3": {
+            "label": "يمين"
+          }
+        },
+        "heading_size": {
+          "label": "حجم العنوان",
+          "options__1": {
+            "label": "صغير"
+          },
+          "options__2": {
+            "label": "متوسط"
+          },
+          "options__3": {
+            "label": "كبير"
+          },
+          "options__4": {
+            "label": "كبير جدًا"
+          },
+          "options__5": {
+            "label": "كبير جدًا جدًا"
+          }
+        }
+      },
+      "blocks": {
+        "heading": {
+          "name": "العنوان",
+          "settings": {
+            "heading": {
+              "label": "العنوان",
+              "default": "ارتدِ الحكاية، واحفظ التراث."
+            }
+          }
+        },
+        "text": {
+          "name": "نص",
+          "settings": {
+            "text": {
+              "label": "نص",
+              "default": "اكتشف قطعًا معاصرة تستلهم فن التطريز الفلسطيني."
+            }
+          }
+        },
+        "buttons": {
+          "name": "الأزرار",
+          "settings": {
+            "button_label_1": {
+              "label": "التسمية",
+              "default": "اكتشف المجموعة"
+            },
+            "button_link_1": {
+              "label": "الرابط"
+            },
+            "button_style_secondary_1": {
+              "label": "نمط الحدود"
+            },
+            "button_label_2": {
+              "label": "التسمية",
+              "default": "اكتشف فن التطريز"
+            },
+            "button_link_2": {
+              "label": "الرابط"
+            },
+            "button_style_secondary_2": {
+              "label": "نمط الحدود"
+            }
+          }
+        }
+      },
+      "presets": {
+        "name": "Hero"
+      }
+    }
+  }
+}

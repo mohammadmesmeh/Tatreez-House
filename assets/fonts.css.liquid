@@ -1,0 +1,135 @@
+/*
+  fonts.css — self-hosted webfonts for the Tatreez House theme.
+
+  Declared here:
+    - "Nunito"             latin subset, variable weight 200–1000, normal (OFL 1.1)
+    - "Playwrite NZ Basic" latin subset, variable weight 100–400,  normal (OFL 1.1)
+    - "Thmanyah Sans"      arabic subset, static weights 300/400/500/700/900 (© thmanyah)
+    - "Thmanyah Serif Display" arabic subset, static weights 300/400/500/700/900 (© thmanyah)
+
+  License texts: docs/fonts/licenses/ for Nunito and Playwrite NZ Basic;
+  docs/fonts/Thmanyah-Font-Family/ for the Thmanyah license. See docs/fonts/README.md.
+
+  Each family is scoped with unicode-range so Latin text uses Nunito / Playwrite
+  NZ Basic and Arabic text falls through to Thmanyah Sans. The actual font stacks
+  are applied through the Dawn font variables in layout/theme.liquid
+  (--font-body-family, --font-heading-family).
+
+  Keep the .css.liquid extension: Shopify only processes Liquid (asset_url)
+  inside .liquid assets. Linked from layout/theme.liquid as 'fonts.css'.
+*/
+
+/* Nunito — Latin, variable weight 200–1000, normal */
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 200 1000;
+  font-display: swap;
+  src: url('{{ "nunito-latin.woff2" | asset_url }}') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+    U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Playwrite NZ Basic — Latin, variable weight 100–400, normal */
+@font-face {
+  font-family: 'Playwrite NZ Basic';
+  font-style: normal;
+  font-weight: 100 400;
+  font-display: swap;
+  src: url('{{ "playwrite-nz-basic.woff2" | asset_url }}') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+    U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Thmanyah Sans — Arabic, static weights (family: 'Thmanyah Sans'). */
+@font-face {
+  font-family: 'Thmanyah Sans';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('{{ "thmanyah-sans-light.woff2" | asset_url }}') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+@font-face {
+  font-family: 'Thmanyah Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('{{ "thmanyah-sans-regular.woff2" | asset_url }}') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+@font-face {
+  font-family: 'Thmanyah Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('{{ "thmanyah-sans-medium.woff2" | asset_url }}') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+@font-face {
+  font-family: 'Thmanyah Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('{{ "thmanyah-sans-bold.woff2" | asset_url }}') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+@font-face {
+  font-family: 'Thmanyah Sans';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url('{{ "thmanyah-sans-black.woff2" | asset_url }}') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+/* Thmanyah Serif Display — Arabic, static weights (family: 'Thmanyah Serif Display').
+   Display/heading face for Arabic; sits ahead of Thmanyah Sans in --font-heading-family. */
+@font-face {
+  font-family: 'Thmanyah Serif Display';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('{{ "thmanyah-serif-display-light.woff2" | asset_url }}') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+@font-face {
+  font-family: 'Thmanyah Serif Display';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('{{ "thmanyah-serif-display-regular.woff2" | asset_url }}') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+@font-face {
+  font-family: 'Thmanyah Serif Display';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('{{ "thmanyah-serif-display-medium.woff2" | asset_url }}') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+@font-face {
+  font-family: 'Thmanyah Serif Display';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('{{ "thmanyah-serif-display-bold.woff2" | asset_url }}') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+@font-face {
+  font-family: 'Thmanyah Serif Display';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url('{{ "thmanyah-serif-display-black.woff2" | asset_url }}') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}

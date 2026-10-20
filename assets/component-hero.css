@@ -1,0 +1,349 @@
+/*
+  component-hero.css — styles for sections/hero.liquid (feature 001-homepage-hero).
+
+  Self-contained; does not duplicate section-image-banner.css.
+  Alignment/positioning uses CSS LOGICAL properties (inset-inline-*, padding-inline-*, text-align: start/end,
+  align-items: start/end, justify-content: start/end) so left/right settings resolve correctly under
+  dir="rtl" without per-direction overrides (constitution V, FR-012).
+
+  Alignment setting values are physical tokens (left | center | right, per contract §2); they map to
+  logical keywords below so RTL flips automatically.
+*/
+
+.hero-section {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  min-height: 28rem;
+}
+
+/*
+  Contract §1 puts `hero-section` on the Shopify wrapper (schema class) while the inner root
+  (#Hero-) carries the same class per contract §3. The inner root never has `.section`, so this
+  compound matches only the wrapper and neutralises it — without this, the base styles would
+  double-apply: stacked min-heights (wrong small/no-image heights), a second black overlay
+  (wrong opacity), and flex-shrinking of the inner root (media no longer full-bleed).
+*/
+.section.hero-section {
+  display: block;
+  min-height: 0;
+}
+
+.section.hero-section::after {
+  content: none;
+}
+
+/* Media layer: only present when an image is configured (no-image fallback omits wrapper entirely). */
+.hero-section__media {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+.hero-section__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Darkening overlay behind the content — driven by image_overlay_opacity (default 55%);
+   hidden in the no-image fallback. The inline #Hero-…::after rule in the section always
+   overrides this static value with the merchant's setting. */
+.hero-section::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-color: #000;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.hero-section--no-image::after {
+  display: none;
+}
+
+/* Image height variants (mirroring Dawn image-banner spacing). */
+.hero-section--small {
+  min-height: 24rem;
+}
+
+.hero-section--medium {
+  min-height: 34rem;
+}
+
+.hero-section--large {
+  min-height: 44rem;
+}
+
+@media screen and (max-width: 749px) {
+  .hero-section--small {
+    min-height: 20rem;
+  }
+
+  .hero-section--medium {
+    min-height: 26rem;
+  }
+
+  .hero-section--large {
+    min-height: 30rem;
+  }
+}
+
+/* Text-only fallback: no media, comfortable vertical rhythm instead of fixed height. */
+.hero-section--no-image {
+  min-height: 0;
+  padding-block: 4.5rem;
+}
+
+/* Content layer */
+.hero-section__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  inline-size: 100%;
+  max-inline-size: 72rem;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+  padding-block: 3.5rem;
+}
+
+/* Desktop content position (grid of top/middle/bottom × left/center/right).
+   start/end keywords are logical: they follow dir=rtl. */
+.hero-section__content--top-left {
+  justify-content: flex-start;
+  align-items: flex-start;
+  text-align: start;
+}
+
+.hero-section__content--top-center {
+  justify-content: flex-start;
+  align-items: center;
+  text-align: center;
+}
+
+.hero-section__content--top-right {
+  justify-content: flex-start;
+  align-items: flex-end;
+  text-align: end;
+}
+
+.hero-section__content--middle-left {
+  justify-content: center;
+  align-items: flex-start;
+  text-align: start;
+}
+
+.hero-section__content--middle-center {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.hero-section__content--middle-right {
+  justify-content: center;
+  align-items: flex-end;
+  text-align: end;
+}
+
+.hero-section__content--bottom-left {
+  justify-content: flex-end;
+  align-items: flex-start;
+  text-align: start;
+}
+
+.hero-section__content--bottom-center {
+  justify-content: flex-end;
+  align-items: center;
+  text-align: center;
+}
+
+.hero-section__content--bottom-right {
+  justify-content: flex-end;
+  align-items: flex-end;
+  text-align: end;
+}
+
+/* Desktop content alignment — overrides the horizontal part of the position above. */
+.hero-section__content--align-left {
+  align-items: flex-start;
+  text-align: start;
+}
+
+.hero-section__content--align-center {
+  align-items: center;
+  text-align: center;
+}
+
+.hero-section__content--align-right {
+  align-items: flex-end;
+  text-align: end;
+}
+
+/* Mobile alignment: overrides both on small screens. */
+@media screen and (max-width: 749px) {
+  .hero-section__content {
+    padding-inline: 1.5rem;
+    padding-block: 3rem;
+  }
+
+  .hero-section__content--align-mobile-left {
+    align-items: flex-start;
+    text-align: start;
+  }
+
+  .hero-section__content--align-mobile-center {
+    align-items: center;
+    text-align: center;
+  }
+
+  .hero-section__content--align-mobile-right {
+    align-items: flex-end;
+    text-align: end;
+  }
+}
+
+/* Typography */
+.hero-section__heading {
+  margin: 0;
+  text-wrap: balance;
+}
+
+.hero-section__text {
+  margin: 0;
+  max-inline-size: 46rem;
+}
+
+/* CTA buttons */
+.hero-section__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.hero-section__content--align-left .hero-section__buttons,
+.hero-section__content--align-mobile-left .hero-section__buttons {
+  justify-content: flex-start;
+}
+
+.hero-section__content--align-center .hero-section__buttons,
+.hero-section__content--align-mobile-center .hero-section__buttons {
+  justify-content: center;
+}
+
+.hero-section__content--align-right .hero-section__buttons,
+.hero-section__content--align-mobile-right .hero-section__buttons {
+  justify-content: flex-end;
+}
+
+.hero-section__buttons .button:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+@media screen and (min-width: 750px) {
+  .hero-section__content {
+    gap: 2rem;
+    padding-inline: 4rem;
+    padding-block: 5rem;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Signature styling (tatreez-inspired storefront hero).
+   Everything below is scoped to the IMAGE state, where a dark overlay is
+   guaranteed. The text-only fallback keeps Dawn's scheme-driven colors so it
+   stays readable on any colour scheme.
+*/
+
+/* White copy over the dark overlay: the scheme foreground is merchant-chosen
+   and is not guaranteed to be light, so dark-on-dark must not be possible. */
+.hero-section:not(.hero-section--no-image) .hero-section__heading,
+.hero-section:not(.hero-section--no-image) .hero-section__text {
+  color: #ffffff;
+}
+
+/* Cross-stitch motif: a short row of embroidered X stitches above the copy.
+   Ivory reads against the dark overlay; embroidery red (#8E3038) reads on the
+   light scheme background of the text-only fallback. */
+.hero-section__content {
+  --hero-stitch-color: #8e3038;
+}
+
+.hero-section:not(.hero-section--no-image) .hero-section__content {
+  --hero-stitch-color: #f7f2e8;
+}
+
+.hero-section__content::before {
+  content: '';
+  display: block;
+  flex-shrink: 0;
+  inline-size: 4.2rem;
+  block-size: 0.7rem;
+  background-image:
+    linear-gradient(
+      45deg,
+      transparent 43%,
+      var(--hero-stitch-color) 43%,
+      var(--hero-stitch-color) 57%,
+      transparent 57%
+    ),
+    linear-gradient(
+      -45deg,
+      transparent 43%,
+      var(--hero-stitch-color) 43%,
+      var(--hero-stitch-color) 57%,
+      transparent 57%
+    );
+  background-size: 0.7rem 0.7rem;
+  background-repeat: repeat-x;
+}
+
+/* CTAs — Dawn renders button background, label AND the ::after outline from
+   --color-button / --color-button-text / --alpha-button-background, so pinning
+   the custom properties restyles all three at once. Specificity note: these
+   selectors outrank base.css's .button / .button--secondary rules. */
+.hero-section:not(.hero-section--no-image) .hero-section__buttons .button--primary {
+  --color-button: 247, 242, 232;
+  --color-button-text: 23, 53, 43;
+  --alpha-button-background: 1;
+  --border-opacity: 1;
+  background-color: #f7f2e8;
+  color: #17352b;
+  transition:
+    box-shadow var(--duration-short) ease,
+    background-color var(--duration-short) ease;
+}
+
+.hero-section:not(.hero-section--no-image) .hero-section__buttons .button--primary:hover {
+  background-color: #efe8d9;
+}
+
+.hero-section:not(.hero-section--no-image) .hero-section__buttons .button--secondary {
+  --color-button: 255, 255, 255;
+  --color-button-text: 255, 255, 255;
+  --alpha-button-background: 0;
+  background-color: transparent;
+  color: #ffffff;
+  transition:
+    box-shadow var(--duration-short) ease,
+    background-color var(--duration-short) ease,
+    color var(--duration-short) ease;
+}
+
+/* base.css re-derives the secondary outline from the theme's border-opacity
+   setting on the pseudo-element; pin it solid so the white outline never
+   washes out against a bright image. */
+.hero-section:not(.hero-section--no-image) .hero-section__buttons .button--secondary::after {
+  --border-opacity: 1;
+}
+
+.hero-section:not(.hero-section--no-image) .hero-section__buttons .button--secondary:hover {
+  background-color: #ffffff;
+  color: #17352b;
+}
