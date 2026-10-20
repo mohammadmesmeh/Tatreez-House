@@ -197,7 +197,8 @@
       "name": "Typography",
       "settings": {
         "type_header_font": {
-          "label": "Font"
+          "label": "Font",
+          "info": "Brand fonts (Nunito, Zain, Amiri) are set by the theme code, so this picker has no effect. See docs/fonts/README.md in the theme repository."
         },
         "heading_scale": {
           "label": "Scale"
@@ -209,7 +210,8 @@
           "content": "Body"
         },
         "type_body_font": {
-          "label": "Font"
+          "label": "Font",
+          "info": "Brand fonts (Nunito, Zain, Amiri) are set by the theme code, so this picker has no effect. See docs/fonts/README.md in the theme repository."
         },
         "body_scale": {
           "label": "Scale"

@@ -1,0 +1,40 @@
+{% doc %}
+  Brand font loading, shared by layout/theme.liquid, layout/password.liquid and
+  templates/gift_card.liquid.
+
+  Outputs, in order:
+    1. one font preload: the Arabic body face on the Arabic storefront, Nunito otherwise;
+    2. the fonts.css stylesheet (self-hosted @font-face rules, see docs/fonts/README.md);
+    3. the Dawn font custom properties every component already reads.
+
+  Latin faces come first in each stack and are scoped to Latin with unicode-range; the Arabic
+  faces are scoped to Arabic, so mixed text picks the right face per character. The theme
+  editor's font pickers are intentionally not used for the family (brand fonts are fixed),
+  so no Shopify-hosted font files are requested.
+
+  @example
+  {% render 'theme-fonts' %}
+{% enddoc %}
+{%- liquid
+  if request.locale.iso_code == 'ar'
+    assign preload_font = 'zain-arabic-400.woff2'
+  else
+    assign preload_font = 'nunito-latin.woff2'
+  endif
+-%}
+{{ preload_font | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+{{ 'fonts.css' | asset_url | stylesheet_tag }}
+{% style %}
+  :root {
+    --font-body-family: 'Nunito', 'Zain', system-ui, 'Segoe UI', Tahoma, sans-serif;
+    --font-body-style: normal;
+    --font-body-weight: 400;
+    --font-body-weight-bold: 700;
+
+    --font-heading-family: 'Nunito', 'Amiri', 'Times New Roman', serif;
+    --font-heading-style: normal;
+    --font-heading-weight: 700;
+
+    --font-accent-family: 'Playwrite NZ Basic', 'Nunito', cursive;
+  }
+{% endstyle %}

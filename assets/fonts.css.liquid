@@ -1,19 +1,21 @@
 /*
-  fonts.css — self-hosted webfonts for the Tatreez House theme.
+  fonts.css — self-hosted webfonts for the Tatreez House theme (all SIL OFL 1.1).
 
   Declared here:
-    - "Nunito"             latin subset, variable weight 200–1000, normal (OFL 1.1)
-    - "Playwrite NZ Basic" latin subset, variable weight 100–400,  normal (OFL 1.1)
+    - "Nunito"             Latin body, UI and headings — variable weight 200–1000
+    - "Zain"               Arabic body and UI — static 400 / 700, Arabic subset
+    - "Amiri"              Arabic headings — static 400 / 700, Arabic subset
+    - "Playwrite NZ Basic" decorative accent only (.font-accent) — variable weight 100–400
 
-  License texts: docs/fonts/licenses/. See docs/fonts/README.md.
+  Every family is scoped with unicode-range: Latin text renders in Nunito, Arabic text in
+  Zain / Amiri, per character, so mixed Arabic/English strings need no markup. Browsers
+  download a face only when a character in its range is actually rendered.
 
-  Each family is scoped with unicode-range so Latin text uses Nunito / Playwrite
-  NZ Basic. The actual font stacks
-  are applied through the Dawn font variables in layout/theme.liquid
-  (--font-body-family, --font-heading-family).
+  Font stacks live in snippets/theme-fonts.liquid (Dawn's --font-* custom properties).
+  Sources, versions, subsetting commands and licences: docs/fonts/README.md.
 
   Keep the .css.liquid extension: Shopify only processes Liquid (asset_url)
-  inside .liquid assets. Linked from layout/theme.liquid as 'fonts.css'.
+  inside .liquid assets. Linked as 'fonts.css'.
 */
 
 /* Nunito — Latin, variable weight 200–1000, normal */
@@ -27,7 +29,46 @@
     U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-/* Playwrite NZ Basic — Latin, variable weight 100–400, normal */
+/* Zain — Arabic body / UI. Range: Arabic, Arabic Supplement, Arabic Extended-A,
+   Presentation Forms A/B, ZWNJ/ZWJ and direction marks. */
+@font-face {
+  font-family: 'Zain';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('{{ "zain-arabic-400.woff2" | asset_url }}') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F;
+}
+
+@font-face {
+  font-family: 'Zain';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('{{ "zain-arabic-700.woff2" | asset_url }}') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F;
+}
+
+/* Amiri — Arabic headings (Naskh). Same Arabic range as Zain. */
+@font-face {
+  font-family: 'Amiri';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('{{ "amiri-arabic-400.woff2" | asset_url }}') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F;
+}
+
+@font-face {
+  font-family: 'Amiri';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('{{ "amiri-arabic-700.woff2" | asset_url }}') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F;
+}
+
+/* Playwrite NZ Basic — Latin, variable weight 100–400, normal. Accent use only. */
 @font-face {
   font-family: 'Playwrite NZ Basic';
   font-style: normal;
@@ -36,4 +77,36 @@
   src: url('{{ "playwrite-nz-basic.woff2" | asset_url }}') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
     U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/*
+  Decorative accent. A handwriting script is never the default heading face (readability,
+  dyslexia-friendliness); opt in per element, for short Latin phrases only. Arabic glyphs in
+  an accented element fall through to the body stack.
+*/
+.font-accent {
+  font-family: var(--font-accent-family);
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+/*
+  Arabic typography.
+  - Tracking breaks the joins of a cursive script, so Arabic text is never letter-spaced.
+  - Amiri's vertical metrics are tall (ascent + descent = 1.758 em vs Nunito's 1.364 em) and
+    Naskh carries stacked marks (shadda + fatha, etc.). Dawn's heading line-height
+    (~1.3) makes marks of consecutive lines collide, so Arabic headings get more room.
+*/
+/* html:lang(ar) * (0,1,1) outranks Dawn's single-class letter-spacing rules in base.css. */
+html:lang(ar) * {
+  letter-spacing: 0;
+}
+
+:lang(ar) :is(h1, h2, h3, h4, h5, h6, .h0, .h1, .h2, .h3, .h4, .h5, .hxl, .hxxl) {
+  letter-spacing: 0;
+  line-height: 1.55;
+}
+
+:lang(ar) :is(.h0, .hxl, .hxxl) {
+  line-height: 1.45;
 }
