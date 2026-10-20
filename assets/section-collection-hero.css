@@ -1,0 +1,102 @@
+/*
+  section-collection-hero.css — collection hero (split text + image) and the collection page
+  toolbar / empty states. Loaded by sections/collection-hero.liquid (collection template only).
+*/
+
+.collection-hero {
+  padding-block: var(--th-space-6) var(--th-space-5);
+}
+
+.collection-hero__grid {
+  display: grid;
+  gap: var(--th-space-4);
+  align-items: center;
+}
+
+.collection-hero__text > :last-child {
+  margin-block-end: 0;
+}
+
+.collection-hero__title {
+  margin: 0 0 var(--th-space-2);
+}
+
+.collection-hero__description {
+  max-inline-size: 56ch;
+  color: rgba(var(--color-foreground), 0.75);
+}
+
+.collection-hero__description > :first-child {
+  margin-block-start: 0;
+}
+
+.collection-hero__divider {
+  margin-block-start: var(--th-space-4);
+  max-inline-size: 24rem;
+}
+
+.collection-hero__media {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: var(--th-radius);
+  background-color: rgb(var(--th-surface-alt));
+}
+
+.collection-hero__image {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+@media screen and (min-width: 750px) {
+  .collection-hero {
+    padding-block: var(--th-space-10) var(--th-space-8);
+  }
+
+  .collection-hero__grid--image-end,
+  .collection-hero__grid--image-start {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--th-space-8);
+  }
+
+  .collection-hero__grid--image-start .collection-hero__media {
+    order: -1;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Toolbar: filters and sort (Dawn facets), one clean row with a linen hairline. This file only
+  loads on the collection template, so these rules never reach search or other pages.
+*/
+.facets-container,
+.facets-vertical-form {
+  border-block: var(--th-border-width) solid rgb(var(--th-border));
+  padding-block: 0;
+  margin-block-end: var(--th-space-5);
+}
+
+/* Dawn reserves a row for active filter pills even when none are applied. */
+.facets-container .active-facets:not(:has(facet-remove)) {
+  display: none;
+}
+
+.facets__summary,
+.mobile-facets__open,
+.facet-filters__field .select__select {
+  min-block-size: var(--th-target);
+}
+
+.product-count__text,
+.mobile-facets__count {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Empty collection and "no results for these filters". */
+.collection--empty .title-wrapper {
+  margin-block: var(--th-space-8);
+  text-align: center;
+}
+
+.collection--empty .title-wrapper .title {
+  font-size: calc(var(--font-heading-scale) * var(--th-step-h4));
+}

@@ -10,11 +10,16 @@
 {
   "sections": {
     "banner": {
-      "type": "main-collection-banner",
+      "type": "collection-hero",
       "settings": {
-        "show_collection_description": true,
-        "show_collection_image": false,
-        "color_scheme": "scheme-1"
+        "show_description": true,
+        "show_collection_image": true,
+        "image_position": "end",
+        "heading_size": "h0",
+        "show_divider": true,
+        "divider_tone": "accent",
+        "color_scheme": "scheme-1",
+        "linen_surface": false
       }
     },
     "product-grid": {

@@ -398,6 +398,28 @@
     }
   },
   "sections": {
+    "collection-hero": {
+      "name": "Collection hero",
+      "settings": {
+        "show_description": { "label": "Show collection description" },
+        "show_collection_image": { "label": "Show collection image" },
+        "image": {
+          "label": "Image",
+          "info": "Overrides the collection image."
+        },
+        "image_position": {
+          "label": "Image position",
+          "options__1": { "label": "End" },
+          "options__2": { "label": "Start" }
+        },
+        "heading_size": {
+          "label": "Heading size",
+          "options__1": { "label": "Medium" },
+          "options__2": { "label": "Large" },
+          "options__3": { "label": "Extra large" }
+        }
+      }
+    },
     "hero": {
       "name": "Hero",
       "settings": {
@@ -555,6 +577,20 @@
       }
     },
     "all": {
+      "divider_tone": {
+        "label": "Stitch divider colour",
+        "options__1": { "label": "Embroidery red" },
+        "options__2": { "label": "Text colour" },
+        "options__3": { "label": "Button colour" },
+        "options__4": { "label": "Linen" }
+      },
+      "show_divider": {
+        "label": "Show stitch divider"
+      },
+      "linen_surface": {
+        "label": "Linen surface",
+        "info": "Woven linen background. Use with a light colour scheme."
+      },
       "animation": {
         "content": "Animations",
         "image_behavior": {
