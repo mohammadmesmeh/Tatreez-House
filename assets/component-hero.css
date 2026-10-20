@@ -260,40 +260,80 @@
   color: rgb(var(--color-foreground));
 }
 
-/* Cross-stitch motif: a short row of embroidered X stitches above the copy,
-   drawn in the scheme's button colour (the scheme accent). */
-.hero-section__content {
-  --hero-stitch-color: rgb(var(--color-button));
-}
-
-.hero-section__content::before {
-  content: '';
-  display: block;
-  flex-shrink: 0;
-  inline-size: 4.2rem;
-  block-size: 0.7rem;
-  background-image:
-    linear-gradient(
-      45deg,
-      transparent 43%,
-      var(--hero-stitch-color) 43%,
-      var(--hero-stitch-color) 57%,
-      transparent 57%
-    ),
-    linear-gradient(
-      -45deg,
-      transparent 43%,
-      var(--hero-stitch-color) 43%,
-      var(--hero-stitch-color) 57%,
-      transparent 57%
-    );
-  background-size: 0.7rem 0.7rem;
-  background-repeat: repeat-x;
-}
-
 /* Over an image, base.css derives the secondary outline from the theme's
    border-opacity setting; pin it solid so the outline never washes out
    against a bright photo. Colours still come from the scheme. */
 .hero-section:not(.hero-section--no-image) .hero-section__buttons .button--secondary::after {
   --border-opacity: 1;
+}
+
+/* ---------------------------------------------------------------------------
+   Eyebrow (with the cross-stitch ornament from tatreez-tokens.css)
+*/
+.hero-section__eyebrow {
+  margin: 0;
+  color: rgb(var(--color-foreground));
+}
+
+/* The hero usually sits on a dark scheme or over an image, where the red stitch would lose
+   contrast; the ornament follows the text colour instead. */
+.hero-section__eyebrow::before {
+  background-color: currentColor;
+}
+
+/* ---------------------------------------------------------------------------
+   Split layout: image beside the copy on the scheme background, no overlay.
+   Mobile: image on top (4:3), copy below. Desktop: two equal columns.
+*/
+.hero-section--layout-split {
+  display: grid;
+  min-height: 0;
+}
+
+.hero-section--layout-split::after {
+  content: none;
+}
+
+.hero-section--layout-split .hero-section__media {
+  position: relative;
+  inset: auto;
+  z-index: auto;
+  aspect-ratio: 4 / 3;
+}
+
+.hero-section--layout-split .hero-section__content {
+  justify-content: center;
+  max-inline-size: 64rem;
+  margin-inline: 0;
+  padding-block: var(--th-space-6) var(--th-space-8);
+}
+
+@media screen and (min-width: 750px) {
+  .hero-section--layout-split {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: stretch;
+  }
+
+  .hero-section--layout-split .hero-section__media {
+    aspect-ratio: auto;
+    min-block-size: 56rem;
+  }
+
+  .hero-section--layout-split.hero-section--small .hero-section__media {
+    min-block-size: 40rem;
+  }
+
+  .hero-section--layout-split.hero-section--large .hero-section__media {
+    min-block-size: 68rem;
+  }
+
+  .hero-section--media-end .hero-section__media {
+    order: 2;
+  }
+
+  .hero-section--layout-split .hero-section__content {
+    align-self: center;
+    padding-inline: var(--th-space-8);
+    padding-block: var(--th-space-10);
+  }
 }

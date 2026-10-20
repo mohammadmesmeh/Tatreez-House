@@ -423,6 +423,23 @@
     "hero": {
       "name": "Hero",
       "settings": {
+        "layout": {
+          "label": "Layout",
+          "options__1": { "label": "Full-bleed image" },
+          "options__2": { "label": "Split: image beside text" }
+        },
+        "split_image_position": {
+          "label": "Split image position",
+          "options__1": { "label": "Start" },
+          "options__2": { "label": "End" }
+        },
+        "show_eyebrow": {
+          "label": "Show eyebrow"
+        },
+        "eyebrow": {
+          "label": "Eyebrow",
+          "info": "Leave blank to use the default, translated text."
+        },
         "image": {
           "label": "Image"
         },

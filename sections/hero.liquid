@@ -33,11 +33,27 @@
   if hero_alt == blank
     assign hero_alt = ''
   endif
+
+  # Layout: full-bleed image behind the copy, or split (image beside the copy, no overlay).
+  assign hero_layout = section.settings.layout | default: 'full'
+  if section.settings.image == blank
+    assign hero_layout = 'full'
+  endif
+  assign image_sizes = '100vw'
+  if hero_layout == 'split'
+    assign image_sizes = '(min-width: 750px) 50vw, 100vw'
+  endif
+
+  # Eyebrow: merchant text, or the localized default (EN/AR).
+  assign hero_eyebrow = section.settings.eyebrow
+  if hero_eyebrow == blank
+    assign hero_eyebrow = 'sections.hero.eyebrow_default' | t
+  endif
 -%}
 
 <section
   id="Hero-{{ section.id }}"
-  class="hero-section hero-section--{{ section.settings.image_height }} color-{{ section.settings.color_scheme }} gradient{% if section.settings.image == blank %} hero-section--no-image{% endif %}"
+  class="hero-section hero-section--{{ section.settings.image_height }} hero-section--layout-{{ hero_layout }}{% if hero_layout == 'split' %} hero-section--media-{{ section.settings.split_image_position }}{% endif %} color-{{ section.settings.color_scheme }} gradient{% if section.settings.image == blank %} hero-section--no-image{% endif %}"
 >
   {%- if section.settings.image != blank -%}
     <div class="hero-section__media media">
@@ -51,7 +67,7 @@
           width: section.settings.image.width,
           height: image_height,
           class: 'hero-section__image',
-          sizes: '100vw',
+          sizes: image_sizes,
           widths: widths,
           fetchpriority: fetch_priority,
           alt: hero_alt
@@ -62,23 +78,34 @@
   <div
     class="hero-section__content hero-section__content--{{ section.settings.desktop_content_position }} hero-section__content--align-{{ section.settings.desktop_content_alignment }} hero-section__content--align-mobile-{{ section.settings.mobile_content_alignment }}"
   >
+    {%- if section.settings.show_eyebrow -%}
+      <p class="th-eyebrow hero-section__eyebrow">{{ hero_eyebrow | escape }}</p>
+    {%- endif -%}
     {%- for block in section.blocks -%}
       {%- case block.type -%}
         {%- when 'heading' -%}
           {%- comment -%}
             Semantic level and visual size are decoupled (FR-014): always <h2>,
-            styled with the merchant-chosen display size class. The | default | t
-            chain renders locale copy when the setting is untouched (FR-011).
+            styled with the merchant-chosen display size class. A blank setting renders
+            the locale copy (FR-011); merchant text is output as-is, never passed to | t.
           {%- endcomment -%}
           <h2
             class="hero-section__heading inline-richtext {{ section.settings.heading_size }}"
             {{ block.shopify_attributes }}
           >
-            {{- block.settings.heading | default: 'sections.hero.blocks.heading.settings.heading.default' | t -}}
+            {%- if block.settings.heading != blank -%}
+              {{- block.settings.heading -}}
+            {%- else -%}
+              {{- 'sections.hero.blocks.heading.settings.heading.default' | t -}}
+            {%- endif -%}
           </h2>
         {%- when 'text' -%}
           <div class="hero-section__text rte" {{ block.shopify_attributes }}>
-            {{- block.settings.text | default: 'sections.hero.blocks.text.settings.text.default' | t -}}
+            {%- if block.settings.text != blank -%}
+              {{- block.settings.text -}}
+            {%- else -%}
+              {{- 'sections.hero.blocks.text.settings.text.default' | t -}}
+            {%- endif -%}
           </div>
         {%- when 'buttons' -%}
           {%- liquid
@@ -205,6 +232,50 @@
       "id": "image_alt",
       "label": "t:sections.hero.settings.image_alt.label",
       "info": "t:sections.hero.settings.image_alt.info"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "options": [
+        {
+          "value": "full",
+          "label": "t:sections.hero.settings.layout.options__1.label"
+        },
+        {
+          "value": "split",
+          "label": "t:sections.hero.settings.layout.options__2.label"
+        }
+      ],
+      "default": "full",
+      "label": "t:sections.hero.settings.layout.label"
+    },
+    {
+      "type": "select",
+      "id": "split_image_position",
+      "options": [
+        {
+          "value": "start",
+          "label": "t:sections.hero.settings.split_image_position.options__1.label"
+        },
+        {
+          "value": "end",
+          "label": "t:sections.hero.settings.split_image_position.options__2.label"
+        }
+      ],
+      "default": "end",
+      "label": "t:sections.hero.settings.split_image_position.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_eyebrow",
+      "default": true,
+      "label": "t:sections.hero.settings.show_eyebrow.label"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:sections.hero.settings.eyebrow.label",
+      "info": "t:sections.hero.settings.eyebrow.info"
     },
     {
       "type": "select",
