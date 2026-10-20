@@ -1,0 +1,37 @@
+{% doc %}
+  Mobile sticky add-to-cart bar for the product page. Appears once the main Add to cart button
+  has scrolled out of view (sticky-atc.js) and submits the SAME product form through the
+  button's form attribute, so Dawn's product-form handles the add, drawer and errors.
+  Hidden on desktop and whenever the main button is visible.
+
+  @param {product} product - The product. Required.
+  @param {string} product_form_id - Id of the main product form. Required.
+  @param {string} section_id - The main-product section id. Required.
+
+  @example
+  {% render 'sticky-atc', product: product, product_form_id: product_form_id, section_id: section.id %}
+{% enddoc %}
+{{ 'component-sticky-atc.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'sticky-atc.js' | asset_url }}" defer="defer"></script>
+<sticky-atc
+  class="sticky-atc"
+  data-target-button="ProductSubmitButton-{{ section_id }}"
+  data-price-source="price-{{ section_id }}"
+  hidden
+>
+  <div class="sticky-atc__inner">
+    <div class="sticky-atc__info">
+      <p class="sticky-atc__title">{{ product.title | escape }}</p>
+      <div class="sticky-atc__price" data-sticky-price></div>
+    </div>
+    <button
+      type="submit"
+      form="{{ product_form_id }}"
+      name="add"
+      class="button button--primary sticky-atc__button"
+      data-sticky-button
+    >
+      {{ 'products.product.add_to_cart' | t }}
+    </button>
+  </div>
+</sticky-atc>

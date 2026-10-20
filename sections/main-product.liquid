@@ -18,6 +18,7 @@
 
   {% unless product.has_only_default_variant %}
     {{ 'component-product-variant-picker.css' | asset_url | stylesheet_tag }}
+    {{ 'component-variant-chips.css' | asset_url | stylesheet_tag }}
     {{ 'component-swatch-input.css' | asset_url | stylesheet_tag }}
     {{ 'component-swatch.css' | asset_url | stylesheet_tag }}
   {% endunless %}
@@ -496,6 +497,7 @@
                     section_id: section.id,
                     show_pickup_availability: true
                   -%}
+                  {%- render 'sticky-atc', product: product, product_form_id: product_form_id, section_id: section.id -%}
                 {%- when 'rating' -%}
                   {%- if product.metafields.reviews.rating.value != blank -%}
                     <div class="rating-wrapper">

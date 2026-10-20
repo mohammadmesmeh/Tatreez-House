@@ -177,45 +177,7 @@
   }
 }
 
-/* Chips: the card variant picker's radio group. ≥ 44px targets, 2px radius. */
-.card-variant-picker .product-form__input--pill .form__label {
-  font-size: 1.2rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: rgba(var(--color-foreground), 0.8);
-  margin-block-end: 0.4rem;
-}
-
-:lang(ar) .card-variant-picker .product-form__input--pill .form__label {
-  letter-spacing: 0;
-  text-transform: none;
-  font-size: 1.3rem;
-}
-
-.card-variant-picker .product-form__input--pill input[type='radio'] + label {
-  min-block-size: var(--th-target);
-  min-inline-size: var(--th-target);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0.4rem;
-  margin-inline-start: 0;
-  padding: 0 1.2rem;
-  border-radius: var(--th-radius);
-  font-size: 1.4rem;
-  letter-spacing: 0;
-}
-
-/* Unavailable values: disabled but readable (75% foreground = 6.25:1 on ivory; Dawn's 60% is
-   about 4:1). The strike-through carries the state, not colour alone. */
-.card-variant-picker .product-form__input--pill input[type='radio']:disabled + label,
-.card-variant-picker__value--unavailable {
-  color: rgba(var(--color-foreground), 0.75);
-  text-decoration: line-through;
-  border-style: dashed;
-  cursor: not-allowed;
-}
+/* Chip styles (shared with the product page): component-variant-chips.css. */
 
 .card-quick-add .quick-add__submit {
   min-block-size: var(--th-target);
