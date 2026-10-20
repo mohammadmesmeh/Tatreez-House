@@ -29,6 +29,11 @@
   {{ 'component-price.css' | asset_url | stylesheet_tag }}
   {{ 'quick-order-list.css' | asset_url | stylesheet_tag }}
   {{ 'quantity-popover.css' | asset_url | stylesheet_tag }}
+  {%- if quick_add == 'standard' -%}
+    {{ 'component-product-variant-picker.css' | asset_url | stylesheet_tag }}
+    {{ 'component-card-variant-picker.css' | asset_url | stylesheet_tag }}
+    <script src="{{ 'card-variant-picker.js' | asset_url }}" defer="defer"></script>
+  {%- endif -%}
 {%- endunless -%}
 {%- if card_product and card_product != empty -%}
   {%- liquid
@@ -40,6 +45,27 @@
     endif
     if ratio == 0 or ratio == null
       assign ratio = 1
+    endif
+
+    assign qty_rules = false
+    if card_product.selected_or_first_available_variant.quantity_rule.min > 1 or card_product.selected_or_first_available_variant.quantity_rule.max != null or card_product.selected_or_first_available_variant.quantity_rule.increment > 1
+      assign qty_rules = true
+    endif
+
+    comment
+      Inline variant selection (card-variant-picker) applies to quick add
+      "standard" on multi-variant products. Products with quantity rules or
+      quantity price breaks keep Dawn's choose-options modal, which renders the
+      full product form; very large variant catalogs also use the modal so the
+      card never ships a huge inline payload.
+    endcomment
+    assign inline_variant_picker = false
+    if quick_add == 'standard'
+      and card_product.variants_count > 1
+      and card_product.variants_count <= 50
+      and qty_rules == false
+      and card_product.quantity_price_breaks_configured? == false
+      assign inline_variant_picker = true
     endif
   -%}
 
@@ -77,7 +103,7 @@
                   "
                   src="{{ card_product.featured_media | image_url: width: 533 }}"
                   sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
-                  alt="{{ card_product.featured_media.alt | escape }}"
+                  alt="{{ card_product.featured_media.alt | default: card_product.title | escape }}"
                   class="motion-reduce"
                   {% unless lazy_load == false %}
                     loading="lazy"
@@ -208,7 +234,13 @@
                 </p>
               {%- endif -%}
 
-              {% render 'price', product: card_product, price_class: '', show_compare_at_price: true %}
+              {%- if inline_variant_picker -%}
+                <div data-card-price>
+                  {% render 'price', product: card_product, use_variant: true, price_class: '', show_compare_at_price: true %}
+                </div>
+              {%- else -%}
+                {% render 'price', product: card_product, price_class: '', show_compare_at_price: true %}
+              {%- endif -%}
               {%- if card_product.quantity_price_breaks_configured? -%}
                 {% if card_product.variants_count == 1 and quick_add == 'bulk' %}
                   {% liquid
@@ -294,13 +326,62 @@
           </div>
           {% assign product_form_id = 'quick-add-' | append: section_id | append: card_product.id %}
           {% if quick_add == 'standard' %}
+            {%- if inline_variant_picker -%}
+              <div class="quick-add quick-add--inline no-js-hidden">
+                {% render 'card-variant-picker',
+                  card_product: card_product,
+                  section_id: section_id,
+                  product_form_id: product_form_id
+                %}
+                <product-form class="product-form" data-section-id="{{ section_id }}">
+                  <div class="product-form__error-message-wrapper" role="alert" hidden>
+                    <span class="svg-wrapper">
+                      {{- 'icon-error.svg' | inline_asset_content -}}
+                    </span>
+                    <span class="product-form__error-message"></span>
+                  </div>
+                  {%- form 'product',
+                    card_product,
+                    id: product_form_id,
+                    class: 'form',
+                    novalidate: 'novalidate',
+                    data-type: 'add-to-cart-form'
+                  -%}
+                    <input
+                      type="hidden"
+                      name="id"
+                      value="{{ card_product.selected_or_first_available_variant.id }}"
+                      class="product-variant-id"
+                    >
+                    <button
+                      id="{{ product_form_id }}-submit"
+                      type="submit"
+                      name="add"
+                      class="quick-add__submit button button--full-width button--secondary"
+                      aria-labelledby="{{ product_form_id }}-submit title-{{ section_id }}-{{ card_product.id }}"
+                      aria-live="polite"
+                      data-sold-out-message="true"
+                      {% if card_product.selected_or_first_available_variant.available == false %}
+                        disabled
+                      {% endif %}
+                    >
+                      <span>
+                        {%- if card_product.selected_or_first_available_variant.available -%}
+                          {{ 'products.product.add_to_cart' | t }}
+                        {%- else -%}
+                          {{ 'products.product.sold_out' | t }}
+                        {%- endif -%}
+                      </span>
+                      <span class="sold-out-message hidden">
+                        {{ 'products.product.sold_out' | t }}
+                      </span>
+                      {%- render 'loading-spinner' -%}
+                    </button>
+                  {%- endform -%}
+                </product-form>
+              </div>
+            {%- else -%}
             <div class="quick-add no-js-hidden">
-              {%- liquid
-                assign qty_rules = false
-                if card_product.selected_or_first_available_variant.quantity_rule.min > 1 or card_product.selected_or_first_available_variant.quantity_rule.max != null or card_product.selected_or_first_available_variant.quantity_rule.increment > 1
-                  assign qty_rules = true
-                endif
-              -%}
               {%- if card_product.variants_count > 1 or qty_rules -%}
                 <modal-opener data-modal="#QuickAdd-{{ card_product.id }}">
                   <button
@@ -392,6 +473,7 @@
                 </product-form>
               {%- endif -%}
             </div>
+            {%- endif -%}
           {% elsif quick_add == 'bulk' %}
             {% if card_product.variants_count == 1 %}
               <quick-add-bulk

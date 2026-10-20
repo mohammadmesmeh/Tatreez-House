@@ -803,6 +803,10 @@
             "label": "Solid button"
           }
         },
+        "view_all_label": {
+          "label": "\"View all\" label",
+          "default": "View all"
+        },
         "enable_desktop_slider": {
           "label": "Carousel"
         },
