@@ -61,6 +61,11 @@
     padding-block-end: var(--th-space-2);
   }
 
+  /* Collapsed from first paint on mobile; footer-accordion.js takes over once defined. */
+  footer-accordion:not(:defined) [data-accordion-panel] {
+    display: none;
+  }
+
   .footer-accordion .list-menu__item--link {
     min-block-size: var(--th-target);
     display: flex;

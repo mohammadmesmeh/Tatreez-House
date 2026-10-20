@@ -1,9 +1,10 @@
 /**
  * footer-accordion.js — collapses footer menu columns into accordions below 750px.
  *
- * Progressive enhancement for sections/footer.liquid: without JavaScript every list stays open.
- * On small screens the heading button toggles its list (aria-expanded + hidden); on wider screens
- * CSS shows the plain label and keeps the list visible, and this element resets to "expanded".
+ * Used by sections/footer.liquid. Lists render collapsed on small screens from first paint (CSS
+ * :not(:defined)), so nothing shifts when this script runs; the heading button then toggles its
+ * list (aria-expanded + hidden). On wider screens CSS shows the plain label and keeps the list
+ * visible, and this element resets to "expanded".
  */
 if (!customElements.get('footer-accordion')) {
   customElements.define(
