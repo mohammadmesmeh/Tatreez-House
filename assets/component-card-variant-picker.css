@@ -1,0 +1,65 @@
+/*
+  component-card-variant-picker.css — inline variant picker inside product cards.
+
+  Rendered by snippets/card-variant-picker.liquid for card-product quick add
+  "standard" on multi-variant products (multi-option selection and add to cart
+  directly in the collection card). The controls reuse Dawn's
+  .product-form__input pill/dropdown classes, which are styled by
+  component-product-variant-picker.css; this file only adapts the fieldsets to
+  the compact card context and styles the card's unavailable affordance.
+
+  No global colours are forced: borders, text and focus rings resolve from the
+  active colour scheme's CSS variables, so Theme Editor colour-scheme choices
+  keep working. Nothing here animates, so reduced-motion preferences are
+  unaffected.
+*/
+
+card-variant-picker {
+  display: block;
+}
+
+.card-variant-picker__group {
+  margin: 0 0 0.6rem;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+/* Pills: wrap below the option legend inside narrow cards. */
+.card-variant-picker__group.product-form__input--pill {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.card-variant-picker__group.product-form__input--pill .form__label {
+  flex-basis: 100%;
+  margin-bottom: 0;
+}
+
+/* Dropdowns: the select fills the card width; base.css renders the caret. */
+.card-variant-picker__group.product-form__input--dropdown {
+  margin-bottom: 1rem;
+}
+
+.card-variant-picker__group.product-form__input--dropdown select {
+  width: 100%;
+}
+
+/*
+  No purchasable variant matches the chosen combination (for example an
+  unavailable size and colour pair, or a subscription variant that cannot be
+  added inline): the card offers a direct path to the product page.
+*/
+.card-variant-picker__unavailable {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem 0.8rem;
+  margin-bottom: 0.8rem;
+  font-size: 1.3rem;
+}
+
+.card-variant-picker__unavailable[hidden] {
+  display: none;
+}

@@ -197,7 +197,8 @@
       "name": "Typography",
       "settings": {
         "type_header_font": {
-          "label": "Font"
+          "label": "Font",
+          "info": "Brand fonts (Nunito, Zain, Amiri) are set by the theme code, so this picker has no effect. See docs/fonts/README.md in the theme repository."
         },
         "heading_scale": {
           "label": "Scale"
@@ -209,7 +210,8 @@
           "content": "Body"
         },
         "type_body_font": {
-          "label": "Font"
+          "label": "Font",
+          "info": "Brand fonts (Nunito, Zain, Amiri) are set by the theme code, so this picker has no effect. See docs/fonts/README.md in the theme repository."
         },
         "body_scale": {
           "label": "Scale"
@@ -384,6 +386,162 @@
     }
   },
   "sections": {
+    "hero": {
+      "name": "Hero",
+      "settings": {
+        "image": {
+          "label": "Image"
+        },
+        "image_alt": {
+          "label": "Image alt text",
+          "info": "Leave blank to use the image's alt text."
+        },
+        "image_height": {
+          "label": "Image height",
+          "options__1": {
+            "label": "Adapt to image"
+          },
+          "options__2": {
+            "label": "Small"
+          },
+          "options__3": {
+            "label": "Medium"
+          },
+          "options__4": {
+            "label": "Large"
+          }
+        },
+        "image_overlay_opacity": {
+          "label": "Image overlay opacity"
+        },
+        "color_scheme": {
+          "label": "Color scheme"
+        },
+        "desktop_content_position": {
+          "label": "Desktop content position",
+          "info": "Start and end follow the reading direction: left and right in English, right and left in Arabic.",
+          "options__1": {
+            "label": "Top start"
+          },
+          "options__2": {
+            "label": "Top center"
+          },
+          "options__3": {
+            "label": "Top end"
+          },
+          "options__4": {
+            "label": "Middle start"
+          },
+          "options__5": {
+            "label": "Middle center"
+          },
+          "options__6": {
+            "label": "Middle end"
+          },
+          "options__7": {
+            "label": "Bottom start"
+          },
+          "options__8": {
+            "label": "Bottom center"
+          },
+          "options__9": {
+            "label": "Bottom end"
+          }
+        },
+        "desktop_content_alignment": {
+          "label": "Desktop content alignment",
+          "info": "Start and end follow the reading direction: left and right in English, right and left in Arabic.",
+          "options__1": {
+            "label": "Start"
+          },
+          "options__2": {
+            "label": "Center"
+          },
+          "options__3": {
+            "label": "End"
+          }
+        },
+        "mobile_content_alignment": {
+          "label": "Mobile content alignment",
+          "info": "Start and end follow the reading direction: left and right in English, right and left in Arabic.",
+          "options__1": {
+            "label": "Start"
+          },
+          "options__2": {
+            "label": "Center"
+          },
+          "options__3": {
+            "label": "End"
+          }
+        },
+        "heading_size": {
+          "label": "Heading size",
+          "options__1": {
+            "label": "Small"
+          },
+          "options__2": {
+            "label": "Medium"
+          },
+          "options__3": {
+            "label": "Large"
+          },
+          "options__4": {
+            "label": "Extra large"
+          },
+          "options__5": {
+            "label": "Extra extra large"
+          }
+        }
+      },
+      "blocks": {
+        "heading": {
+          "name": "Heading",
+          "settings": {
+            "heading": {
+              "label": "Heading",
+              "default": "Wear the Story. Keep the Heritage."
+            }
+          }
+        },
+        "text": {
+          "name": "Text",
+          "settings": {
+            "text": {
+              "label": "Text",
+              "default": "Discover contemporary pieces inspired by Palestinian tatreez."
+            }
+          }
+        },
+        "buttons": {
+          "name": "Buttons",
+          "settings": {
+            "button_label_1": {
+              "label": "Label",
+              "default": "Explore the Collection"
+            },
+            "button_link_1": {
+              "label": "Link"
+            },
+            "button_style_secondary_1": {
+              "label": "Outline style"
+            },
+            "button_label_2": {
+              "label": "Label",
+              "default": "Discover Tatreez"
+            },
+            "button_link_2": {
+              "label": "Link"
+            },
+            "button_style_secondary_2": {
+              "label": "Outline style"
+            }
+          }
+        }
+      },
+      "presets": {
+        "name": "Hero"
+      }
+    },
     "all": {
       "animation": {
         "content": "Animations",
@@ -802,6 +960,10 @@
           "options__3": {
             "label": "Solid button"
           }
+        },
+        "view_all_label": {
+          "label": "\"View all\" label",
+          "default": "View all"
         },
         "enable_desktop_slider": {
           "label": "Carousel"

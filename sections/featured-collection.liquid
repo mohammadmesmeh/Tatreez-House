@@ -205,7 +205,7 @@
           class="{% if section.settings.view_all_style == 'link' %}link underlined-link{% elsif section.settings.view_all_style == 'solid' %}button{% else %}button button--secondary{% endif %}"
           aria-label="{{ 'sections.featured_collection.view_all_label' | t: collection_name: section.settings.collection.title | escape }}"
         >
-          {{ 'sections.featured_collection.view_all' | t }}
+          {{ section.settings.view_all_label | default: 'sections.featured_collection.view_all' | t }}
         </a>
       </div>
     {%- endif -%}
@@ -358,6 +358,12 @@
         }
       ],
       "default": "solid"
+    },
+    {
+      "type": "text",
+      "id": "view_all_label",
+      "label": "t:sections.featured-collection.settings.view_all_label.label",
+      "default": "t:sections.featured-collection.settings.view_all_label.default"
     }, 
     {
       "type": "color_scheme",

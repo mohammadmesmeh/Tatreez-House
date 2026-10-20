@@ -276,6 +276,24 @@
     }
   },
   "sections": {
+    "hero": {
+      "blocks": {
+        "heading": {
+          "settings": {
+            "heading": {
+              "default": "Wear the Story. Keep the Heritage."
+            }
+          }
+        },
+        "text": {
+          "settings": {
+            "text": {
+              "default": "Discover contemporary pieces inspired by Palestinian tatreez."
+            }
+          }
+        }
+      }
+    },
     "announcements": {
       "previous_announcement": "Previous announcement",
       "next_announcement": "Next announcement",
@@ -283,7 +301,6 @@
       "announcement": "Announcement",
       "announcement_bar": "Announcement bar"
     },
-
     "header": {
       "announcement": "Announcement",
       "menu": "Menu",

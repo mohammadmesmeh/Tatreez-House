@@ -1,0 +1,381 @@
+/*
+  rtl.css — right-to-left overrides for Dawn components.
+
+  Loaded from layout/theme.liquid only when the storefront direction is RTL (Arabic locale).
+  Dawn positions many components with physical left/right and translateX(); logical properties
+  are used where an override is needed, and [dir='rtl'] scoping only where Dawn's transforms or
+  JS-driven states require it. Everything here mirrors an existing Dawn rule — keep the source
+  file/rule noted in each block so upgrades stay traceable.
+
+  Never mirrored: the logo, product photography, the search, account, cart, close and checkmark
+  icons, and vertical carets (they point down/up, not along the reading direction).
+*/
+
+/* ---------------------------------------------------------------------------
+   Directional icons. Every Dawn "→" (icon-arrow) points along the reading direction, so it is
+   mirrored once here. Wrappers that Dawn rotates 180° for "back" (menu drawer, facets) keep
+   their rotation and therefore end up pointing right — the RTL "back" direction.
+*/
+[dir='rtl'] .icon-arrow {
+  transform: scaleX(-1);
+}
+
+/* Prev/next carets (component-slider.css, component-pagination.css): swap the ±90° rotations. */
+[dir='rtl'] .slider-button--next .icon,
+[dir='rtl'] .pagination__item--prev .icon {
+  transform: rotate(90deg);
+}
+
+[dir='rtl'] .slider-button--prev .icon,
+[dir='rtl'] .pagination__item--next .icon {
+  transform: rotate(-90deg);
+}
+
+[dir='rtl'] .slider-button--next:not([disabled]):hover .icon,
+[dir='rtl'] .pagination__item--prev:hover .icon {
+  transform: rotate(90deg) scale(1.1);
+}
+
+[dir='rtl'] .slider-button--prev:not([disabled]):hover .icon,
+[dir='rtl'] .pagination__item--next:hover .icon {
+  transform: rotate(-90deg) scale(1.1);
+}
+
+[dir='rtl'] .pagination__item--next .icon {
+  margin-left: 0;
+  margin-inline-start: -0.2rem;
+}
+
+[dir='rtl'] .pagination__item--prev .icon {
+  margin-right: 0;
+  margin-inline-end: -0.2rem;
+}
+
+/* ---------------------------------------------------------------------------
+   Header (base.css)
+*/
+[dir='rtl'] .header__icon--cart {
+  margin-right: 0;
+  margin-inline-end: -1.2rem;
+}
+
+[dir='rtl'] .header__menu-item .icon-caret {
+  right: auto;
+  left: 0.8rem;
+}
+
+[dir='rtl'] .header__submenu .header__menu-item::after {
+  right: auto;
+  left: 2rem;
+}
+
+[dir='rtl'] .header__submenu .icon-caret {
+  margin-left: 0;
+  margin-inline-start: 1rem;
+}
+
+[dir='rtl'] .list-menu--right {
+  right: auto;
+  left: 0;
+}
+
+[dir='rtl'] .header--top-center .mega-menu__list > li {
+  padding-right: 0;
+  padding-inline-end: 2.4rem;
+}
+
+/* Search modal: the close button moves to the inline-end edge, so the space Dawn reserves for it
+   (padding on .search-modal__content) moves with it. */
+[dir='rtl'] .search-modal__content {
+  padding: 0 1rem 0 5rem;
+}
+
+[dir='rtl'] .search-modal__close-button {
+  right: auto;
+  left: 0.3rem;
+}
+
+@media screen and (min-width: 750px) {
+  [dir='rtl'] .search-modal__content {
+    padding: 0 6rem;
+  }
+
+  [dir='rtl'] .search-modal__close-button {
+    left: 1rem;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  [dir='rtl'] .search-modal__close-button {
+    margin-left: 0;
+    margin-inline-start: 0.5rem;
+  }
+}
+
+[dir='rtl'] .announcement-bar .slider-button--next {
+  margin-right: 0;
+  margin-inline-end: -1.5rem;
+}
+
+[dir='rtl'] .announcement-bar .slider-button--prev {
+  margin-left: 0;
+  margin-inline-start: -1.5rem;
+}
+
+[dir='rtl'] .announcement-bar__link .icon-arrow {
+  margin-left: 0;
+  margin-inline-start: 0.8rem;
+}
+
+/* ---------------------------------------------------------------------------
+   Menu drawer (component-menu-drawer.css): slides in from the inline-start edge (right), where
+   the menu button sits in RTL; submenus slide in from the inline-end edge.
+*/
+[dir='rtl'] .menu-drawer {
+  left: auto;
+  right: 0;
+  transform: translateX(100%);
+}
+
+[dir='rtl'] .js .menu-drawer__submenu {
+  left: auto;
+  right: 0;
+  transform: translateX(-100%);
+}
+
+/* Restores the open state: the rule above outranks Dawn's open-state selector. */
+[dir='rtl'] details[open].menu-opening > .menu-drawer__submenu {
+  transform: translateX(0);
+}
+
+[dir='rtl'] .menu-drawer summary.menu-drawer__menu-item {
+  padding-right: 3rem;
+  padding-left: 5.2rem;
+}
+
+[dir='rtl'] .menu-drawer__menu-item > .svg-wrapper {
+  right: auto;
+  left: 3rem;
+}
+
+[dir='rtl'] .menu-drawer__close-button {
+  text-align: start;
+  padding: 1.2rem 3rem 1.2rem 2.6rem;
+}
+
+[dir='rtl'] .menu-drawer__close-button .svg-wrapper {
+  margin-right: 0;
+  margin-inline-end: 1rem;
+}
+
+[dir='rtl'] .menu-drawer .list-social {
+  margin-left: 0;
+  margin-inline-start: -1.25rem;
+}
+
+/* ---------------------------------------------------------------------------
+   Cart drawer (component-cart-drawer.css): the panel sits at the inline-end edge (left) via
+   Dawn's flex-end, so it must also slide in from the left.
+*/
+[dir='rtl'] .drawer__inner {
+  transform: translateX(-100%);
+  border-right: 0.1rem solid rgba(var(--color-foreground), 0.2);
+  border-left: 0;
+}
+
+[dir='rtl'] .cart-drawer .tax-note {
+  margin: 1.2rem auto 2rem 0;
+  text-align: end;
+}
+
+/* Cart notification (component-cart-notification.css): drops in under the cart icon (left). */
+[dir='rtl'] .cart-notification {
+  right: auto;
+  left: 0;
+}
+
+@media screen and (min-width: 750px) {
+  [dir='rtl'] .cart-notification {
+    left: 2.2rem;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  [dir='rtl'] .cart-notification-wrapper:is(.page-width) > .cart-notification {
+    right: auto;
+    left: 4rem;
+  }
+}
+
+[dir='rtl'] .cart-notification__heading .icon-checkmark {
+  margin-right: 0;
+  margin-inline-end: 1rem;
+}
+
+[dir='rtl'] .cart-notification__close {
+  margin-right: 0;
+  margin-inline-end: -3rem;
+}
+
+[dir='rtl'] .cart-notification-product__image {
+  margin-right: 0;
+  margin-inline-end: 1.5rem;
+}
+
+/* ---------------------------------------------------------------------------
+   Forms (base.css, component-search.css)
+*/
+[dir='rtl'] .field__input,
+[dir='rtl'] .customer .field input {
+  text-align: start;
+}
+
+/* Email addresses, phone numbers and URLs are Latin, left-to-right data even in Arabic. */
+[dir='rtl'] .field__input:is([type='email'], [type='tel'], [type='url']),
+[dir='rtl'] .customer .field input:is([type='email'], [type='tel'], [type='url']) {
+  direction: ltr;
+  text-align: right;
+}
+
+[dir='rtl'] .field__label,
+[dir='rtl'] .customer .field label,
+[dir='rtl'] .field__input:focus ~ .field__label,
+[dir='rtl'] .field__input:not(:placeholder-shown) ~ .field__label,
+[dir='rtl'] .field__input:-webkit-autofill ~ .field__label,
+[dir='rtl'] .customer .field input:focus ~ label,
+[dir='rtl'] .customer .field input:not(:placeholder-shown) ~ label,
+[dir='rtl'] .customer .field input:-webkit-autofill ~ label {
+  left: auto;
+  right: calc(var(--inputs-border-width) + 2rem);
+}
+
+[dir='rtl'] .field__button {
+  right: auto;
+  left: 0;
+}
+
+[dir='rtl'] .select .svg-wrapper,
+[dir='rtl'] .customer select + .svg-wrapper {
+  right: auto;
+  left: 0;
+}
+
+[dir='rtl'] .select__select,
+[dir='rtl'] .customer select {
+  padding: 0 2rem 0 calc(var(--inputs-border-width) + 3rem);
+}
+
+[dir='rtl'] .search__input.field__input {
+  padding-right: 1.5rem;
+  padding-left: 9.8rem;
+}
+
+[dir='rtl'] .search__button {
+  right: auto;
+  left: var(--inputs-border-width);
+}
+
+[dir='rtl'] .reset__button {
+  right: auto;
+  left: calc(var(--inputs-border-width) + 4.4rem);
+}
+
+[dir='rtl'] .reset__button:not(:focus-visible)::after,
+[dir='rtl'] .reset__button:not(:focus)::after {
+  border-right: 0;
+  border-left: 0.1rem solid rgba(var(--color-foreground), 0.08);
+  right: auto;
+  left: 0;
+}
+
+/* Quantity input: the inner offsets sit on the outer edges, which swap sides. */
+[dir='rtl'] .quantity__button:first-child {
+  margin-left: 0;
+  margin-right: var(--inputs-border-width);
+}
+
+[dir='rtl'] .quantity__button:last-child {
+  margin-right: 0;
+  margin-left: var(--inputs-border-width);
+}
+
+/* Predictive search (component-predictive-search.css) */
+[dir='rtl'] .predictive-search__item {
+  text-align: start;
+}
+
+[dir='rtl'] .predictive-search__item--term .icon-arrow {
+  margin-left: 0;
+  margin-inline-start: calc(var(--font-heading-scale) * 2rem);
+}
+
+/* ---------------------------------------------------------------------------
+   Facets drawer (component-facets.css): opens from the inline-end edge (left).
+*/
+[dir='rtl'] .mobile-facets__inner {
+  margin-left: 0;
+  margin-right: auto;
+  border-width: 0 var(--drawer-border-width) 0 0;
+}
+
+[dir='rtl'] .js .disclosure-has-popup:not(.menu-opening) .mobile-facets__inner {
+  transform: translateX(-105vw);
+}
+
+[dir='rtl'] .js .mobile-facets__submenu {
+  left: auto;
+  right: 0;
+  transform: translateX(-100%);
+}
+
+[dir='rtl'] .js details[open].menu-opening > .mobile-facets__submenu {
+  transform: translateX(0);
+}
+
+/* Dawn rotates this icon itself (not a wrapper) for "back"; in RTL back points right. */
+[dir='rtl'] .mobile-facets__close-button .icon-arrow {
+  transform: none;
+  margin-right: 0;
+  margin-inline-end: 1rem;
+}
+
+/* ---------------------------------------------------------------------------
+   Footer (section-footer.css)
+*/
+@media screen and (max-width: 749px) {
+  [dir='rtl'] .footer-block.footer-block--menu:only-child {
+    text-align: start;
+  }
+}
+
+@media screen and (min-width: 750px) {
+  [dir='rtl'] .footer-block__newsletter:not(:only-child) {
+    text-align: start;
+    margin-right: 0;
+    margin-left: auto;
+  }
+
+  [dir='rtl'] .footer__follow-on-shop:first-child:not(:last-child) {
+    margin-right: 0;
+    margin-left: auto;
+    text-align: start;
+  }
+
+  [dir='rtl'] .footer__follow-on-shop:not(:first-child):not(:last-child),
+  [dir='rtl'] .footer__content-bottom-wrapper:not(.footer__content-bottom-wrapper--center) .footer__copyright {
+    text-align: end;
+  }
+
+  [dir='rtl'] .footer-block__details-content > li:not(:last-child) {
+    margin-right: 0;
+    margin-left: 1.5rem;
+  }
+}
+
+[dir='rtl'] .footer-block__brand-info {
+  text-align: start;
+}
+
+[dir='rtl'] .footer-block:only-child .footer-block__brand-info {
+  text-align: center;
+}

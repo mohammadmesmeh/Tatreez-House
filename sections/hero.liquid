@@ -1,0 +1,382 @@
+{{ 'component-hero.css' | asset_url | stylesheet_tag }}
+
+{%- if section.settings.image_height == 'adapt' and section.settings.image != blank -%}
+  {%- style -%}
+    #Hero-{{ section.id }}::before,
+    #Hero-{{ section.id }} .hero-section__media::before {
+      padding-block-end: {{ 1 | divided_by: section.settings.image.aspect_ratio | times: 100 }}%;
+      content: '';
+      display: block;
+    }
+  {%- endstyle -%}
+{%- endif -%}
+
+{%- style -%}
+  #Hero-{{ section.id }}::after {
+    opacity: {{ section.settings.image_overlay_opacity | divided_by: 100.0 }};
+  }
+{%- endstyle -%}
+
+{%- liquid
+  assign widths = '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840'
+  assign fetch_priority = 'auto'
+  if section.index == 1
+    assign fetch_priority = 'high'
+  endif
+
+  # Alternative text: merchant-supplied override wins, then the image's own alt, then ''
+  # (FR-006). The explicit '' keeps alt="" in the output: image_tag drops a nil alt entirely.
+  assign hero_alt = section.settings.image_alt
+  if hero_alt == blank
+    assign hero_alt = section.settings.image.alt
+  endif
+  if hero_alt == blank
+    assign hero_alt = ''
+  endif
+-%}
+
+<section
+  id="Hero-{{ section.id }}"
+  class="hero-section hero-section--{{ section.settings.image_height }} color-{{ section.settings.color_scheme }} gradient{% if section.settings.image == blank %} hero-section--no-image{% endif %}"
+>
+  {%- if section.settings.image != blank -%}
+    <div class="hero-section__media media">
+      {%- liquid
+        assign image_height = section.settings.image.width | divided_by: section.settings.image.aspect_ratio
+      -%}
+      {{
+        section.settings.image
+        | image_url: width: 3840
+        | image_tag:
+          width: section.settings.image.width,
+          height: image_height,
+          class: 'hero-section__image',
+          sizes: '100vw',
+          widths: widths,
+          fetchpriority: fetch_priority,
+          alt: hero_alt
+      }}
+    </div>
+  {%- endif -%}
+
+  <div
+    class="hero-section__content hero-section__content--{{ section.settings.desktop_content_position }} hero-section__content--align-{{ section.settings.desktop_content_alignment }} hero-section__content--align-mobile-{{ section.settings.mobile_content_alignment }}"
+  >
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'heading' -%}
+          {%- comment -%}
+            Semantic level and visual size are decoupled (FR-014): always <h2>,
+            styled with the merchant-chosen display size class. The | default | t
+            chain renders locale copy when the setting is untouched (FR-011).
+          {%- endcomment -%}
+          <h2
+            class="hero-section__heading inline-richtext {{ section.settings.heading_size }}"
+            {{ block.shopify_attributes }}
+          >
+            {{- block.settings.heading | default: 'sections.hero.blocks.heading.settings.heading.default' | t -}}
+          </h2>
+        {%- when 'text' -%}
+          <div class="hero-section__text rte" {{ block.shopify_attributes }}>
+            {{- block.settings.text | default: 'sections.hero.blocks.text.settings.text.default' | t -}}
+          </div>
+        {%- when 'buttons' -%}
+          {%- liquid
+            # A CTA renders only when BOTH label and link are present (FR-005, contract §3).
+            assign show_button_1 = false
+            if block.settings.button_label_1 != blank and block.settings.button_link_1 != blank
+              assign show_button_1 = true
+            endif
+            assign show_button_2 = false
+            if block.settings.button_label_2 != blank and block.settings.button_link_2 != blank
+              assign show_button_2 = true
+            endif
+          -%}
+          {%- if show_button_1 or show_button_2 -%}
+            <div class="hero-section__buttons" {{ block.shopify_attributes }}>
+              {%- if show_button_1 -%}
+                <a
+                  href="{{ block.settings.button_link_1 }}"
+                  class="button{% if block.settings.button_style_secondary_1 %} button--secondary{% else %} button--primary{% endif %}"
+                >
+                  {{- block.settings.button_label_1 | escape -}}
+                </a>
+              {%- endif -%}
+              {%- if show_button_2 -%}
+                <a
+                  href="{{ block.settings.button_link_2 }}"
+                  class="button{% if block.settings.button_style_secondary_2 %} button--secondary{% else %} button--primary{% endif %}"
+                >
+                  {{- block.settings.button_label_2 | escape -}}
+                </a>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.hero.name",
+  "tag": "section",
+  "class": "section hero-section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "t:sections.hero.blocks.heading.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "default": "t:sections.hero.blocks.heading.settings.heading.default",
+          "label": "t:sections.hero.blocks.heading.settings.heading.label"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "t:sections.hero.blocks.text.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "text",
+          "default": "t:sections.hero.blocks.text.settings.text.default",
+          "label": "t:sections.hero.blocks.text.settings.text.label"
+        }
+      ]
+    },
+    {
+      "type": "buttons",
+      "name": "t:sections.hero.blocks.buttons.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_label_1",
+          "default": "t:sections.hero.blocks.buttons.settings.button_label_1.default",
+          "label": "t:sections.hero.blocks.buttons.settings.button_label_1.label"
+        },
+        {
+          "type": "url",
+          "id": "button_link_1",
+          "label": "t:sections.hero.blocks.buttons.settings.button_link_1.label"
+        },
+        {
+          "type": "checkbox",
+          "id": "button_style_secondary_1",
+          "default": false,
+          "label": "t:sections.hero.blocks.buttons.settings.button_style_secondary_1.label"
+        },
+        {
+          "type": "text",
+          "id": "button_label_2",
+          "default": "t:sections.hero.blocks.buttons.settings.button_label_2.default",
+          "label": "t:sections.hero.blocks.buttons.settings.button_label_2.label"
+        },
+        {
+          "type": "url",
+          "id": "button_link_2",
+          "label": "t:sections.hero.blocks.buttons.settings.button_link_2.label"
+        },
+        {
+          "type": "checkbox",
+          "id": "button_style_secondary_2",
+          "default": true,
+          "label": "t:sections.hero.blocks.buttons.settings.button_style_secondary_2.label"
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.hero.settings.image.label"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "t:sections.hero.settings.image_alt.label",
+      "info": "t:sections.hero.settings.image_alt.info"
+    },
+    {
+      "type": "select",
+      "id": "image_height",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "t:sections.hero.settings.image_height.options__1.label"
+        },
+        {
+          "value": "small",
+          "label": "t:sections.hero.settings.image_height.options__2.label"
+        },
+        {
+          "value": "medium",
+          "label": "t:sections.hero.settings.image_height.options__3.label"
+        },
+        {
+          "value": "large",
+          "label": "t:sections.hero.settings.image_height.options__4.label"
+        }
+      ],
+      "default": "large",
+      "label": "t:sections.hero.settings.image_height.label"
+    },
+    {
+      "type": "range",
+      "id": "image_overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "t:sections.hero.settings.image_overlay_opacity.label",
+      "default": 55
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme-1",
+      "label": "t:sections.hero.settings.color_scheme.label"
+    },
+    {
+      "type": "select",
+      "id": "desktop_content_position",
+      "options": [
+        {
+          "value": "top-start",
+          "label": "t:sections.hero.settings.desktop_content_position.options__1.label"
+        },
+        {
+          "value": "top-center",
+          "label": "t:sections.hero.settings.desktop_content_position.options__2.label"
+        },
+        {
+          "value": "top-end",
+          "label": "t:sections.hero.settings.desktop_content_position.options__3.label"
+        },
+        {
+          "value": "middle-start",
+          "label": "t:sections.hero.settings.desktop_content_position.options__4.label"
+        },
+        {
+          "value": "middle-center",
+          "label": "t:sections.hero.settings.desktop_content_position.options__5.label"
+        },
+        {
+          "value": "middle-end",
+          "label": "t:sections.hero.settings.desktop_content_position.options__6.label"
+        },
+        {
+          "value": "bottom-start",
+          "label": "t:sections.hero.settings.desktop_content_position.options__7.label"
+        },
+        {
+          "value": "bottom-center",
+          "label": "t:sections.hero.settings.desktop_content_position.options__8.label"
+        },
+        {
+          "value": "bottom-end",
+          "label": "t:sections.hero.settings.desktop_content_position.options__9.label"
+        }
+      ],
+      "default": "middle-center",
+      "label": "t:sections.hero.settings.desktop_content_position.label",
+      "info": "t:sections.hero.settings.desktop_content_position.info"
+    },
+    {
+      "type": "select",
+      "id": "desktop_content_alignment",
+      "options": [
+        {
+          "value": "start",
+          "label": "t:sections.hero.settings.desktop_content_alignment.options__1.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.hero.settings.desktop_content_alignment.options__2.label"
+        },
+        {
+          "value": "end",
+          "label": "t:sections.hero.settings.desktop_content_alignment.options__3.label"
+        }
+      ],
+      "default": "center",
+      "label": "t:sections.hero.settings.desktop_content_alignment.label",
+      "info": "t:sections.hero.settings.desktop_content_alignment.info"
+    },
+    {
+      "type": "select",
+      "id": "mobile_content_alignment",
+      "options": [
+        {
+          "value": "start",
+          "label": "t:sections.hero.settings.mobile_content_alignment.options__1.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.hero.settings.mobile_content_alignment.options__2.label"
+        },
+        {
+          "value": "end",
+          "label": "t:sections.hero.settings.mobile_content_alignment.options__3.label"
+        }
+      ],
+      "default": "center",
+      "label": "t:sections.hero.settings.mobile_content_alignment.label",
+      "info": "t:sections.hero.settings.mobile_content_alignment.info"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "t:sections.hero.settings.heading_size.options__1.label"
+        },
+        {
+          "value": "h1",
+          "label": "t:sections.hero.settings.heading_size.options__2.label"
+        },
+        {
+          "value": "h0",
+          "label": "t:sections.hero.settings.heading_size.options__3.label"
+        },
+        {
+          "value": "hxl",
+          "label": "t:sections.hero.settings.heading_size.options__4.label"
+        },
+        {
+          "value": "hxxl",
+          "label": "t:sections.hero.settings.heading_size.options__5.label"
+        }
+      ],
+      "default": "h1",
+      "label": "t:sections.hero.settings.heading_size.label"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.hero.presets.name",
+      "blocks": [
+        {
+          "type": "heading"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "buttons"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

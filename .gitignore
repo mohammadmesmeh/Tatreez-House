@@ -1,0 +1,23 @@
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Dependencies and tool caches
+node_modules/
+.opencode/node_modules/
+.opencode/bun.lock
+
+# Secrets / local environment
+.env
+.env.*
+*.pem
+
+# Shopify CLI local state
+.shopify/
+
+# Editor / scratch
+.vscode/
+.idea/
+*.log
+.lighthouseci/
