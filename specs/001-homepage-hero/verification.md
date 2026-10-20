@@ -203,3 +203,28 @@ byte-faithful to the contract.
 4. **Optional** — retry a `url` schema default post-T002 (§4.1 follow-up).
 5. **Before any publish** — [withdrawn Arabic font] license permission for web embedding (`docs/fonts/README.md`),
    owner approval of deviations §4.1–§4.4, and a fresh `shopify theme check`.
+
+---
+
+## 8. M0 re-verification (2026-10-20, branch `002-foundation`)
+
+Environment: Shopify CLI 4.9.4 · `shopify theme dev --theme 142644281431 --theme-editor-sync
+--reconciliation-strategy keep-local --port 9393` (port 9292 was held by another process) ·
+headless Microsoft Edge via Playwright · live theme untouched. The owner had placed the hero on
+the homepage in the editor (`hero_YjYFq6`, scheme-3, image `shutterstock_2380757597.jpg`), and
+M0 set the CTA links. RTL was forced with `dir="rtl" lang="ar"` plus an injected `rtl.css`,
+because the Arabic language is not enabled in the store (`/ar` → 404).
+
+| # | Scenario | Status | Evidence |
+|---|----------|--------|----------|
+| 2 | Section unplaced on delivery | Superseded | The owner placed it; M0 configured it in `templates/index.json`. |
+| 3 | Merchant adds hero from editor | PASS (owner) | Placed through the theme editor and pulled with `shopify theme pull`. |
+| 4 | Heading hierarchy | PASS | Served homepage: one `<h1>` (header) and exactly one hero `<h2 class="hero-section__heading … h1">`. |
+| 5 | Image present, overlay legible | PASS (scheme-3) | Screenshots at 360/768/1440: white text on deep-green 40% overlay over a dark photo. `alt=""` now rendered (was missing; fixed in `01cce29`). |
+| 6 | No image (text-only fallback) | UNTESTED | Would need the admin image removed; not changed in this run. |
+| 7 | Colour scheme only | PARTIAL | scheme-3 verified visually; other schemes not rendered. All schemes pass AA by `scripts/contrast-check.mjs`. |
+| 8 | Keyboard and focus | PASS after fix | Tab order header → CTA 1 → CTA 2 → footer, in LTR (1440) and RTL (360). The primary CTA ring was invisible (dark on dark); fixed in `7e6a49b`, re-checked: white 2px ring. |
+| 9 | Responsive | PASS (360/390/768/1440) | No horizontal overflow (`scrollWidth == clientWidth`) at any width; CTAs stack on 360. 1024 not captured. |
+| 10 | LTR/RTL | PASS (forced RTL) | Arabic heading/text from `ar.json` rendered in Amiri/Zain at 360 and 1440; no mark collisions; CTAs mirror. The real Arabic locale route remains UNTESTED until the language is enabled. |
+| 11 | CTA destinations | PARTIAL | `/collections/all` → 200. `/pages/tatreez` → **404** until the owner creates the page (T002). |
+| 12 | No new runtime dependencies | PASS | Hero adds only `component-hero.css`; no scripts. |
