@@ -51,15 +51,19 @@
         "desktop_content_position": "middle-center",
         "desktop_content_alignment": "center",
         "mobile_content_alignment": "center",
-        "heading_size": "h1"
+        "heading_size": "h1",
+        "layout": "split",
+        "split_image_position": "end",
+        "show_eyebrow": true,
+        "eyebrow": ""
       }
     },
     "featured_collection": {
       "type": "featured-collection",
       "settings": {
         "collection": "all",
-        "products_to_show": 8,
-        "title": "&nbsp;Our Signature Pieces&nbsp;",
+        "products_to_show": 4,
+        "title": "Our Signature Pieces",
         "heading_size": "h2",
         "description": "",
         "show_description": false,
@@ -71,21 +75,134 @@
         "view_all_style": "solid",
         "view_all_label": "View all",
         "color_scheme": "scheme-80059332-ff5c-4f81-a22c-80e5aab949f5",
-        "image_ratio": "adapt",
+        "image_ratio": "portrait",
         "image_shape": "default",
         "show_secondary_image": true,
         "show_vendor": false,
         "show_rating": false,
-        "quick_add": "none",
+        "quick_add": "standard",
         "columns_mobile": "2",
         "swipe_on_mobile": false,
         "padding_top": 44,
         "padding_bottom": 36
       }
+    },
+    "path_cards": {
+      "type": "path-cards",
+      "blocks": {
+        "path_shop": {
+          "type": "path",
+          "settings": {
+            "role": "shop",
+            "image": "",
+            "heading": "",
+            "text": "",
+            "button_label": "",
+            "link": ""
+          }
+        },
+        "path_learn": {
+          "type": "path",
+          "settings": {
+            "role": "learn",
+            "image": "",
+            "heading": "",
+            "text": "",
+            "button_label": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "path_shop",
+        "path_learn"
+      ],
+      "settings": {
+        "eyebrow": "",
+        "title": "",
+        "lede": "",
+        "color_scheme": "scheme-1",
+        "linen_surface": false
+      }
+    },
+    "brand_story": {
+      "type": "brand-story",
+      "settings": {
+        "image_position": "start",
+        "eyebrow": "",
+        "heading": "",
+        "text": "",
+        "button_label": "",
+        "link": "",
+        "show_divider": true,
+        "divider_tone": "accent",
+        "color_scheme": "scheme-1",
+        "linen_surface": false
+      }
+    },
+    "digital_patterns": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "Digital patterns",
+        "heading_size": "h2",
+        "description": "<p>Instant download. Stitch the motifs yourself, at your own pace.</p>",
+        "show_description": true,
+        "description_style": "body",
+        "collection": "digital-patterns",
+        "products_to_show": 3,
+        "columns_desktop": 3,
+        "full_width": false,
+        "show_view_all": true,
+        "view_all_style": "link",
+        "view_all_label": "All patterns",
+        "enable_desktop_slider": false,
+        "color_scheme": "scheme-80059332-ff5c-4f81-a22c-80e5aab949f5",
+        "image_ratio": "portrait",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "standard",
+        "columns_mobile": "2",
+        "swipe_on_mobile": false,
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
+    },
+    "learn_teaser": {
+      "type": "learn-teaser",
+      "settings": {
+        "blog": "news",
+        "eyebrow": "",
+        "heading": "",
+        "show_date": true,
+        "color_scheme": "scheme-1",
+        "linen_surface": false
+      }
+    },
+    "workshops_teaser": {
+      "type": "workshops-teaser",
+      "settings": {
+        "image_position": "end",
+        "eyebrow": "",
+        "heading": "",
+        "text": "",
+        "button_label": "",
+        "link": "",
+        "show_divider": true,
+        "divider_tone": "accent",
+        "color_scheme": "scheme-1",
+        "linen_surface": false
+      }
     }
   },
   "order": [
     "hero_YjYFq6",
-    "featured_collection"
+    "path_cards",
+    "featured_collection",
+    "brand_story",
+    "digital_patterns",
+    "learn_teaser",
+    "workshops_teaser"
   ]
 }
