@@ -285,6 +285,28 @@ h4,
   min-inline-size: var(--th-target);
 }
 
+/* Dawn controls below 44px (filters/sort on collection and search, announcement link). */
+.facets__summary,
+.mobile-facets__open-wrapper,
+.mobile-facets__open,
+.facet-filters__sort,
+.announcement-bar__link {
+  min-block-size: var(--th-target);
+}
+
+.facets__summary,
+.mobile-facets__open,
+.announcement-bar__link {
+  display: flex;
+  align-items: center;
+}
+
+/* Dawn sets min-height: auto on these selects at (0,2,0) in a later stylesheet. */
+.facet-filters__field .select__select.facet-filters__sort,
+.mobile-facets__sort .select__select.select__select {
+  min-block-size: var(--th-target);
+}
+
 /* ---------------------------------------------------------------------------
    6. Section rhythm for new sections
 */

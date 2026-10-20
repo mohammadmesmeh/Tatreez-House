@@ -80,11 +80,6 @@
   display: none;
 }
 
-.facets__summary,
-.mobile-facets__open,
-.facet-filters__field .select__select {
-  min-block-size: var(--th-target);
-}
 
 .product-count__text,
 .mobile-facets__count {
