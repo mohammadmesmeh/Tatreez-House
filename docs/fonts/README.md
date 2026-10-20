@@ -48,7 +48,7 @@ face hurts readability and accessibility when it carries every heading.
 
 - `fonts.css` (from `assets/fonts.css.liquid`) holds all `@font-face` rules, each with
   `font-display: swap`. Keep the `.css.liquid` extension: `asset_url` only runs in `.liquid` assets.
-- Two preloads per locale, body + heading face: `zain-arabic-400.woff2` + `amiri-arabic-700.woff2`
+- Two preloads per locale, body + heading face: `zain-arabic-400.woff2` + `amiri-arabic-400.woff2`
   when `request.locale.iso_code == 'ar'`, `nunito-latin.woff2` + `fraunces-latin.woff2` otherwise.
   The heading face is preloaded because the hero heading is usually the LCP element, and because a
   late heading font shows the fallback serif for the whole swap period (see M2 in
