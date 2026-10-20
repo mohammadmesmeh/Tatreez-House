@@ -353,7 +353,8 @@
       }
     },
     "footer": {
-      "payment": "Payment methods"
+      "payment": "Payment methods",
+      "demo_note": "Tatreez House is a fictional demo brand created for a design portfolio."
     },
     "featured_blog": {
       "view_all": "View all",

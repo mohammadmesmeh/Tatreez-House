@@ -1,0 +1,87 @@
+/*
+  section-footer-tatreez.css — footer refinements (stitch divider, mobile accordions, demo note).
+  Loaded by sections/footer.liquid.
+*/
+
+.footer__stitch {
+  margin-block-end: var(--th-space-5);
+}
+
+.footer .footer-block__heading {
+  font-family: var(--font-heading-family);
+  font-size: var(--th-step-h6);
+  font-weight: 500;
+}
+
+/* Accordion: the button is the mobile control, the label the desktop heading. */
+.footer-accordion__toggle {
+  display: none;
+  inline-size: 100%;
+  min-block-size: var(--th-target);
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--th-space-2);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.footer-accordion__toggle .svg-wrapper {
+  inline-size: 1.2rem;
+  transition: transform var(--th-duration) var(--th-ease);
+}
+
+.footer-accordion__toggle[aria-expanded='true'] .svg-wrapper {
+  transform: rotate(180deg);
+}
+
+@media screen and (max-width: 749px) {
+  .js .footer-accordion__toggle {
+    display: flex;
+  }
+
+  .js .footer-accordion__label {
+    display: none;
+  }
+
+  .footer .footer-block--menu {
+    border-block-end: var(--th-border-width) solid rgb(var(--th-border));
+    padding-block: var(--th-space-1);
+  }
+
+  .footer .footer-block--menu .footer-block__heading {
+    margin: 0;
+  }
+
+  .footer-accordion [data-accordion-panel] {
+    padding-block-end: var(--th-space-2);
+  }
+
+  .footer-accordion .list-menu__item--link {
+    min-block-size: var(--th-target);
+    display: flex;
+    align-items: center;
+  }
+}
+
+/* Desktop: lists always visible, whatever state the accordion was left in. */
+@media screen and (min-width: 750px) {
+  .footer-accordion [data-accordion-panel][hidden] {
+    display: block;
+  }
+}
+
+.footer__demo-note {
+  display: block;
+  margin-block-start: var(--th-space-1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer-accordion__toggle .svg-wrapper {
+    transition: none;
+  }
+}

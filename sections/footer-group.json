@@ -15,6 +15,9 @@
       "type": "footer",
       "settings": {
         "color_scheme": "scheme-1",
+        "show_divider": true,
+        "divider_tone": "accent",
+        "show_demo_note": true,
         "newsletter_enable": true,
         "newsletter_heading": "Subscribe to our emails",
         "enable_follow_on_shop": true,

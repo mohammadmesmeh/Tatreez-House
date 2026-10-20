@@ -1385,6 +1385,10 @@
         }
       },
       "settings": {
+        "show_demo_note": {
+          "label": "Show demo brand note",
+          "info": "A short line saying this is a fictional demo brand."
+        },
         "newsletter_enable": {
           "label": "Email signup"
         },
