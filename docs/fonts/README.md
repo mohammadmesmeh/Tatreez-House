@@ -8,7 +8,8 @@ produced, and keeps the licence texts. Nothing in `docs/` is served by the theme
 
 | Role | Family | Weights served | Scope (`unicode-range`) | File(s) |
 |---|---|---|---|---|
-| Latin body, UI and headings | **Nunito** | variable 200–1000 (body 400/700, headings 700) | Latin | `nunito-latin.woff2` |
+| Latin headings and display | **Fraunces** | variable `opsz` 9–144, `wght` 300–700 (SOFT/WONK pinned to 0) | Latin | `fraunces-latin.woff2` |
+| Latin body and UI | **Nunito** | variable 200–1000 (body 400/700) | Latin | `nunito-latin.woff2` |
 | Arabic body and UI | **Zain** | 400, 700 | Arabic | `zain-arabic-400.woff2`, `zain-arabic-700.woff2` |
 | Arabic headings | **Amiri** | 400, 700 | Arabic | `amiri-arabic-400.woff2`, `amiri-arabic-700.woff2` |
 | Decorative accent only | **Playwrite NZ Basic** | variable 100–400 | Latin | `playwrite-nz-basic.woff2` |
@@ -17,7 +18,7 @@ Stacks (set once in `snippets/theme-fonts.liquid`, rendered by both layouts and 
 
 ```css
 --font-body-family:    'Nunito', 'Zain', system-ui, 'Segoe UI', Tahoma, sans-serif;
---font-heading-family: 'Nunito', 'Amiri', 'Times New Roman', serif;
+--font-heading-family: 'Fraunces', 'Amiri', Georgia, serif;
 --font-accent-family:  'Playwrite NZ Basic', 'Nunito', cursive;   /* only via .font-accent */
 ```
 
@@ -47,8 +48,11 @@ face hurts readability and accessibility when it carries every heading.
 
 - `fonts.css` (from `assets/fonts.css.liquid`) holds all `@font-face` rules, each with
   `font-display: swap`. Keep the `.css.liquid` extension: `asset_url` only runs in `.liquid` assets.
-- Exactly one preload: `zain-arabic-400.woff2` when `request.locale.iso_code == 'ar'`,
-  `nunito-latin.woff2` otherwise.
+- Two preloads per locale, body + heading face: `zain-arabic-400.woff2` + `amiri-arabic-700.woff2`
+  when `request.locale.iso_code == 'ar'`, `nunito-latin.woff2` + `fraunces-latin.woff2` otherwise.
+  The heading face is preloaded because the hero heading is usually the LCP element, and because a
+  late heading font shows the fallback serif for the whole swap period (see M2 in
+  `docs/DECISIONS.md`).
 - **Dawn's font pickers** (`type_header_font`, `type_body_font`) are kept in
   `config/settings_schema.json` (setting IDs preserved, theme editor unchanged) but the layouts no
   longer output their `font_face` rules or the `fonts.shopifycdn.com` preconnect. The pickers
@@ -95,16 +99,29 @@ work. `--name-IDs='*'` keeps the copyright and licence name records.
 
 | File | Bytes | SHA-256 |
 |---|---|---|
+| `assets/fraunces-latin.woff2` | 66,316 | `b2e0e2c94db6948bc66b3674fcee7b17d06f8f0d0ffcb67c80686764885d946e` |
 | `assets/nunito-latin.woff2` | 39,128 | `ba344451eab25b217a165363b1982048a5e5830a0daf36577973955a04cac793` |
 | `assets/playwrite-nz-basic.woff2` | 37,308 | `947c7f80daa998895febff219375966a9d0e6612d800da367da9d8ae9db7f61e` |
 | `assets/zain-arabic-400.woff2` | 32,476 | `bf1720817247f8d21781a80f1375eea312fd585125803a9ce311656f2151009e` |
 | `assets/zain-arabic-700.woff2` | 32,292 | `646703bc9066553997cde42a55b503af06a86321014720b962e235e3410a6150` |
 | `assets/amiri-arabic-400.woff2` | 109,176 | `6213f582b0e8788c6f870e524231a9660bd4922382fe5193cb1acfb7780e8df4` |
 | `assets/amiri-arabic-700.woff2` | 109,304 | `a2a6e11492cb2a2f4420ba4bd370e7e1e8d2d4c0ba6a5f2935b199a06da35677` |
-| **Total** | **359,684** (≈351 KB) | |
+| **Total** | **426,000** (≈416 KB) | |
 
 Amiri stays relatively large after subsetting because its GSUB closure keeps ~5,900 glyphs
 (Naskh ligatures and mark variants). It is only fetched when Arabic heading text renders.
+
+### Fraunces (added M2, 2026-10-20)
+
+- Source: google/fonts `ofl/fraunces/Fraunces[SOFT,WONK,opsz,wght].ttf` at commit
+  `4024282d9b0cffcdb8e3024560862746178d741f` (upstream Version 1.000), SHA-256
+  `177ff6c0f14e5550a3c624247cd1189611d4eb65d000b14944c63d967958abb`.
+  © 2018 The Fraunces Project Authors (github.com/undercasetype/Fraunces). No Reserved Font Name.
+- Produced with fontTools 4.67: `instancer` pins `SOFT=0`, `WONK=0` (calm, upright letterforms) and
+  limits `wght` to 300–700; the subsetter keeps the Latin range below with all layout features.
+  `opsz` (9–144) is kept: 66 KB with it vs 36 KB without, accepted for optical sizing across the
+  43–76 px display and 18–25 px card-title range.
+- Verified: family `Fraunces`, axes `opsz 9–144`, `wght 300–700`, 249 glyphs, no Arabic.
 
 ### Latin files (unchanged)
 
@@ -120,6 +137,7 @@ Amiri stays relatively large after subsetting because its GSUB closure keeps ~5,
 
 | Family | Licence | Text | Self-hosting / web embedding |
 |---|---|---|---|
+| Fraunces | SIL OFL 1.1 | `licenses/OFL-Fraunces.txt` | permitted |
 | Nunito | SIL OFL 1.1 | `licenses/OFL-Nunito.txt` | permitted |
 | Playwrite NZ Basic | SIL OFL 1.1 | `licenses/OFL-PlaywriteNZBasic.txt` | permitted |
 | Zain | SIL OFL 1.1 | `licenses/OFL-Zain.txt` | permitted |
