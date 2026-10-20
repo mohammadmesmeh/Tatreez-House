@@ -26,6 +26,13 @@ summary.list-menu__item {
   transition: font-size var(--th-duration) var(--th-ease);
 }
 
+@media screen and (max-width: 749px) {
+  .header__heading-link .h2 {
+    font-size: calc(var(--font-heading-scale) * 2rem);
+    white-space: nowrap;
+  }
+}
+
 .header__inline-menu .header__menu-item {
   min-block-size: var(--th-target);
   font-size: 1.5rem;
