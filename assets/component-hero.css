@@ -49,15 +49,16 @@
   object-position: center;
 }
 
-/* Darkening overlay behind the content — driven by image_overlay_opacity (default 55%);
-   hidden in the no-image fallback. The inline #Hero-…::after rule in the section always
-   overrides this static value with the merchant's setting. */
+/* Overlay behind the content, tinted with the colour scheme's background so the scheme's
+   text colour always reads on it; strength comes from image_overlay_opacity (default 55%).
+   Hidden in the no-image fallback. The inline #Hero-…::after rule in the section always
+   overrides this static opacity with the merchant's setting. */
 .hero-section::after {
   content: '';
   position: absolute;
   inset: 0;
   z-index: -1;
-  background-color: #000;
+  background-color: rgb(var(--color-background));
   opacity: 0.55;
   pointer-events: none;
 }
@@ -256,27 +257,20 @@
 
 /* ---------------------------------------------------------------------------
    Signature styling (tatreez-inspired storefront hero).
-   Everything below is scoped to the IMAGE state, where a dark overlay is
-   guaranteed. The text-only fallback keeps Dawn's scheme-driven colors so it
-   stays readable on any colour scheme.
+   Every colour comes from the section's colour scheme (--color-foreground,
+   --color-button, …), so merchants restyle the hero by picking a scheme; no
+   brand hex values live in this file.
 */
 
-/* White copy over the dark overlay: the scheme foreground is merchant-chosen
-   and is not guaranteed to be light, so dark-on-dark must not be possible. */
-.hero-section:not(.hero-section--no-image) .hero-section__heading,
-.hero-section:not(.hero-section--no-image) .hero-section__text {
-  color: #ffffff;
+.hero-section__heading,
+.hero-section__text {
+  color: rgb(var(--color-foreground));
 }
 
-/* Cross-stitch motif: a short row of embroidered X stitches above the copy.
-   Ivory reads against the dark overlay; embroidery red (#8E3038) reads on the
-   light scheme background of the text-only fallback. */
+/* Cross-stitch motif: a short row of embroidered X stitches above the copy,
+   drawn in the scheme's button colour (the scheme accent). */
 .hero-section__content {
-  --hero-stitch-color: #8e3038;
-}
-
-.hero-section:not(.hero-section--no-image) .hero-section__content {
-  --hero-stitch-color: #f7f2e8;
+  --hero-stitch-color: rgb(var(--color-button));
 }
 
 .hero-section__content::before {
@@ -304,46 +298,9 @@
   background-repeat: repeat-x;
 }
 
-/* CTAs — Dawn renders button background, label AND the ::after outline from
-   --color-button / --color-button-text / --alpha-button-background, so pinning
-   the custom properties restyles all three at once. Specificity note: these
-   selectors outrank base.css's .button / .button--secondary rules. */
-.hero-section:not(.hero-section--no-image) .hero-section__buttons .button--primary {
-  --color-button: 247, 242, 232;
-  --color-button-text: 23, 53, 43;
-  --alpha-button-background: 1;
-  --border-opacity: 1;
-  background-color: #f7f2e8;
-  color: #17352b;
-  transition:
-    box-shadow var(--duration-short) ease,
-    background-color var(--duration-short) ease;
-}
-
-.hero-section:not(.hero-section--no-image) .hero-section__buttons .button--primary:hover {
-  background-color: #efe8d9;
-}
-
-.hero-section:not(.hero-section--no-image) .hero-section__buttons .button--secondary {
-  --color-button: 255, 255, 255;
-  --color-button-text: 255, 255, 255;
-  --alpha-button-background: 0;
-  background-color: transparent;
-  color: #ffffff;
-  transition:
-    box-shadow var(--duration-short) ease,
-    background-color var(--duration-short) ease,
-    color var(--duration-short) ease;
-}
-
-/* base.css re-derives the secondary outline from the theme's border-opacity
-   setting on the pseudo-element; pin it solid so the white outline never
-   washes out against a bright image. */
+/* Over an image, base.css derives the secondary outline from the theme's
+   border-opacity setting; pin it solid so the outline never washes out
+   against a bright photo. Colours still come from the scheme. */
 .hero-section:not(.hero-section--no-image) .hero-section__buttons .button--secondary::after {
   --border-opacity: 1;
-}
-
-.hero-section:not(.hero-section--no-image) .hero-section__buttons .button--secondary:hover {
-  background-color: #ffffff;
-  color: #17352b;
 }
