@@ -12,7 +12,7 @@
     "banner": {
       "type": "collection-hero",
       "settings": {
-        "show_description": true,
+        "show_collection_description": true,
         "show_collection_image": true,
         "image_position": "end",
         "heading_size": "h0",

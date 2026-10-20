@@ -13,7 +13,7 @@
     <div class="collection-hero__text">
       <p class="th-eyebrow">{{ 'sections.collection_template.title' | t }}</p>
       <h1 class="collection-hero__title {{ section.settings.heading_size }}">{{ collection.title | escape }}</h1>
-      {%- if section.settings.show_description and collection.description != blank -%}
+      {%- if section.settings.show_collection_description and collection.description != blank -%}
         <div class="collection-hero__description rte">{{ collection.description }}</div>
       {%- endif -%}
       {%- if section.settings.show_divider -%}
@@ -48,7 +48,7 @@
   "settings": [
     {
       "type": "checkbox",
-      "id": "show_description",
+      "id": "show_collection_description",
       "default": true,
       "label": "t:sections.collection-hero.settings.show_description.label"
     },
