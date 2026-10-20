@@ -69,6 +69,7 @@
         "full_width": false,
         "show_view_all": true,
         "view_all_style": "solid",
+        "view_all_label": "View all",
         "color_scheme": "scheme-80059332-ff5c-4f81-a22c-80e5aab949f5",
         "image_ratio": "adapt",
         "image_shape": "default",
