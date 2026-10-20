@@ -232,8 +232,11 @@
   gap: 1rem;
 }
 
+/* The ring sits outside the button, on the hero background, so it uses the scheme's text colour
+   (which the scheme guarantees against the background/overlay) — not the button label colour,
+   which on a primary button matches the dark background and disappears. */
 .hero-section__buttons .button:focus-visible {
-  outline: 2px solid currentColor;
+  outline: 2px solid rgb(var(--color-foreground));
   outline-offset: 3px;
 }
 
