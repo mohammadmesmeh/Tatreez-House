@@ -14,8 +14,22 @@ if (!customElements.get('sticky-atc')) {
       static mobileQuery = window.matchMedia('(max-width: 749px)');
 
       connectedCallback() {
+        // Dawn's quick-add modal copies product-info (and this element) into a dialog: stay inert.
+        if (this.closest('quick-add-modal')) return;
+
         this.button = this.querySelector('[data-sticky-button]');
+        this.label = this.querySelector('[data-sticky-label]');
+        this.errorElement = this.querySelector('[data-sticky-error]');
         this.priceTarget = this.querySelector('[data-sticky-price]');
+        this.form = this.button ? document.getElementById(this.button.getAttribute('form')) : null;
+
+        // Busy state on the bar itself: the main button (where Dawn shows its spinner) is off screen.
+        this.onSubmit = (event) => {
+          if (event.submitter !== this.button) return;
+          this.setError('');
+          this.setBusy(true);
+        };
+        this.form?.addEventListener('submit', this.onSubmit, true);
         this.mainButtonOutOfView = false;
 
         this.sync();
@@ -25,17 +39,33 @@ if (!customElements.get('sticky-atc')) {
         StickyAtc.mobileQuery.addEventListener('change', this.onMediaChange);
 
         if (typeof subscribe === 'function' && typeof PUB_SUB_EVENTS !== 'undefined') {
-          this.unsubscribe = subscribe(PUB_SUB_EVENTS.variantChange, () => {
-            // product-info swaps the button markup; re-observe the new node and mirror it.
-            this.sync();
-            this.observe();
-          });
+          this.unsubscribers = [
+            subscribe(PUB_SUB_EVENTS.variantChange, () => {
+              // product-info swaps the button markup; re-observe the new node and mirror it.
+              this.setError('');
+              this.sync();
+              this.observe();
+            }),
+            subscribe(PUB_SUB_EVENTS.cartUpdate, (event) => {
+              if (event?.source === 'product-form') this.setBusy(false);
+            }),
+            subscribe(PUB_SUB_EVENTS.cartError, (event) => {
+              if (event?.source !== 'product-form' || !this.isBusy) return;
+              this.setBusy(false);
+              // Dawn's server message is already localized; show it where the shopper is looking.
+              // Dawn publishes the specific text (response.description) as `errors`; `message` is
+              // Shopify's generic title ("Cart Error"), so it is only a fallback.
+              const message = (typeof event.errors === 'string' ? event.errors : '') || event.message;
+              this.setError(message || this.dataset.errorFallback || '');
+            }),
+          ];
         }
       }
 
       disconnectedCallback() {
         this.observer?.disconnect();
-        this.unsubscribe?.();
+        this.unsubscribers?.forEach((unsubscribe) => unsubscribe());
+        this.form?.removeEventListener('submit', this.onSubmit, true);
         StickyAtc.mobileQuery.removeEventListener('change', this.onMediaChange);
         document.documentElement.style.removeProperty('scroll-padding-block-end');
       }
@@ -60,11 +90,24 @@ if (!customElements.get('sticky-atc')) {
         const main = this.mainButton;
         if (main && this.button) {
           const label = main.querySelector('span')?.textContent.trim();
-          if (label) this.button.textContent = label;
+          if (label && this.label) this.label.textContent = label;
           this.button.disabled = main.disabled;
         }
         const price = document.getElementById(this.dataset.priceSource);
         if (price && this.priceTarget) this.priceTarget.innerHTML = price.innerHTML;
+      }
+
+      setBusy(busy) {
+        this.isBusy = busy;
+        this.button?.classList.toggle('loading', busy);
+        this.button?.setAttribute('aria-busy', String(busy));
+        this.querySelector('.loading__spinner')?.classList.toggle('hidden', !busy);
+      }
+
+      setError(message) {
+        if (!this.errorElement) return;
+        this.errorElement.textContent = typeof message === 'string' ? message : '';
+        this.errorElement.hidden = !this.errorElement.textContent;
       }
 
       update() {

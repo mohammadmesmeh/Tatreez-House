@@ -17,6 +17,7 @@
   class="sticky-atc"
   data-target-button="ProductSubmitButton-{{ section_id }}"
   data-price-source="price-{{ section_id }}"
+  data-error-fallback="{{ 'sections.cart.cart_error' | t | escape }}"
   hidden
 >
   <div class="sticky-atc__inner">
@@ -31,7 +32,9 @@
       class="button button--primary sticky-atc__button"
       data-sticky-button
     >
-      {{ 'products.product.add_to_cart' | t }}
+      <span data-sticky-label>{{ 'products.product.add_to_cart' | t }}</span>
+      {%- render 'loading-spinner' -%}
     </button>
   </div>
+  <p class="sticky-atc__error" role="alert" data-sticky-error hidden></p>
 </sticky-atc>

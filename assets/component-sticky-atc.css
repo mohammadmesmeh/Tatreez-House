@@ -50,6 +50,28 @@
   padding-inline: var(--th-space-3);
 }
 
+.sticky-atc__error {
+  margin: var(--th-space-1) 0 0;
+  font-size: 1.4rem;
+  color: rgb(var(--color-foreground));
+}
+
+.sticky-atc__error::before {
+  content: '';
+  display: inline-block;
+  inline-size: 0.8rem;
+  block-size: 0.8rem;
+  margin-inline-end: 0.6rem;
+  background-color: rgb(var(--th-accent));
+  -webkit-mask: url('icon-stitch-x.svg') center / contain no-repeat;
+  mask: url('icon-stitch-x.svg') center / contain no-repeat;
+}
+
+/* Dawn's quick-add modal copies product-info; never show a second fixed bar there. */
+quick-add-modal sticky-atc {
+  display: none !important;
+}
+
 @media screen and (min-width: 750px) {
   .sticky-atc {
     display: none;
