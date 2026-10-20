@@ -60,12 +60,10 @@
       card never ships a huge inline payload.
     endcomment
     assign inline_variant_picker = false
-    if quick_add == 'standard'
-      and card_product.variants_count > 1
-      and card_product.variants_count <= 50
-      and qty_rules == false
-      and card_product.quantity_price_breaks_configured? == false
-      assign inline_variant_picker = true
+    if quick_add == 'standard' and qty_rules == false and card_product.quantity_price_breaks_configured? == false
+      if card_product.variants_count > 1 and card_product.variants_count <= 50
+        assign inline_variant_picker = true
+      endif
     endif
   -%}
 
