@@ -129,6 +129,7 @@
             wires any .slideshow__autoplay button: click toggles, aria-label switches pause/play.
           {%- endcomment -%}
           {%- if section.settings.auto_rotate -%}
+            <script src="{{ 'announcement-autoplay.js' | asset_url }}" defer="defer"></script>
             <button
               type="button"
               class="slideshow__autoplay slider-button announcement-bar__autoplay"
