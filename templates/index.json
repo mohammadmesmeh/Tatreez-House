@@ -15,23 +15,23 @@
         "heading_q6jUjq": {
           "type": "heading",
           "settings": {
-            "heading": "Wear the Story. Keep the Heritage."
+            "heading": ""
           }
         },
         "text_Ymr4jm": {
           "type": "text",
           "settings": {
-            "text": "Discover contemporary pieces inspired by Palestinian tatreez."
+            "text": ""
           }
         },
         "buttons_XXh399": {
           "type": "buttons",
           "settings": {
             "button_label_1": "Explore the Collection",
-            "button_link_1": "",
+            "button_link_1": "shopify://collections/all",
             "button_style_secondary_1": false,
             "button_label_2": "Discover Tatreez",
-            "button_link_2": "",
+            "button_link_2": "shopify://pages/tatreez",
             "button_style_secondary_2": true
           }
         }
@@ -69,7 +69,7 @@
         "full_width": false,
         "show_view_all": true,
         "view_all_style": "solid",
-        "color_scheme": "scheme-1",
+        "color_scheme": "scheme-80059332-ff5c-4f81-a22c-80e5aab949f5",
         "image_ratio": "adapt",
         "image_shape": "default",
         "show_secondary_image": true,
