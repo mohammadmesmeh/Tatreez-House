@@ -490,6 +490,27 @@
     "name": "t:settings_schema.cards.name",
     "settings": [
       {
+        "type": "text",
+        "id": "card_uncropped_product_type",
+        "default": "Digital Pattern",
+        "label": "t:settings_schema.cards.settings.card_uncropped_product_type.label",
+        "info": "t:settings_schema.cards.settings.card_uncropped_product_type.info"
+      },
+      {
+        "type": "text",
+        "id": "card_hidden_title_suffix",
+        "default": "(PDF)",
+        "label": "t:settings_schema.cards.settings.card_hidden_title_suffix.label",
+        "info": "t:settings_schema.cards.settings.card_hidden_title_suffix.info"
+      },
+      {
+        "type": "text",
+        "id": "card_new_tag",
+        "default": "new-collection",
+        "label": "t:settings_schema.cards.settings.card_new_tag.label",
+        "info": "t:settings_schema.cards.settings.card_new_tag.info"
+      },
+      {
         "type": "select",
         "id": "card_style",
         "options": [

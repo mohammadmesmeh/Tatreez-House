@@ -12,7 +12,8 @@
     variant — no unnecessary selectors.
 
   Cart behaviour always goes through Dawn's product-form element
-  (/cart/add.js + cart notification/drawer + cart-count pubsub).
+  (/cart/add.js + cart notification/drawer + cart-count pubsub). The <card-quick-add> wrapper
+  (card-quick-add.js) only announces adding / added / error states in a live region.
 
   @param {product} card_product - The product being quick-added. Required.
   @param {string} section_id - The section ID used to namespace IDs and aria references.
@@ -24,6 +25,12 @@
   @example
   {% render 'card-quick-add', card_product: product, section_id: section.id, product_form_id: product_form_id, horizontal_quick_add: false, inline_variant_picker: true, qty_rules: false %}
 {% enddoc %}
+<card-quick-add
+  class="card-quick-add"
+  data-adding="{{ 'products.card.adding' | t: product: card_product.title | escape }}"
+  data-added="{{ 'products.card.added' | t: product: card_product.title | escape }}"
+  data-error="{{ 'products.card.error' | t: product: card_product.title | escape }}"
+>
 {%- if inline_variant_picker -%}
   <div class="quick-add quick-add--inline no-js-hidden">
     {% render 'card-variant-picker',
@@ -131,3 +138,5 @@
     {%- endif -%}
   </div>
 {%- endif -%}
+  <p class="visually-hidden" role="status" data-card-quick-add-status></p>
+</card-quick-add>

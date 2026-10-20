@@ -1,0 +1,51 @@
+{% doc %}
+  Product card badges, derived only from product data:
+  - Sold out: no variant is available (colours: theme setting "Sold out badge" scheme).
+  - Sale: a compare-at price above the price (colours: theme setting "Sale badge" scheme).
+  - Instant download: no variant requires shipping (digital products).
+  - New: the product has the tag set in theme settings (Cards > "New" badge tag).
+  The wrapper id lets the title link include the badges in its accessible name (aria-labelledby);
+  when no badge applies an empty hidden element keeps that id reference valid.
+
+  @param {product} card_product - The product. Required.
+  @param {string} id - Id for the badge wrapper. Required.
+
+  @example
+  {% render 'card-badges', card_product: card_product, id: badge_id %}
+{% enddoc %}
+{%- liquid
+  assign shipped_variants = card_product.variants | where: 'requires_shipping', true
+  assign is_digital = false
+  if shipped_variants.size == 0
+    assign is_digital = true
+  endif
+
+  assign on_sale = false
+  if card_product.compare_at_price > card_product.price and card_product.available
+    assign on_sale = true
+  endif
+
+  assign is_new = false
+  assign new_tag = settings.card_new_tag | strip
+  if new_tag != blank and card_product.tags contains new_tag
+    assign is_new = true
+  endif
+-%}
+{%- if card_product.available == false or on_sale or is_digital or is_new -%}
+  <ul id="{{ id }}" class="card-badges list-unstyled" role="list">
+    {%- if card_product.available == false -%}
+      <li class="card-badge card-badge--sold-out color-{{ settings.sold_out_badge_color_scheme }}">{{ 'products.product.sold_out' | t }}</li>
+    {%- elsif on_sale -%}
+      <li class="card-badge card-badge--sale color-{{ settings.sale_badge_color_scheme }}">{{ 'products.product.on_sale' | t }}</li>
+    {%- endif -%}
+    {%- if is_new -%}
+      <li class="card-badge card-badge--new">{{ 'products.card.new' | t }}</li>
+    {%- endif -%}
+    {%- if is_digital -%}
+      <li class="card-badge card-badge--digital">{{ 'products.card.instant_download' | t }}</li>
+    {%- endif -%}
+  </ul>
+{%- else -%}
+  {%- comment -%}Keeps the title link's aria-labelledby reference valid; contributes no text.{%- endcomment -%}
+  <span id="{{ id }}" hidden></span>
+{%- endif -%}

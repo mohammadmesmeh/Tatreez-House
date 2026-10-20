@@ -26,11 +26,22 @@
 -%}
 <card-variant-picker class="card-variant-picker" data-product-form="{{ product_form_id }}">
   {%- for option in card_product.options_with_values -%}
-    {%- assign selected_value = selected_variant.options[forloop.index0] -%}
+    {%- assign option_index = forloop.index0 -%}
+    {%- assign selected_value = selected_variant.options[option_index] -%}
     {%- if picker_style == 'pills' -%}
       <fieldset class="js product-form__input product-form__input--pill card-variant-picker__group">
         <legend class="form__label">{{ option.name | escape }}</legend>
         {%- for value in option.values -%}
+          {%- liquid
+            # A value is unavailable when no available variant uses it at this option position.
+            assign value_available = false
+            for variant in card_product.variants
+              if variant.available and variant.options[option_index] == value
+                assign value_available = true
+                break
+              endif
+            endfor
+          -%}
           <input
             type="radio"
             id="CardVariant-{{ section_id }}-{{ card_product.id }}-{{ option.position }}-{{ forloop.index0 }}"
@@ -40,12 +51,22 @@
             {% if value == selected_value %}
               checked
             {% endif %}
+            {% unless value_available %}
+              disabled
+            {% endunless %}
           >
-          <label for="CardVariant-{{ section_id }}-{{ card_product.id }}-{{ option.position }}-{{ forloop.index0 }}">
-            {{- value -}}
-            <span class="visually-hidden label-unavailable">
-              {{- 'products.product.variant_sold_out_or_unavailable' | t -}}
-            </span>
+          <label
+            for="CardVariant-{{ section_id }}-{{ card_product.id }}-{{ option.position }}-{{ forloop.index0 }}"
+            {% unless value_available %}
+              class="card-variant-picker__value--unavailable"
+            {% endunless %}
+          >
+            {%- if value_available -%}
+              {{- value -}}
+            {%- else -%}
+              <span aria-hidden="true">{{ value }}</span>
+              <span class="visually-hidden">{{ 'products.card.option_unavailable' | t: value: value }}</span>
+            {%- endif -%}
           </label>
         {%- endfor -%}
       </fieldset>

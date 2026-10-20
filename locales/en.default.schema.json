@@ -55,6 +55,18 @@
     "cards": {
       "name": "Product cards",
       "settings": {
+        "card_uncropped_product_type": {
+          "label": "Show uncropped images for product type",
+          "info": "Cards of this product type show the whole image on the linen surface, so pattern charts are never cropped."
+        },
+        "card_hidden_title_suffix": {
+          "label": "Hide title suffix on cards",
+          "info": "A trailing text such as (PDF) is hidden visually on cards; screen readers still announce it."
+        },
+        "card_new_tag": {
+          "label": "\"New\" badge tag",
+          "info": "Products with this tag show a New badge on cards."
+        },
         "style": {
           "options__1": {
             "label": "Standard"

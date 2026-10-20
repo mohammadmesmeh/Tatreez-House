@@ -223,6 +223,14 @@
       "sort_by_label": "Sort by:",
       "to": "To",
       "clear_filter": "Remove filter"
+    },
+    "card": {
+      "instant_download": "Instant download",
+      "new": "New",
+      "adding": "Adding {{ product }} to your cart…",
+      "added": "{{ product }} added to your cart.",
+      "error": "{{ product }} could not be added to your cart.",
+      "option_unavailable": "{{ value }}, sold out"
     }
   },
   "templates": {

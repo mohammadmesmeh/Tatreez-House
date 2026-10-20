@@ -239,6 +239,14 @@
       "sort_by_label": "الترتيب حسب:",
       "to": "إلى",
       "clear_filter": "إزالة عامل التصفية"
+    },
+    "card": {
+      "instant_download": "تنزيل فوري",
+      "new": "جديد",
+      "adding": "جارٍ إضافة {{ product }} إلى سلتك…",
+      "added": "أُضيف {{ product }} إلى سلتك.",
+      "error": "تعذّرت إضافة {{ product }} إلى سلتك.",
+      "option_unavailable": "{{ value }}، نفدت الكمية"
     }
   },
   "templates": {

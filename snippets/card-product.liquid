@@ -29,10 +29,12 @@
   {{ 'component-price.css' | asset_url | stylesheet_tag }}
   {{ 'quick-order-list.css' | asset_url | stylesheet_tag }}
   {{ 'quantity-popover.css' | asset_url | stylesheet_tag }}
+  {{ 'component-card-tatreez.css' | asset_url | stylesheet_tag }}
   {%- if quick_add == 'standard' -%}
     {{ 'component-product-variant-picker.css' | asset_url | stylesheet_tag }}
     {{ 'component-card-variant-picker.css' | asset_url | stylesheet_tag }}
     <script src="{{ 'card-variant-picker.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'card-quick-add.js' | asset_url }}" defer="defer"></script>
   {%- endif -%}
 {%- endunless -%}
 {%- if card_product and card_product != empty -%}
@@ -46,6 +48,38 @@
     if ratio == 0 or ratio == null
       assign ratio = 1
     endif
+
+    # Uncropped media (contain on linen) for the product type set in theme settings, e.g.
+    # digital pattern charts. Title suffix (e.g. "(PDF)") is hidden visually; the badge
+    # carries that meaning and screen readers still get the full title.
+    assign uncropped_type = settings.card_uncropped_product_type | strip | downcase
+    assign card_uncropped = false
+    if uncropped_type != blank and card_product.type != blank
+      assign card_type_compare = card_product.type | strip | downcase
+      if card_type_compare == uncropped_type
+        assign card_uncropped = true
+      endif
+    endif
+
+    assign card_title = card_product.title
+    assign card_title_suffix = ''
+    assign hidden_suffix = settings.card_hidden_title_suffix | strip
+    if hidden_suffix != blank
+      assign suffix_with_space = ' ' | append: hidden_suffix
+      assign suffix_size = suffix_with_space | size
+      assign tail_start = card_product.title | size | minus: suffix_size
+      assign title_tail = ''
+      if tail_start > 0
+        assign title_tail = card_product.title | slice: tail_start, suffix_size
+      endif
+      if title_tail == suffix_with_space
+        assign card_title = card_product.title | remove_last: suffix_with_space
+        assign card_title_suffix = suffix_with_space
+      endif
+    endif
+
+    assign badge_id = 'Badge-' | append: section_id | append: '-' | append: card_product.id
+    assign no_media_badge_id = 'NoMedia' | append: badge_id
 
     assign qty_rules = false
     if card_product.selected_or_first_available_variant.quantity_rule.min > 1 or card_product.selected_or_first_available_variant.quantity_rule.max != null or card_product.selected_or_first_available_variant.quantity_rule.increment > 1
@@ -78,6 +112,7 @@
           {% if extend_height %} card--extend-height{% endif %}
           {% if card_product.featured_media == nil and settings.card_style == 'card' %} ratio{% endif %}
           {% if horizontal_class %} card--horizontal{% endif %}
+          {% if card_uncropped %} card--uncropped{% endif %}
         "
         style="--ratio-percent: {{ 1 | divided_by: ratio | times: 100 }}%;"
       >
@@ -146,33 +181,23 @@
                   href="{{ card_product.url }}"
                   id="StandardCardNoMediaLink-{{ section_id }}-{{ card_product.id }}"
                   class="full-unstyled-link"
-                  aria-labelledby="StandardCardNoMediaLink-{{ section_id }}-{{ card_product.id }}{% if card_product.available == false or card_product.compare_at_price > card_product.price %} NoMediaStandardBadge-{{ section_id }}-{{ card_product.id }}{% endif %}"
+                  aria-labelledby="StandardCardNoMediaLink-{{ section_id }}-{{ card_product.id }} {{ no_media_badge_id }}"
                 >
-                  {{ card_product.title | escape }}
+                  {{ card_title | escape }}
+                  {%- if card_title_suffix != blank -%}<span class="visually-hidden">{{ card_title_suffix | escape }}</span>{%- endif -%}
                 </a>
               </h3>
             </div>
             <div class="card__badge {{ settings.badge_position }}">
-              {%- if card_product.available == false -%}
-                <span
-                  id="NoMediaStandardBadge-{{ section_id }}-{{ card_product.id }}"
-                  class="badge badge--bottom-left color-{{ settings.sold_out_badge_color_scheme }}"
-                >
-                  {{- 'products.product.sold_out' | t -}}
-                </span>
-              {%- elsif card_product.compare_at_price > card_product.price and card_product.available -%}
-                <span
-                  id="NoMediaStandardBadge-{{ section_id }}-{{ card_product.id }}"
-                  class="badge badge--bottom-left color-{{ settings.sale_badge_color_scheme }}"
-                >
-                  {{- 'products.product.on_sale' | t -}}
-                </span>
-              {%- endif -%}
+              {% render 'card-badges', card_product: card_product, id: no_media_badge_id %}
             </div>
           </div>
         </div>
         <div class="card__content">
           <div class="card__information">
+            {%- if card_product.type != blank -%}
+              <p class="card__eyebrow th-eyebrow">{{ card_product.type | escape }}</p>
+            {%- endif -%}
             <h3
               class="card__heading{% if card_product.featured_media or settings.card_style == 'standard' %} h5{% endif %}"
               {% if card_product.featured_media or settings.card_style == 'card' %}
@@ -183,9 +208,10 @@
                 href="{{ card_product.url }}"
                 id="CardLink-{{ section_id }}-{{ card_product.id }}"
                 class="full-unstyled-link"
-                aria-labelledby="CardLink-{{ section_id }}-{{ card_product.id }}{% if card_product.available == false or card_product.compare_at_price > card_product.price %} Badge-{{ section_id }}-{{ card_product.id }}{% endif %}"
+                aria-labelledby="CardLink-{{ section_id }}-{{ card_product.id }} {{ badge_id }}"
               >
-                {{ card_product.title | escape }}
+                {{ card_title | escape }}
+                {%- if card_title_suffix != blank -%}<span class="visually-hidden">{{ card_title_suffix | escape }}</span>{%- endif -%}
               </a>
             </h3>
             <div class="card-information">
@@ -489,21 +515,7 @@
             {% endif %}
           {% endif %}
           <div class="card__badge {{ settings.badge_position }}">
-            {%- if card_product.available == false -%}
-              <span
-                id="Badge-{{ section_id }}-{{ card_product.id }}"
-                class="badge badge--bottom-left color-{{ settings.sold_out_badge_color_scheme }}"
-              >
-                {{- 'products.product.sold_out' | t -}}
-              </span>
-            {%- elsif card_product.compare_at_price > card_product.price and card_product.available -%}
-              <span
-                id="Badge-{{ section_id }}-{{ card_product.id }}"
-                class="badge badge--bottom-left color-{{ settings.sale_badge_color_scheme }}"
-              >
-                {{- 'products.product.on_sale' | t -}}
-              </span>
-            {%- endif -%}
+            {% render 'card-badges', card_product: card_product, id: badge_id %}
           </div>
         </div>
       </div>
