@@ -174,18 +174,18 @@ FR-006); `alt` from the heading (rejected — decorative duplication).
 
 ## R9 — Font wiring for Arabic display headings
 
-**Decision**: Ship `Thmanyah Serif Display` (five verified static weights: 300/400/500/700/900) as
+**Decision**: Ship `[withdrawn Arabic display font]` (five verified static weights: 300/400/500/700/900) as
 WOFF2 under `assets/`, add matching `@font-face` rules scoped to the Arabic unicode range in
-`assets/fonts.css.liquid`, and insert `'Thmanyah Serif Display'` into `--font-heading-family`
-ahead of `'Thmanyah Sans'` so Arabic headings prefer the display serif while Latin headings
+`assets/fonts.css.liquid`, and insert `[withdrawn Arabic display font]` into `--font-heading-family`
+ahead of `[withdrawn Arabic text font]` so Arabic headings prefer the display serif while Latin headings
 continue to prefer `'Playwrite NZ Basic'`.
 
-**Rationale**: Clarification decision 3 names Thmanyah Serif Display as the Arabic display face,
-and the family was already verified with `fontTools` (family `thmanyah serif display`, static
+**Rationale**: Clarification decision 3 names [withdrawn Arabic display font] as the Arabic display face,
+and the family was already verified with `fontTools` (family `[withdrawn Arabic display font]`, static
 weights 300/400/500/700/900, 416 glyphs, Arabic present, not variable). constitution III permits
 use only after such verification — done.
 
-**Alternatives considered**: reuse Thmanyah Sans for display (rejected — clarification chose the
+**Alternatives considered**: reuse [withdrawn Arabic text font] for display (rejected — clarification chose the
 serif display face); a Latin-only heading stack (rejected — Arabic headings would fall through to
 the body face).
 

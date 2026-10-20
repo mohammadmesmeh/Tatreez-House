@@ -12,27 +12,12 @@ Nothing here is served by the theme. Only the files copied into `assets/` are se
 assets/
   nunito-latin.woff2            # served: Nunito latin subset (variable)
   playwrite-nz-basic.woff2      # served: Playwrite NZ Basic (variable)
-  thmanyah-sans-light.woff2     # served: Thmanyah Sans 300
-  thmanyah-sans-regular.woff2   # served: Thmanyah Sans 400
-  thmanyah-sans-medium.woff2    # served: Thmanyah Sans 500
-  thmanyah-sans-bold.woff2      # served: Thmanyah Sans 700
-  thmanyah-sans-black.woff2     # served: Thmanyah Sans 900
-  thmanyah-serif-display-light.woff2     # served: Thmanyah Serif Display 300
-  thmanyah-serif-display-regular.woff2   # served: Thmanyah Serif Display 400
-  thmanyah-serif-display-medium.woff2    # served: Thmanyah Serif Display 500
-  thmanyah-serif-display-bold.woff2      # served: Thmanyah Serif Display 700
-  thmanyah-serif-display-black.woff2     # served: Thmanyah Serif Display 900
   fonts.css.liquid              # served: @font-face declarations (Latin + Arabic)
 docs/fonts/
   README.md                     # this file
   licenses/
     OFL-Nunito.txt          # SIL Open Font License 1.1
     OFL-PlaywriteNZBasic.txt# SIL Open Font License 1.1
-  Thmanyah-Font-Family/     # Arabic font source archive (originals; keep as-is)
-    LICENSE.pdf
-    ترخيص خط ثمانية.pdf          # Arabic text of the same license
-    دليل جماليات خط ثمانية.pdf   # typeface aesthetics / specimen guide
-    thmanyah typeface/      # 3 families x 5 weights x (otf + woff2)
 ```
 
 ## Wired up — Latin
@@ -64,63 +49,8 @@ docs/fonts/
 
 ## Wired up — Arabic
 
-### Thmanyah Sans
-- Family **in CSS**: `Thmanyah Sans`
-- Family name **inside the files**: typographic family `thmanyah sans` (the "Regular" and
-  "Bold" files carry the plain family `thmanyah sans`; the other weights carry descriptive
-  families such as `thmanyah sans Light` / `thmanyah sans Black`, i.e. the naming in the
-  archive is inconsistent). The CSS name is ours, so the internal names do not matter.
-- Weights: **static** (no `fvar`), `OS/2.usWeightClass` →
-  Light `300`, Regular `400`, Medium `500`, Bold `700`, Black `900`.
-- Subset served: arabic, scoped with
-  `unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF`
-  (covers the Arabic block, Arabic Supplement, Arabic Extended-A, and the Arabic Presentation
-  Forms the files actually contain). Latin glyphs in the files are intentionally **not**
-  served — Latin routes to Nunito / Playwrite NZ Basic.
-- Files (copied flat into `assets/`, clear names):
-  | CSS weight | file | bytes |
-  |---|---|---|
-  | 300 | `thmanyah-sans-light.woff2` | 72,380 |
-  | 400 | `thmanyah-sans-regular.woff2` | 77,776 |
-  | 500 | `thmanyah-sans-medium.woff2` | 79,064 |
-  | 700 | `thmanyah-sans-bold.woff2` | 79,160 |
-  | 900 | `thmanyah-sans-black.woff2` | 77,112 |
-- Source (originals, untouched):
-  `docs/fonts/Thmanyah-Font-Family/thmanyah typeface/thmanyahsans/woff2/`.
-  The `thmanyahseriftext` family is **not** wired up.
-- License: © 2026 thmanyah Publishing and Distribution (https://thmanyah.com/,
-  ask@thmanyah.com), reserved font name "thmanyah". `LICENSE.pdf` SHA-256
-  `07bbb2321bd2b944333c25f4d55140ca22625666132394d7399a365bd8b79a10`. The Arabic text
-  (`ترخيص خط ثمانية.pdf`) prevails over translations.
-
-> ⚠️ **License caveat on record.** The Thmanyah license permits commercial use in
-> websites/branding/logos and embedding "as part of a compiled, packaged, or obfuscated
-> product", but prohibits hosting the Font Software for download and making it available for
-> independent reuse "including through web embedding". Serving these WOFF2 from the theme's
-> public `assets/` (Shopify CDN) therefore sits against that restriction. This was applied at
-> the project owner's explicit instruction for a **development-theme-only** test; obtain written
-> permission / an appropriate license before publishing.
-
-### Thmanyah Serif Display
-- Family **in CSS**: `Thmanyah Serif Display` (serves as the Arabic **display/heading** face;
-  declared decision — spec clarification, 2026-10-17).
-- Weights: **static** (not variable), `OS/2.usWeightClass` →
-  Light `300`, Regular `400`, Medium `500`, Bold `700`, Black `900`; verified with `fontTools`
-  (family `thmanyah serif display`, 416 glyphs, Arabic present).
-- Subset served: same Arabic `unicode-range` as Thmanyah Sans
-  (`U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF`); Latin glyphs in the
-  files are intentionally not served — Latin display routes to Playwrite NZ Basic.
-- Files (copied flat into `assets/`, clear names):
-  | CSS weight | file | bytes | SHA-256 (prefix) |
-  |---|---|---|---|
-  | 300 | `thmanyah-serif-display-light.woff2` | 75,732 | `3DB143F2…886A` |
-  | 400 | `thmanyah-serif-display-regular.woff2` | 81,136 | `214A70D9…1CA6` |
-  | 500 | `thmanyah-serif-display-medium.woff2` | 82,552 | `E21A2EA5…6259` |
-  | 700 | `thmanyah-serif-display-bold.woff2` | 81,988 | `D36DA84E…46CE` |
-  | 900 | `thmanyah-serif-display-black.woff2` | 79,212 | `A057BE61…A0B` |
-- Source (originals, untouched):
-  `docs/fonts/Thmanyah-Font-Family/thmanyah typeface/thmanyahserifdisplay/woff2/`.
-- License: same Thmanyah terms as above — the ⚠️ license caveat applies to these files too.
+None yet. The previously used Arabic font was withdrawn on 2026-10-20 (licence forbids web
+embedding); see `docs/DECISIONS.md`. The OFL replacement is documented in the next revision.
 
 ## How it is wired
 
@@ -132,19 +62,12 @@ docs/fonts/
   `{{ 'fonts.css' | asset_url | stylesheet_tag }}`.
 - The font **stacks** are applied through Dawn's own variables in `layout/theme.liquid`
   (`:root`), so every component that already uses them follows:
-  - `--font-body-family: 'Nunito', 'Thmanyah Sans', <theme body font>, <fallbacks>`
-  - `--font-heading-family: 'Playwrite NZ Basic', 'Thmanyah Serif Display', 'Thmanyah Sans', <theme heading font>, <fallbacks>`
     (Arabic display headings prefer the serif display face; Latin display prefers Playwrite
-    NZ Basic; Thmanyah Sans remains as the Arabic text fallback.)
-  Because Nunito/Playwrite are scoped to Latin and the Thmanyah families to Arabic, Latin text renders
-  in Nunito / Playwrite NZ Basic and Arabic text falls through to Thmanyah Serif Display
-  (headings) / Thmanyah Sans (body). The merchant's
   theme-settings font stays as a further fallback, so the theme editor keeps working.
 - No colours, spacing, or layout were changed.
 
 ## Verification performed
 - Real family names and `OS/2` weight classes read from the files with `fontTools` (see above).
-- `unicode-range` derived from the actual `cmap` of `thmanyahsans-Regular.woff2` (411 glyphs;
   Arabic ranges as listed). Playwrite NZ Basic's `cmap` (486 glyphs) has **no** Arabic glyphs,
   so its Latin range is safe.
 - Dev theme (`shopify theme dev`, theme id `142644281431`, `http://127.0.0.1:9292`) loads
@@ -156,6 +79,5 @@ docs/fonts/
 - **Not** visually inspected in a browser: rendering of actual Arabic glyphs has not been seen,
   only that the files load. Confirm visually in the theme preview before relying on it.
 - **Update (feature 001, T004)**: `fonts.css.liquid` now declares **12** `@font-face` rules
-  (added the five `Thmanyah Serif Display` weights). Browser loading of the new rules is verified
   as part of the feature's end-to-end check (quickstart Scenarios 3–12); the `theme check`
   regression floor is re-checked in `specs/001-homepage-hero/tasks.md` T016.

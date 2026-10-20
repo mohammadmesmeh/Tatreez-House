@@ -42,10 +42,10 @@
 
 **Purpose**: Changes that affect theme-wide behavior and must be complete before US1 implementation work that depends on them. These are additive and align with constitution III/IV.
 
-- [x] T003 [P] Copy the five verified `Thmanyah Serif Display` static weights (300/400/500/700/900) WOFF2 files into `assets/` (from `docs/fonts/Thmanyah-Font-Family/thmanyah typeface/`), preserving filenames and using only weights that were fontTools-verified. Files: `assets/thmanyah-serif-display-*.woff2` (new).
-- [x] T004 [P] Update `assets/fonts.css.liquid` to add `@font-face` declarations for `Thmanyah Serif Display` (arabic range scoped), using the same `font-display`/format conventions as existing declarations; do not duplicate existing `@font-face` rules and do not reference unverified weights. File: `assets/fonts.css.liquid`.
-- [x] T005 [P] Update `docs/fonts/README.md` to record the Thmanyah Serif Display wiring (families/weights, purpose: Arabic display headings), provenance/licensing note consistent with existing entries, and the dev-theme-only caveat. File: `docs/fonts/README.md`.
-- [x] T006 [P] Update `layout/theme.liquid` to insert `'Thmanyah Serif Display'` into `--font-heading-family` before `'Thmanyah Sans'` (so Arabic headings prefer the display serif; Latin still prefers `'Playwrite NZ Basic'`), and add direction handling: set `<html dir="rtl">` when `request.locale.iso_code` is RTL (e.g. `ar`, `he`, `fa`, `ur`), otherwise `dir="ltr"`. File: `layout/theme.liquid`. (RTL full verification deferred until Arabic enabled; this is additive/readiness only.)
+- [x] T003 [P] Copy the five verified `[withdrawn Arabic display font]` static weights (300/400/500/700/900) WOFF2 files into `assets/` (from `[withdrawn archive, removed from repo]`), preserving filenames and using only weights that were fontTools-verified. Files: `assets/[withdrawn-arabic-display-font].woff2` (new).
+- [x] T004 [P] Update `assets/fonts.css.liquid` to add `@font-face` declarations for `[withdrawn Arabic display font]` (arabic range scoped), using the same `font-display`/format conventions as existing declarations; do not duplicate existing `@font-face` rules and do not reference unverified weights. File: `assets/fonts.css.liquid`.
+- [x] T005 [P] Update `docs/fonts/README.md` to record the [withdrawn Arabic display font] wiring (families/weights, purpose: Arabic display headings), provenance/licensing note consistent with existing entries, and the dev-theme-only caveat. File: `docs/fonts/README.md`.
+- [x] T006 [P] Update `layout/theme.liquid` to insert `[withdrawn Arabic display font]` into `--font-heading-family` before `[withdrawn Arabic text font]` (so Arabic headings prefer the display serif; Latin still prefers `'Playwrite NZ Basic'`), and add direction handling: set `<html dir="rtl">` when `request.locale.iso_code` is RTL (e.g. `ar`, `he`, `fa`, `ur`), otherwise `dir="ltr"`. File: `layout/theme.liquid`. (RTL full verification deferred until Arabic enabled; this is additive/readiness only.)
 
 **Checkpoint**: Font wiring and document direction are in place; no existing sections modified. Theme still passes static checks.
 
@@ -113,4 +113,4 @@
 - **Heading**: exactly one `<h2>` per hero; header keeps `<h1>` on homepage (T007, contract §3).
 - **No-image fallback**: omit media wrapper entirely when no image configured (T007, FR-007).
 - **No publish**: never run `theme push --live` or `theme publish`. All work against unpublished development theme.
-- **License**: Thmanyah fonts are not to be published/web-embedded beyond dev theme testing per existing caveat; T005 records it.
+- **License**: [withdrawn Arabic font] fonts are not to be published/web-embedded beyond dev theme testing per existing caveat; T005 records it.

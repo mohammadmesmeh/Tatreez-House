@@ -71,9 +71,9 @@ Baseline (T001): *156 files, 9 warnings / 8 files*.
 |-------|--------|
 | `GET /` | **200**, 127 062 bytes, normal homepage (no upload-error page) |
 | `<html …>` tag | `<html class="js" lang="en" dir="ltr">` → **T006 direction logic PASS** |
-| `--font-heading-family` in `:root` | `'Playwrite NZ Basic', 'Thmanyah Serif Display', 'Thmanyah Sans', Assistant, sans-serif` → stack order PASS |
-| `fonts.css` stylesheet | **200**, 3 604 bytes, **12 `@font-face` rules**, 5 `Thmanyah Serif Display` mentions |
-| `thmanyah-serif-display-light.woff2` | **200, 75 732 bytes** → T003/T004 font serving PASS (all 12 woff2 refs present: Nunito, Playwrite, 5× Thmanyah Sans, 5× Thmanyah Serif Display) |
+| `--font-heading-family` in `:root` | `'Playwrite NZ Basic', [withdrawn Arabic display font], [withdrawn Arabic text font], Assistant, sans-serif` → stack order PASS |
+| `fonts.css` stylesheet | **200**, 3 604 bytes, **12 `@font-face` rules**, 5 `[withdrawn Arabic display font]` mentions |
+| `[withdrawn-arabic-display-font].woff2` | **200, 75 732 bytes** → T003/T004 font serving PASS (all 12 woff2 refs present: Nunito, Playwrite, 5× [withdrawn Arabic text font], 5× [withdrawn Arabic display font]) |
 | `component-hero.css` on homepage | absent — section unplaced as required (Scenario 2/12 precondition) |
 | Homepage `<h1>` count | 1 (header) — hero unplaced |
 | Script origins | `cdn.shopify.com`=4, local=17, third-party=0 |
@@ -164,7 +164,7 @@ byte-faithful to the contract.
 | T015 quickstart 3–12 | ⏳ **partial** | Agent-runnable evidence in §1/§3; editor scenarios 3–9 + RTL override remain human — this task stays open |
 | T016 regression floor | ✅ | §2: 159 files / 9 warnings / 8 files / exit 0; zero feature-path offences |
 | T017 unintended edits | ✅ | Only the three intended files are modified; `image-banner.liquid`, `header.liquid`, other sections untouched; `templates/index.json` byte-identical |
-| T018 this document | ✅ | `specs/001-homepage-hero/verification.md`; license caveat confirmed present in `docs/fonts/README.md` ("⚠️ License caveat on record" — Thmanyah web-embedding restriction, permission required before publishing) |
+| T018 this document | ✅ | `specs/001-homepage-hero/verification.md`; license caveat confirmed present in `docs/fonts/README.md` ("⚠️ License caveat on record" — [withdrawn Arabic font] web-embedding restriction, permission required before publishing) |
 | T019 constitution I–VIII | ✅ | §6 below |
 
 ## 6. Constitution gates (T019)
@@ -176,7 +176,7 @@ byte-faithful to the contract.
   spec-approved bilingual text; no invented credentials or historical claims.
 - **III. Font Verification** ✅ — T004 fontTools verification of exact families/weights precedes any
   `@font-face`; only verified WOFF2 served (12 rules, §3); system fallbacks in every stack; license
-  texts in `docs/fonts/licenses/` + Thmanyah caveat in `docs/fonts/README.md`. Arabic shaping/final
+  texts in `docs/fonts/licenses/` + [withdrawn Arabic font] caveat in `docs/fonts/README.md`. Arabic shaping/final
   font sign-off remains part of the deferred RTL pass (explicitly untested).
 - **IV. Bilingual Localization & Direction** ✅ (build) / ⏳ (live proof) — all strings via locale
   files (EN + AR, identical shape); `component-hero.css` uses logical properties; `theme.liquid`
@@ -201,5 +201,5 @@ byte-faithful to the contract.
 3. **Scenario 10 / RTL** — enable the Arabic store language, then re-verify both directions; until
    then use the dev-tools `dir="rtl"` override and do not claim RTL as proven.
 4. **Optional** — retry a `url` schema default post-T002 (§4.1 follow-up).
-5. **Before any publish** — Thmanyah license permission for web embedding (`docs/fonts/README.md`),
+5. **Before any publish** — [withdrawn Arabic font] license permission for web embedding (`docs/fonts/README.md`),
    owner approval of deviations §4.1–§4.4, and a fresh `shopify theme check`.

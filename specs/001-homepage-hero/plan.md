@@ -46,11 +46,11 @@ is the first section, loads with `fetchpriority="high"`; no new blocking resourc
 
 **Constraints**: OS 2.0 + Dawn conventions; existing section setting IDs and merchant
 configuration preserved; no publish and no live-theme changes (development theme only); the
-Thmanyah font license restricts hosted web embedding (already on record, dev-theme test only);
+[withdrawn Arabic font] font license restricts hosted web embedding (already on record, dev-theme test only);
 Arabic store language is **not** enabled by this feature.
 
 **Scale/Scope**: One new section (`sections/hero.liquid`), one CSS asset, ~10 settings, 3 blocks,
-locale keys in 4 locale files, and wiring the already-verified `Thmanyah Serif Display` family
+locale keys in 4 locale files, and wiring the already-verified `[withdrawn Arabic display font]` family
 (5 weights). No new pages, apps, or JavaScript.
 
 ## Constitution Check
@@ -61,7 +61,7 @@ locale keys in 4 locale files, and wiring the already-verified `Thmanyah Serif D
 |---|-----------|------|--------|
 | I | Shopify-Native Architecture (NON-NEGOTIABLE) | Liquid/OS 2.0 only; merchant-editable via schema; existing setting IDs preserved; shared markup not duplicated | ✅ Pass |
 | II | Cultural Heritage & Brand Fidelity | Brand palette via existing color-scheme mechanism; no invented business claims; fictional content clearly labelled | ✅ Pass |
-| III | Font Verification Before Use | Only verified families/weights used (Nunito, Playwrite NZ Basic, Thmanyah Sans, Thmanyah Serif Display — all inspected with `fontTools`); system fallbacks present | ✅ Pass |
+| III | Font Verification Before Use | Only verified families/weights used (Nunito, Playwrite NZ Basic, [withdrawn Arabic text font], [withdrawn Arabic display font] — all inspected with `fontTools`); system fallbacks present | ✅ Pass |
 | IV | Bilingual Localization & Direction | Copy from locale files; CSS logical properties; no duplicated RTL stylesheet; language selector out of scope | ✅ Pass (RTL verifiable only once Arabic is enabled — recorded) |
 | V | Accessibility, Responsiveness & Quality | Semantic markup, `<h2>` heading, keyboard-operable controls with visible focus, WCAG AA contrast, deliberate mobile layout, defined empty states | ✅ Pass |
 | VI | Evidence-Based Verification | Acceptance criteria + verification steps defined; loading verified by HTTP checks; unverified items labelled untested | ✅ Pass |
@@ -95,11 +95,11 @@ sections/
 
 assets/
 ├── component-hero.css              # NEW: hero styles (CSS logical properties for RTL)
-├── fonts.css.liquid                # EXTEND: add 'Thmanyah Serif Display' @font-face (arabic range)
-└── thmanyah-serif-display-*.woff2  # NEW: 5 verified weights (light/regular/medium/bold/black)
+├── fonts.css.liquid                # EXTEND: add [withdrawn Arabic display font] @font-face (arabic range)
+└── [withdrawn-arabic-display-font].woff2  # NEW: 5 verified weights (light/regular/medium/bold/black)
 
 layout/
-└── theme.liquid                    # EXTEND: add 'Thmanyah Serif Display' to --font-heading-family;
+└── theme.liquid                    # EXTEND: add [withdrawn Arabic display font] to --font-heading-family;
                                     #         add direction (`dir`) handling for RTL locales
 
 locales/
@@ -109,7 +109,7 @@ locales/
 └── ar.schema.json                  # NEW:    sections.hero.* Arabic editor labels + defaults
 
 docs/fonts/
-└── README.md                       # EXTEND: record Thmanyah Serif Display wiring
+└── README.md                       # EXTEND: record [withdrawn Arabic display font] wiring
 
 # Explicitly NOT modified:
 templates/index.json                # homepage left untouched (section ships unplaced)
