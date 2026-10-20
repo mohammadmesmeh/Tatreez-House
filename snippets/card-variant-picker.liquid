@@ -33,14 +33,9 @@
         <legend class="form__label">{{ option.name | escape }}</legend>
         {%- for value in option.values -%}
           {%- liquid
-            # A value is unavailable when no available variant uses it at this option position.
-            assign value_available = false
-            for variant in card_product.variants
-              if variant.available and variant.options[option_index] == value
-                assign value_available = true
-                break
-              endif
-            endfor
+            # Shopify's product_option_value.available: any available variant has this value
+            # (relative to the selected variant's other options) — no variant loop needed.
+            assign value_available = value.available
           -%}
           <input
             type="radio"
@@ -52,7 +47,7 @@
               checked
             {% endif %}
             {% unless value_available %}
-              disabled
+              class="card-variant-picker__input--unavailable"
             {% endunless %}
           >
           <label

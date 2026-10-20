@@ -35,10 +35,12 @@
 
 /* Unavailable values: disabled but readable (75% foreground = 6.25:1 on ivory; Dawn's 60% is
    about 4:1). The strike-through carries the state, not colour alone. */
-/* Cards use the disabled attribute; Dawn's product page marks unavailable combinations with
-   the .disabled class (still selectable, so shoppers can see what is missing). */
+/* Unavailable values stay focusable and selectable (keyboard and screen-reader users can still
+   find them; selecting one shows the disabled "Sold out" button). Cards mark them with
+   .card-variant-picker__input--unavailable, Dawn's product page with .disabled. */
 .product-form__input--pill input[type='radio']:disabled + label,
 .product-form__input--pill input[type='radio'].disabled + label,
+.product-form__input--pill input[type='radio'].card-variant-picker__input--unavailable + label,
 .card-variant-picker__value--unavailable {
   color: rgba(var(--color-foreground), 0.75);
   text-decoration: line-through;
