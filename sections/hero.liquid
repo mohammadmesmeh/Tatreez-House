@@ -24,10 +24,14 @@
     assign fetch_priority = 'high'
   endif
 
-  # Alternative text: merchant-supplied override wins, then the image's own alt (FR-006).
+  # Alternative text: merchant-supplied override wins, then the image's own alt, then ''
+  # (FR-006). The explicit '' keeps alt="" in the output: image_tag drops a nil alt entirely.
   assign hero_alt = section.settings.image_alt
   if hero_alt == blank
     assign hero_alt = section.settings.image.alt
+  endif
+  if hero_alt == blank
+    assign hero_alt = ''
   endif
 -%}
 
