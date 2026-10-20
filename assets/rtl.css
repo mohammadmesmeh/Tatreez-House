@@ -52,6 +52,19 @@
 }
 
 /* ---------------------------------------------------------------------------
+   Sliders (global.js SliderComponent / SlideshowComponent): the scroll maths uses LTR
+   scrollLeft/offsetLeft, which breaks in an RTL scroll container (half-scrolled slides). Keep the
+   track LTR and restore RTL inside each slide; content and controls still read right-to-left.
+*/
+[dir='rtl'] .slider {
+  direction: ltr;
+}
+
+[dir='rtl'] .slider > * {
+  direction: rtl;
+}
+
+/* ---------------------------------------------------------------------------
    Header (base.css)
 */
 [dir='rtl'] .header__icon--cart {
@@ -181,6 +194,18 @@
   transform: translateX(-100%);
   border-right: 0.1rem solid rgba(var(--color-foreground), 0.2);
   border-left: 0;
+}
+
+/* Close button sits at the inline-end of the drawer header (Dawn: right: -10px / 5px), so it no
+   longer covers the "Your cart" title in RTL. */
+[dir='rtl'] .drawer__close {
+  right: auto;
+  left: -10px;
+}
+
+[dir='rtl'] .cart-drawer__warnings .drawer__close {
+  right: auto;
+  left: 5px;
 }
 
 [dir='rtl'] .cart-drawer .tax-note {
