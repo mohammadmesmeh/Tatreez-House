@@ -164,10 +164,30 @@ summary.list-menu__item {
 /* ---------------------------------------------------------------------------
    Announcement bar pause control
 */
-.announcement-bar__autoplay.slider-button {
+/* Every control in the rotating bar gets its own 44px target. Dawn pulls the arrows outward with
+   negative margins, which made the "next" arrow overlap the pause button (15px hit area). */
+.announcement-bar-slider .slider-button {
+  flex: none;
   min-inline-size: var(--th-target);
-  block-size: var(--th-target);
+  min-block-size: var(--th-target);
+}
+
+.announcement-bar-slider:has(.announcement-bar__autoplay) .slider-button--next {
+  margin-right: 0;
+  margin-left: 0;
+  margin-inline-end: 0;
+}
+
+/* component-slideshow.css positions .slideshow__autoplay absolutely at the right edge (built for
+   the slideshow section); in the announcement bar it must sit in the flex row after "next". */
+.announcement-bar-slider .announcement-bar__autoplay.slideshow__autoplay {
+  position: relative;
+  inset: auto;
+  margin: 0;
   margin-inline-start: 0.4rem;
+  padding: 0;
+  border: 0;
+  border-inline-start: var(--th-border-width) solid rgba(var(--color-foreground), 0.08);
 }
 
 @media (prefers-reduced-motion: reduce) {
