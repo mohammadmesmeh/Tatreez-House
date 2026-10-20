@@ -2,8 +2,8 @@
 
 usage: python scripts/capture-screens.py OUT_DIR [BASE_URL] [--widths 390,1440] [--rtl]
 
-Pages: home, a collection, a garment product, a pattern product, search, and the cart drawer
-after adding the first product from the collection. Uses the system Microsoft Edge through
+Pages: home, a collection, a garment product, a pattern product, search, the cart drawer after a
+card quick add (first digital pattern), and the mobile menu (drawer open, widths below 990px). Uses the system Microsoft Edge through
 Playwright (no browser download), emulates prefers-reduced-motion so scroll-reveal animations
 do not hide content in full-page captures, and writes JPEGs to keep the repository small.
 --rtl forces dir="rtl" lang="ar" and injects rtl.css (for stores without Arabic enabled).
@@ -25,7 +25,8 @@ parser.add_argument('out')
 parser.add_argument('base', nargs='?', default='http://127.0.0.1:9393')
 parser.add_argument('--widths', default='390,1440')
 parser.add_argument('--rtl', action='store_true')
-parser.add_argument('--pages', default=','.join(list(PAGES) + ['cart-drawer']))
+parser.add_argument('--pages', default=','.join(list(PAGES) + ['cart-drawer', 'mobile-menu']))
+parser.add_argument('--quality', type=int, default=68)
 args = parser.parse_args()
 out = pathlib.Path(args.out)
 out.mkdir(parents=True, exist_ok=True)
@@ -60,15 +61,24 @@ with sync_playwright() as p:
         for name in args.pages.split(','):
             target = out / f'{name}-{width}{suffix}.jpg'
             if name == 'cart-drawer':
-                open_page(page, PAGES['collection'])
                 page.goto(args.base + '/cart/clear', wait_until='load')
-                open_page(page, PAGES['product-garment'])
-                page.locator('product-form button[name="add"]:visible').first.click()
-                page.wait_for_timeout(2500)
-                page.screenshot(path=str(target), type='jpeg', quality=72)
+                open_page(page, '/collections/digital-patterns')
+                card = page.locator('.product-card-wrapper').first
+                card.hover()
+                card.locator('.quick-add__submit').click()
+                page.wait_for_selector('cart-drawer.active', timeout=20000)
+                page.wait_for_timeout(1200)
+                page.screenshot(path=str(target), type='jpeg', quality=args.quality)
+            elif name == 'mobile-menu':
+                if width >= 990:
+                    continue
+                open_page(page, PAGES['home'])
+                page.locator('header-drawer summary').click()
+                page.wait_for_timeout(900)
+                page.screenshot(path=str(target), type='jpeg', quality=args.quality)
             else:
                 open_page(page, PAGES[name])
-                page.screenshot(path=str(target), full_page=True, type='jpeg', quality=72)
+                page.screenshot(path=str(target), full_page=True, type='jpeg', quality=args.quality)
             print('saved', target)
         ctx.close()
     browser.close()
