@@ -261,11 +261,11 @@ The portfolio targets a Shopify Website Designer role. The finished store must s
 | Milestone | Scope | Status |
 |---|---|---|
 | M0 | Foundation: licensed font system, brand colour check, full EN/AR locales, hero on the homepage, RTL fixes for Dawn, docs | Done (2026-10-20), owner actions pending |
-| M1 | Homepage "two paths" section (Shop / Learn), then the rest of the homepage per section 8 | Planned |
-| M2 | Store: garment product template with metafields (motif story, care, size guide); `product.pattern` template for digital patterns with Shopify Digital Downloads (verify cost first) | Planned |
-| M3 | Pattern library: `motif` metaobject, metaobject pages, filtering (full spec-kit flow) | Planned |
-| M4 | Events: workshops as products (date = variant, seats = inventory), `product.workshop` template; free monthly community circles with registration (full spec-kit flow) | Planned |
-| M5 | Learn hub page, blog and article templates linked to motifs | Planned |
+| M1 | Homepage "two paths" section (Shop / Learn) | Done (delivered with M2, 2026-10-20) |
+| M2 | Design system and UX overhaul ("Editorial heritage"): tokens, Fraunces, header and mega menu, product cards with quick add, collection hero, homepage story sections, footer, mobile sticky add to cart | Done (2026-10-20), admin menus and images pending |
+| M3 | Store: garment product template using metafields (motif story, care, size guide); `product.pattern` template for digital patterns with Shopify Digital Downloads (verify cost first) | Planned |
+| M4 | Pattern library: `motif` metaobject, metaobject pages, filtering (full spec-kit flow) | Planned |
+| M5 | Events: workshops as products (date = variant, seats = inventory), `product.workshop` template; monthly community circles with free registration (full spec-kit flow); Learn hub page + blog/article templates linked to motifs | Planned |
 | M6 | Accessibility/performance audit, owner handoff guide, screenshots, case study | Planned |
 
 ## 17. Open Decisions

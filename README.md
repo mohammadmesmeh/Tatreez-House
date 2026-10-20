@@ -8,6 +8,32 @@ events, and learning content about motifs and technique.
 > prices and copy on the development store are demonstration content. No sales figures,
 > testimonials or credentials are claimed.
 
+## Features
+
+- **Editorial design system** ("Editorial heritage"): Fraunces + Nunito (Latin), Amiri + Zain
+  (Arabic), fluid type scale, 8 px spacing, 2 px radius, and an original cross-stitch graphic
+  language (dividers, eyebrows, stitched link underline, woven linen surface).
+  See [`docs/DESIGN_SYSTEM.md`](docs/DESIGN_SYSTEM.md).
+- **Two clear paths** on the homepage: *Shop the collection* and *Learn tatreez*.
+- **Product cards** with 4:5 media (uncropped charts for digital patterns), data-driven badges
+  (Sale, Sold out, New, Instant download) and accessible quick add: one tap for single-variant
+  products, option chips for multi-variant products, all through Dawn's cart drawer.
+- **Collection hero**, clean filter toolbar, mobile filter drawer.
+- **Header** with mega menu + featured card, pausable announcements, shrinking sticky header.
+- **Product page** with shared option chips and a mobile sticky add to cart.
+- **Footer** with stitch divider, mobile accordions and a demo-brand note.
+- **Bilingual EN / AR** with RTL support throughout (`assets/rtl.css`).
+- **Accessibility as acceptance criteria**: WCAG 2.2 AA contrast (checked by script), visible
+  focus, keyboard-operable quick add and drawers, 44 px targets, reduced motion.
+
+## Screenshots
+
+Before / after pairs: [`docs/screenshots/m2/before-after.md`](docs/screenshots/m2/before-after.md).
+
+| Home (desktop) | Collection (mobile) |
+|---|---|
+| ![Home page at 1440 px](docs/screenshots/m2/after/home-1440.jpg) | ![Clothing collection at 390 px](docs/screenshots/m2/after/collection-390.jpg) |
+
 ## Tech stack
 
 - Shopify Online Store 2.0, based on **Dawn**
@@ -20,15 +46,19 @@ events, and learning content about motifs and technique.
 
 ```
 layout/      theme.liquid (sets lang/dir, loads rtl.css for Arabic), password.liquid
-sections/    Dawn sections + custom hero.liquid
-snippets/    Dawn snippets + theme-fonts.liquid (shared font loading), card-variant-picker.liquid
+sections/    Dawn sections + custom hero, path-cards, collection-hero, brand-story,
+             workshops-teaser, learn-teaser
+snippets/    Dawn snippets + theme-fonts, stitch-divider, editorial-split, card-badges,
+             card-quick-add, card-variant-picker, mega-menu-feature, sticky-atc
 templates/   JSON templates; index.json places the custom hero
-assets/      Dawn CSS/JS + component-hero.css, rtl.css, fonts.css.liquid, self-hosted WOFF2 fonts
+assets/      Dawn CSS/JS + tatreez-tokens.css (design tokens), component/section CSS, small custom
+             elements (card-quick-add, footer-accordion, sticky-atc), rtl.css, fonts.css.liquid,
+             self-hosted WOFF2 fonts
 locales/     en.default.json, en.default.schema.json, ar.json (full Arabic storefront)
 config/      settings_schema.json, settings_data.json (pulled from the theme editor)
 docs/        PROJECT_BRIEF.md, DECISIONS.md, fonts/
 specs/       per-feature specifications (001-homepage-hero)
-scripts/     contrast-check.mjs
+scripts/     contrast-check.mjs (WCAG pairs), capture-screens.py (screenshot matrix)
 ```
 
 Conventions:
@@ -49,7 +79,8 @@ All fonts are SIL Open Font License 1.1, self-hosted and scoped with `unicode-ra
 
 | Role | Family |
 |---|---|
-| Latin body, UI, headings | Nunito |
+| Latin headings, display | Fraunces |
+| Latin body, UI | Nunito |
 | Arabic body, UI | Zain (Arabic subset) |
 | Arabic headings | Amiri (Arabic subset) |
 | Decorative accent (opt-in `.font-accent`) | Playwrite NZ Basic |
@@ -82,12 +113,12 @@ Never run `shopify theme publish` or `theme push --live` against the live theme.
 |---|---|---|
 | 001 | Custom homepage hero section | Done |
 | M0 | Foundation: licensed fonts, colour check, full Arabic locale, hero on homepage, RTL fixes, docs | Done (owner admin actions pending) |
-| M1 | Homepage "two paths" (Shop / Learn) and remaining homepage sections | Planned |
-| M2 | Garment product template (metafields); digital pattern template | Planned |
-| M3 | Pattern library (`motif` metaobjects, filtering) | Planned |
-| M4 | Workshops (products as events) and free community circles | Planned |
-| M5 | Learn hub, blog and article templates linked to motifs | Planned |
-| M6 | Accessibility/performance audit, owner handoff guide, case study | Planned |
+| M1 | Homepage "two paths" (Shop / Learn) | Done (delivered with M2) |
+| M2 | Design system and UX overhaul: tokens, Fraunces, header/mega menu, product cards with quick add, collection hero, homepage story sections, footer, sticky add to cart | Done (admin menus and images pending) |
+| M3 | Garment product template (metafields); digital pattern template | Planned |
+| M4 | Pattern library (`motif` metaobjects, filtering) | Planned |
+| M5 | Workshops (products as events) and free community circles; Learn hub, blog and article templates | Planned |
+| M6 | Accessibility/performance audit on production, owner handoff guide, case study | Planned |
 
 Decisions and their reasons: [`docs/DECISIONS.md`](docs/DECISIONS.md). Full brief:
 [`docs/PROJECT_BRIEF.md`](docs/PROJECT_BRIEF.md).

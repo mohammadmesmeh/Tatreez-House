@@ -111,15 +111,20 @@ All original, drawn on an 8 px stitch grid (one cross-stitch = 2 crossing diagon
 
 ## Components (M2)
 
-| Component | Files |
-|---|---|
-| Product card | `snippets/card-product.liquid`, `card-quick-add.liquid`, `card-variant-picker.liquid`, `card-inline-add-form.liquid`, `card-badges.liquid`, `assets/component-card-tatreez.css`, `assets/card-variant-picker.js` |
-| Path cards | `sections/path-cards.liquid` |
-| Editorial split | `sections/editorial-split.liquid` (brand story, workshops teaser) |
-| Learn teaser | `sections/learn-teaser.liquid` |
-| Collection hero | `sections/collection-hero.liquid` |
-| Announcement bar | `sections/announcement-bar.liquid` (pause control) |
-| Sticky add to cart | `snippets/sticky-atc.liquid`, `assets/sticky-atc.js` |
+| Component | Files | Notes |
+|---|---|---|
+| Header, mega menu, drawer | `sections/header.liquid`, `snippets/mega-menu-feature.liquid`, `assets/component-header-tatreez.css` | Featured card from header settings; sticky shrink; drawer groups menus with children first |
+| Announcement bar | `sections/announcement-bar.liquid` | Pause/play (WCAG 2.2.2) via Dawn's slideshow-component |
+| Product card | `snippets/card-product.liquid`, `card-badges.liquid`, `card-quick-add.liquid`, `card-variant-picker.liquid`, `card-inline-add-form.liquid`, `assets/component-card-tatreez.css`, `assets/card-quick-add.js`, `assets/card-variant-picker.js` | 4:5 media, data badges, quick add via Dawn product-form |
+| Option chips | `assets/component-variant-chips.css` | Shared by cards and the product page |
+| Collection hero | `sections/collection-hero.liquid`, `assets/section-collection-hero.css` | Split text + image, toolbar styling |
+| Hero | `sections/hero.liquid`, `assets/component-hero.css` | Full-bleed or split, eyebrow |
+| Path cards | `sections/path-cards.liquid`, `assets/section-path-cards.css` | "Choose your path", one stretched link per card |
+| Editorial split | `snippets/editorial-split.liquid`, `sections/brand-story.liquid`, `sections/workshops-teaser.liquid`, `assets/section-editorial-split.css` | Shared markup, per-section translated defaults |
+| Learn teaser | `sections/learn-teaser.liquid`, `assets/section-learn-teaser.css` | Hidden in store without articles |
+| Footer | `sections/footer.liquid`, `assets/section-footer-tatreez.css`, `assets/footer-accordion.js` | Stitch divider, mobile accordions, demo note |
+| Sticky add to cart | `snippets/sticky-atc.liquid`, `assets/sticky-atc.js`, `assets/component-sticky-atc.css` | Mobile only, submits the main form |
+| Stitch divider | `snippets/stitch-divider.liquid` | `aria-hidden`, tone: accent / ink / action / border |
 
 ## Do / don't
 
