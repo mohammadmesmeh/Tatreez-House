@@ -1,0 +1,212 @@
+{{ 'section-path-cards.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign section_eyebrow = section.settings.eyebrow
+  if section_eyebrow == blank
+    assign section_eyebrow = 'sections.path_cards.eyebrow' | t
+  endif
+  assign section_title = section.settings.title
+  if section_title == blank
+    assign section_title = 'sections.path_cards.title' | t
+  endif
+  assign section_lede = section.settings.lede
+  if section_lede == blank
+    assign section_lede = 'sections.path_cards.lede' | t
+  endif
+-%}
+
+<div class="path-cards color-{{ section.settings.color_scheme }} gradient{% if section.settings.linen_surface %} th-linen{% endif %}">
+  <div class="page-width th-section">
+    <header class="th-section__header path-cards__header">
+      <p class="th-eyebrow">{{ section_eyebrow | escape }}</p>
+      <h2 class="th-section__title h0">{{ section_title | escape }}</h2>
+      <p class="th-section__lede">{{ section_lede | escape }}</p>
+    </header>
+
+    <ul class="path-cards__list path-cards__list--{{ section.blocks.size }} list-unstyled" role="list">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign role = block.settings.role
+          assign card_heading = block.settings.heading
+          assign card_text = block.settings.text
+          assign card_cta = block.settings.button_label
+          assign card_link = block.settings.link
+          if role == 'shop' or role == 'learn'
+            assign key_base = 'sections.path_cards.' | append: role
+            if card_heading == blank
+              assign card_heading = key_base | append: '.heading' | t
+            endif
+            if card_text == blank
+              assign card_text = key_base | append: '.text' | t
+            endif
+            if card_cta == blank
+              assign card_cta = key_base | append: '.cta' | t
+            endif
+          endif
+          if role == 'shop' and card_link == blank
+            assign card_link = routes.all_products_collection_url
+          endif
+          assign card_alt = block.settings.image.alt | default: ''
+        -%}
+        <li class="path-card" {{ block.shopify_attributes }}>
+          <div class="path-card__media{% if block.settings.image == blank %} path-card__media--empty th-linen{% endif %}">
+            {%- if block.settings.image != blank -%}
+              {{
+                block.settings.image
+                | image_url: width: 1400
+                | image_tag:
+                  class: 'path-card__image',
+                  loading: 'lazy',
+                  widths: '375, 550, 750, 1100, 1400',
+                  sizes: '(min-width: 750px) 50vw, 100vw',
+                  alt: card_alt
+              }}
+            {%- else -%}
+              {% render 'stitch-divider', id: block.id, tone: 'accent', class: 'path-card__placeholder-stitch' %}
+            {%- endif -%}
+          </div>
+          <div class="path-card__body">
+            {%- comment -%}
+              One link per card: the heading, stretched over the card. The CTA below is a visual
+              label only (aria-hidden), so keyboard and screen-reader users meet one clear link.
+            {%- endcomment -%}
+            <h3 class="path-card__heading h1">
+              {%- if card_link != blank -%}
+                <a href="{{ card_link }}" class="path-card__link">{{ card_heading | escape }}</a>
+              {%- else -%}
+                {{ card_heading | escape }}
+              {%- endif -%}
+            </h3>
+            {%- if card_text != blank -%}
+              <p class="path-card__text">{{ card_text | escape }}</p>
+            {%- endif -%}
+            {%- if card_link != blank and card_cta != blank -%}
+              <span class="path-card__cta button{% if forloop.first == false %} button--secondary{% endif %}" aria-hidden="true">
+                {{- card_cta | escape -}}
+              </span>
+            {%- endif -%}
+          </div>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.path-cards.name",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 3,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:sections.path-cards.settings.eyebrow.label",
+      "info": "t:sections.path-cards.settings.default_copy.info"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:sections.path-cards.settings.title.label",
+      "info": "t:sections.path-cards.settings.default_copy.info"
+    },
+    {
+      "type": "text",
+      "id": "lede",
+      "label": "t:sections.path-cards.settings.lede.label",
+      "info": "t:sections.path-cards.settings.default_copy.info"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme-1",
+      "label": "t:sections.all.colors.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "linen_surface",
+      "default": false,
+      "label": "t:sections.all.linen_surface.label",
+      "info": "t:sections.all.linen_surface.info"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "path",
+      "name": "t:sections.path-cards.blocks.path.name",
+      "settings": [
+        {
+          "type": "select",
+          "id": "role",
+          "options": [
+            {
+              "value": "shop",
+              "label": "t:sections.path-cards.blocks.path.settings.role.options__1.label"
+            },
+            {
+              "value": "learn",
+              "label": "t:sections.path-cards.blocks.path.settings.role.options__2.label"
+            },
+            {
+              "value": "custom",
+              "label": "t:sections.path-cards.blocks.path.settings.role.options__3.label"
+            }
+          ],
+          "default": "shop",
+          "label": "t:sections.path-cards.blocks.path.settings.role.label",
+          "info": "t:sections.path-cards.blocks.path.settings.role.info"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.path-cards.blocks.path.settings.image.label"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "t:sections.path-cards.blocks.path.settings.heading.label"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "t:sections.path-cards.blocks.path.settings.text.label"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "t:sections.path-cards.blocks.path.settings.button_label.label"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:sections.path-cards.blocks.path.settings.link.label",
+          "info": "t:sections.path-cards.blocks.path.settings.link.info"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.path-cards.presets.name",
+      "blocks": [
+        {
+          "type": "path",
+          "settings": {
+            "role": "shop"
+          }
+        },
+        {
+          "type": "path",
+          "settings": {
+            "role": "learn"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

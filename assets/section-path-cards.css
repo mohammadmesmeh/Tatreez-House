@@ -1,0 +1,145 @@
+/*
+  section-path-cards.css — "Choose your path" (Shop / Learn) cards. Loaded by
+  sections/path-cards.liquid. The heading link is stretched over the card, so the whole card is
+  clickable while keyboard users meet a single, clearly labelled link per card.
+*/
+
+.path-cards__header {
+  max-inline-size: 64rem;
+}
+
+.path-cards__list {
+  display: grid;
+  gap: var(--th-space-4);
+  margin: 0;
+}
+
+@media screen and (min-width: 750px) {
+  .path-cards__list--2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--th-space-5);
+  }
+
+  .path-cards__list--3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.path-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--th-radius);
+  overflow: hidden;
+  background-color: rgb(var(--color-background));
+  box-shadow: inset 0 0 0 var(--th-border-width) rgb(var(--th-border));
+}
+
+.path-card__media {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
+@media screen and (min-width: 750px) {
+  .path-cards__list--2 .path-card__media {
+    aspect-ratio: 5 / 4;
+  }
+}
+
+.path-card__media--empty {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 5 / 2;
+}
+
+@media screen and (min-width: 750px) {
+  .path-cards__list--2 .path-card__media--empty {
+    aspect-ratio: 5 / 2;
+  }
+}
+
+.path-card__placeholder-stitch {
+  inline-size: 40%;
+}
+
+.path-card__image {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  transition: transform var(--th-duration) var(--th-ease);
+}
+
+.path-card__body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--th-space-2);
+  padding: var(--th-space-4);
+}
+
+@media screen and (min-width: 990px) {
+  .path-card__body {
+    padding: var(--th-space-5) var(--th-space-6) var(--th-space-6);
+  }
+}
+
+.path-card__heading {
+  margin: 0;
+}
+
+.path-card__text {
+  margin: 0;
+  max-inline-size: 44ch;
+  color: rgba(var(--color-foreground), 0.75);
+}
+
+.path-card__cta {
+  margin-block-start: var(--th-space-1);
+}
+
+/* The heading link is the card's only link; stretch its hit area over the whole card. */
+.path-card__link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.path-card__link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+/* Move the focus ring from the heading text to the whole card — only where :has() exists, so
+   older browsers keep the link's own ring instead of losing focus visibility. */
+@supports selector(:has(*)) {
+  .path-card__link:focus-visible {
+    outline: none;
+    box-shadow: none;
+  }
+
+  .path-card:has(.path-card__link:focus-visible) {
+    outline: 0.2rem solid rgb(var(--color-foreground));
+    outline-offset: 0.3rem;
+  }
+}
+
+.path-card__cta {
+  pointer-events: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .path-card:hover .path-card__image {
+    transform: scale(1.04);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .path-card__image {
+    transition: none;
+  }
+
+  .path-card:hover .path-card__image {
+    transform: none;
+  }
+}

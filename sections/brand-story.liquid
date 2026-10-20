@@ -1,0 +1,142 @@
+{{ 'section-editorial-split.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  # Blank settings fall back to localized copy (EN/AR) in locales/*.json > sections.brand_story.
+  assign eyebrow = section.settings.eyebrow
+  if eyebrow == blank
+    assign eyebrow = 'sections.brand_story.eyebrow' | t
+  endif
+  assign heading = section.settings.heading
+  if heading == blank
+    assign heading = 'sections.brand_story.heading' | t
+  endif
+  assign text = section.settings.text
+  if text == blank
+    assign text = 'sections.brand_story.text_html' | t
+  endif
+  assign cta_label = section.settings.button_label
+  if cta_label == blank
+    assign cta_label = 'sections.brand_story.cta' | t
+  endif
+-%}
+
+{% render 'editorial-split',
+  section: section,
+  eyebrow: eyebrow,
+  heading: heading,
+  text: text,
+  cta_label: cta_label,
+  cta_link: section.settings.link
+%}
+
+{% schema %}
+{
+  "name": "t:sections.brand-story.name",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.editorial.settings.image.label"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "options": [
+        {
+          "value": "start",
+          "label": "t:sections.editorial.settings.image_position.options__1.label"
+        },
+        {
+          "value": "end",
+          "label": "t:sections.editorial.settings.image_position.options__2.label"
+        }
+      ],
+      "default": "start",
+      "label": "t:sections.editorial.settings.image_position.label"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:sections.editorial.settings.eyebrow.label",
+      "info": "t:sections.editorial.settings.default_copy.info"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:sections.editorial.settings.heading.label",
+      "info": "t:sections.editorial.settings.default_copy.info"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "t:sections.editorial.settings.text.label",
+      "info": "t:sections.editorial.settings.default_copy.info"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "t:sections.editorial.settings.button_label.label",
+      "info": "t:sections.editorial.settings.default_copy.info"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "t:sections.editorial.settings.link.label",
+      "info": "t:sections.editorial.settings.link.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_divider",
+      "default": true,
+      "label": "t:sections.all.show_divider.label"
+    },
+    {
+      "type": "select",
+      "id": "divider_tone",
+      "options": [
+        {
+          "value": "accent",
+          "label": "t:sections.all.divider_tone.options__1.label"
+        },
+        {
+          "value": "ink",
+          "label": "t:sections.all.divider_tone.options__2.label"
+        },
+        {
+          "value": "action",
+          "label": "t:sections.all.divider_tone.options__3.label"
+        },
+        {
+          "value": "border",
+          "label": "t:sections.all.divider_tone.options__4.label"
+        }
+      ],
+      "default": "accent",
+      "label": "t:sections.all.divider_tone.label"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme-1",
+      "label": "t:sections.all.colors.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "linen_surface",
+      "default": false,
+      "label": "t:sections.all.linen_surface.label",
+      "info": "t:sections.all.linen_surface.info"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.brand-story.presets.name"
+    }
+  ]
+}
+{% endschema %}

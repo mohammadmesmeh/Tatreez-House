@@ -300,7 +300,8 @@
             }
           }
         }
-      }
+      },
+      "eyebrow_default": "Contemporary Palestinian embroidery"
     },
     "announcements": {
       "previous_announcement": "Previous announcement",
@@ -410,6 +411,39 @@
       "min_error": "This item has a minimum of {{ min }}",
       "max_error": "This item has a maximum of {{ max }}",
       "step_error": "You can only add this item in increments of {{ step }}"
+    },
+    "path_cards": {
+      "eyebrow": "Start here",
+      "title": "Choose your path",
+      "lede": "Wear tatreez, or learn to stitch it yourself.",
+      "shop": {
+        "heading": "Shop the collection",
+        "text": "Dresses, accessories and home textiles carrying traditional motifs.",
+        "cta": "Shop now"
+      },
+      "learn": {
+        "heading": "Learn tatreez",
+        "text": "Motifs, techniques and downloadable patterns for every level.",
+        "cta": "Start learning"
+      }
+    },
+    "brand_story": {
+      "eyebrow": "Our story",
+      "heading": "Every stitch carries a story",
+      "text_html": "<p>Tatreez House is a fictional demo brand created for a design portfolio. It imagines contemporary clothing and home pieces that carry Palestinian cross-stitch motifs into everyday life.</p>",
+      "cta": "About the project"
+    },
+    "workshops_teaser": {
+      "eyebrow": "Workshops",
+      "heading": "Stitch together",
+      "text_html": "<p>Hands-on workshops and free monthly community circles are being planned. Dates will be announced here.</p>",
+      "cta": "See workshops"
+    },
+    "learn_teaser": {
+      "eyebrow": "Journal",
+      "heading": "Learn the craft",
+      "cta": "Read the journal",
+      "editor_empty": "Choose a blog with published articles to show them here. Until then this section stays hidden in the store."
     }
   },
   "localization": {

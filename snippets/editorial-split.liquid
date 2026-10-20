@@ -1,0 +1,53 @@
+{% doc %}
+  Editorial image + text layout shared by the brand story and workshops teaser sections.
+  Copy arrives already resolved (merchant setting or localized default) from the section.
+
+  @param {object} section - The calling section (settings + id). Required.
+  @param {string} eyebrow - Short label above the heading.
+  @param {string} heading - Heading text. Required.
+  @param {string} text - Rich text (HTML from a richtext setting or a *_html locale key).
+  @param {string} cta_label - Button label; the button renders only with a link.
+  @param {string} cta_link - Button URL.
+
+  @example
+  {% render 'editorial-split', section: section, eyebrow: eyebrow, heading: heading, text: text, cta_label: cta_label, cta_link: section.settings.link %}
+{% enddoc %}
+{%- liquid
+  assign image = section.settings.image
+  assign image_alt = image.alt | default: ''
+-%}
+<div class="editorial-split color-{{ section.settings.color_scheme }} gradient{% if section.settings.linen_surface %} th-linen{% endif %}">
+  <div class="page-width th-section">
+    <div class="editorial-split__grid{% if image == blank %} editorial-split__grid--text-only{% else %} editorial-split__grid--image-{{ section.settings.image_position }}{% endif %}">
+      {%- if image != blank -%}
+        <div class="editorial-split__media">
+          {{
+            image
+            | image_url: width: 1400
+            | image_tag:
+              class: 'editorial-split__image',
+              loading: 'lazy',
+              widths: '375, 550, 750, 1100, 1400',
+              sizes: '(min-width: 750px) 50vw, 100vw',
+              alt: image_alt
+          }}
+        </div>
+      {%- endif -%}
+      <div class="editorial-split__text">
+        {%- if section.settings.show_divider -%}
+          {% render 'stitch-divider', id: section.id, tone: section.settings.divider_tone, class: 'editorial-split__divider' %}
+        {%- endif -%}
+        {%- if eyebrow != blank -%}
+          <p class="th-eyebrow">{{ eyebrow | escape }}</p>
+        {%- endif -%}
+        <h2 class="editorial-split__heading h0">{{ heading | escape }}</h2>
+        {%- if text != blank -%}
+          <div class="editorial-split__body rte">{{ text }}</div>
+        {%- endif -%}
+        {%- if cta_link != blank and cta_label != blank -%}
+          <a href="{{ cta_link }}" class="button button--secondary editorial-split__cta">{{ cta_label | escape }}</a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
