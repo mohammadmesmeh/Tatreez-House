@@ -2,12 +2,10 @@
   component-hero.css — styles for sections/hero.liquid (feature 001-homepage-hero).
 
   Self-contained; does not duplicate section-image-banner.css.
-  Alignment/positioning uses CSS LOGICAL properties (inset-inline-*, padding-inline-*, text-align: start/end,
-  align-items: start/end, justify-content: start/end) so left/right settings resolve correctly under
-  dir="rtl" without per-direction overrides (constitution V, FR-012).
-
-  Alignment setting values are physical tokens (left | center | right, per contract §2); they map to
-  logical keywords below so RTL flips automatically.
+  Position and alignment settings use logical tokens (start | center | end, top-start … bottom-end)
+  and map to logical CSS (flex-start/flex-end on the inline axis, text-align: start/end,
+  inset/padding-inline/-block), so the same setting mirrors automatically under dir="rtl":
+  "start" is left in English and right in Arabic. No per-direction overrides needed.
 */
 
 .hero-section {
@@ -114,9 +112,9 @@
   padding-block: 3.5rem;
 }
 
-/* Desktop content position (grid of top/middle/bottom × left/center/right).
-   start/end keywords are logical: they follow dir=rtl. */
-.hero-section__content--top-left {
+/* Desktop content position (grid of top/middle/bottom × start/center/end).
+   flex-start/flex-end on the cross (inline) axis and text-align start/end follow dir=rtl. */
+.hero-section__content--top-start {
   justify-content: flex-start;
   align-items: flex-start;
   text-align: start;
@@ -128,13 +126,13 @@
   text-align: center;
 }
 
-.hero-section__content--top-right {
+.hero-section__content--top-end {
   justify-content: flex-start;
   align-items: flex-end;
   text-align: end;
 }
 
-.hero-section__content--middle-left {
+.hero-section__content--middle-start {
   justify-content: center;
   align-items: flex-start;
   text-align: start;
@@ -146,13 +144,13 @@
   text-align: center;
 }
 
-.hero-section__content--middle-right {
+.hero-section__content--middle-end {
   justify-content: center;
   align-items: flex-end;
   text-align: end;
 }
 
-.hero-section__content--bottom-left {
+.hero-section__content--bottom-start {
   justify-content: flex-end;
   align-items: flex-start;
   text-align: start;
@@ -164,24 +162,27 @@
   text-align: center;
 }
 
-.hero-section__content--bottom-right {
+.hero-section__content--bottom-end {
   justify-content: flex-end;
   align-items: flex-end;
   text-align: end;
 }
 
 /* Desktop content alignment — overrides the horizontal part of the position above. */
-.hero-section__content--align-left {
+.hero-section__content--align-start {
+  --hero-justify: flex-start;
   align-items: flex-start;
   text-align: start;
 }
 
 .hero-section__content--align-center {
+  --hero-justify: center;
   align-items: center;
   text-align: center;
 }
 
-.hero-section__content--align-right {
+.hero-section__content--align-end {
+  --hero-justify: flex-end;
   align-items: flex-end;
   text-align: end;
 }
@@ -193,17 +194,20 @@
     padding-block: 3rem;
   }
 
-  .hero-section__content--align-mobile-left {
+  .hero-section__content--align-mobile-start {
+    --hero-justify: flex-start;
     align-items: flex-start;
     text-align: start;
   }
 
   .hero-section__content--align-mobile-center {
+    --hero-justify: center;
     align-items: center;
     text-align: center;
   }
 
-  .hero-section__content--align-mobile-right {
+  .hero-section__content--align-mobile-end {
+    --hero-justify: flex-end;
     align-items: flex-end;
     text-align: end;
   }
@@ -220,26 +224,12 @@
   max-inline-size: 46rem;
 }
 
-/* CTA buttons */
+/* CTA buttons — follow the active (desktop or mobile) alignment via --hero-justify. */
 .hero-section__buttons {
   display: flex;
   flex-wrap: wrap;
+  justify-content: var(--hero-justify, center);
   gap: 1rem;
-}
-
-.hero-section__content--align-left .hero-section__buttons,
-.hero-section__content--align-mobile-left .hero-section__buttons {
-  justify-content: flex-start;
-}
-
-.hero-section__content--align-center .hero-section__buttons,
-.hero-section__content--align-mobile-center .hero-section__buttons {
-  justify-content: center;
-}
-
-.hero-section__content--align-right .hero-section__buttons,
-.hero-section__content--align-mobile-right .hero-section__buttons {
-  justify-content: flex-end;
 }
 
 .hero-section__buttons .button:focus-visible {

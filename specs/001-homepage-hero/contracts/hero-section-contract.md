@@ -41,16 +41,16 @@ specified below as a contract the implementation must satisfy.
 | `image_height` | `select` | `adapt` \| `small` \| `medium` \| `large` | `large` | yes |
 | `image_overlay_opacity` | `range` | min 0, max 100, step 5 | `40` | yes |
 | `color_scheme` | `color_scheme` | schemes from `settings_schema.json` | `scheme-1` | yes |
-| `desktop_content_position` | `select` | `top-left`…`bottom-right` | `middle-center` | yes |
-| `desktop_content_alignment` | `select` | `left` \| `center` \| `right` | `center` | yes |
-| `mobile_content_alignment` | `select` | `left` \| `center` \| `right` | `center` | yes |
+| `desktop_content_position` | `select` | `top-start` \| `top-center` \| `top-end` \| `middle-start` \| `middle-center` \| `middle-end` \| `bottom-start` \| `bottom-center` \| `bottom-end` | `middle-center` | yes |
+| `desktop_content_alignment` | `select` | `start` \| `center` \| `end` | `center` | yes |
+| `mobile_content_alignment` | `select` | `start` \| `center` \| `end` | `center` | yes |
 | `heading_size` | `select` | size classes (`h0`, `h1`, `h2`, `hxl`, `hxxl`) | `h1` | yes |
 
 **Guarantees**
 - Setting IDs are **new**; none collide with or rename any existing Dawn setting (constitution I).
-- The three `*_alignment`/`*_position` options store physical-looking tokens but the markup applies
-  them through logical properties, so `left`/`right` resolve to start/end under `dir="rtl"`
-  (FR-012).
+- The three `*_alignment`/`*_position` options store **logical** tokens (`start`/`end`, renamed from
+  `left`/`right` in M0, 2026-10-20) and the CSS applies them through logical properties, so
+  `start` is left in LTR and right under `dir="rtl"` (FR-012). Labels read "Start / Center / End".
 - `heading_size` selects a **class**, never an element name (FR-014).
 
 ## 3. Storefront DOM contract

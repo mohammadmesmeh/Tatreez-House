@@ -20,9 +20,9 @@ merchant adds the section.
 | `image_alt` | `text` | no | blank | FR-006; blank ⇒ fall back to `image.alt`. |
 | `image_height` | `select` | yes | `large` | Layout control; constrained to Dawn-like steps. |
 | `image_overlay_opacity` | `range` (0–100) | yes | `40` | Keeps overlaid text legible (FR-008). |
-| `desktop_content_position` | `select` | yes | `middle-center` | Where the content block sits on desktop. |
-| `desktop_content_alignment` | `select` | yes | `center` | Text alignment; must resolve **logically** for RTL. |
-| `mobile_content_alignment` | `select` | yes | `center` | Text alignment on small screens. |
+| `desktop_content_position` | `select` | yes | `middle-center` | Where the content block sits on desktop: `top`/`middle`/`bottom` × `start`/`center`/`end` (logical; mirrors in RTL). |
+| `desktop_content_alignment` | `select` | yes | `center` | Text alignment: `start` \| `center` \| `end` (logical; mirrors in RTL). |
+| `mobile_content_alignment` | `select` | yes | `center` | Text alignment on small screens: `start` \| `center` \| `end`. |
 | `heading_size` | `select` | yes | `h1` | **Visual** size only (class on the `<h2>`); never changes the heading level (FR-014). |
 | `blocks` | block list | yes (via preset) | heading, text, buttons | At most one of each; enforced by block `limit` (FR-002). |
 

@@ -419,56 +419,59 @@
         },
         "desktop_content_position": {
           "label": "Desktop content position",
+          "info": "Start and end follow the reading direction: left and right in English, right and left in Arabic.",
           "options__1": {
-            "label": "Top left"
+            "label": "Top start"
           },
           "options__2": {
             "label": "Top center"
           },
           "options__3": {
-            "label": "Top right"
+            "label": "Top end"
           },
           "options__4": {
-            "label": "Middle left"
+            "label": "Middle start"
           },
           "options__5": {
             "label": "Middle center"
           },
           "options__6": {
-            "label": "Middle right"
+            "label": "Middle end"
           },
           "options__7": {
-            "label": "Bottom left"
+            "label": "Bottom start"
           },
           "options__8": {
             "label": "Bottom center"
           },
           "options__9": {
-            "label": "Bottom right"
+            "label": "Bottom end"
           }
         },
         "desktop_content_alignment": {
           "label": "Desktop content alignment",
+          "info": "Start and end follow the reading direction: left and right in English, right and left in Arabic.",
           "options__1": {
-            "label": "Left"
+            "label": "Start"
           },
           "options__2": {
             "label": "Center"
           },
           "options__3": {
-            "label": "Right"
+            "label": "End"
           }
         },
         "mobile_content_alignment": {
           "label": "Mobile content alignment",
+          "info": "Start and end follow the reading direction: left and right in English, right and left in Arabic.",
           "options__1": {
-            "label": "Left"
+            "label": "Start"
           },
           "options__2": {
             "label": "Center"
           },
           "options__3": {
-            "label": "Right"
+            "label": "End"
           }
         },
         "heading_size": {
