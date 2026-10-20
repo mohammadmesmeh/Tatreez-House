@@ -76,44 +76,28 @@ Use the palette consistently and verify text contrast for accessibility.
 
 ### Typography
 
-The proposed typography system uses separate display and body fonts for Arabic and English.
+Decided 2026-10-20 (milestone M0; see `docs/DECISIONS.md`). All four families are SIL OFL 1.1,
+self-hosted from `assets/`. Details, sources and subsetting: `docs/fonts/README.md`.
 
-**English**
-- Display / accent: Playwrite New Zealand Basic
-- Body / UI: Nunito
+| Role | Family | Weights | Scope |
+|---|---|---|---|
+| Latin body, UI and headings | Nunito | variable (400 body, 700 bold and headings) | Latin |
+| Arabic body and UI | Zain | 400, 700 | Arabic only (`unicode-range`) |
+| Arabic headings | Amiri (Naskh) | 400, 700 | Arabic only (`unicode-range`) |
+| Decorative accent | Playwrite NZ Basic | variable 100–400 | Latin, opt-in `.font-accent` only |
 
-**Arabic**
-- Display: Thuluth / Thamanya (ثمانية); use the exact local font family and filename after inspecting the project assets.
-- Body / UI: Zain, pending confirmation of the exact font family and available files.
+**Font stacks**
+- Body: `'Nunito', 'Zain', system-ui, 'Segoe UI', Tahoma, sans-serif`
+- Headings: `'Nunito', 'Amiri', 'Times New Roman', serif`
+- Accent: `'Playwrite NZ Basic', 'Nunito', cursive`
 
-**Implementation requirements**
-- Inspect local font files before configuring `@font-face`.
-- Verify exact family names, available weights, formats, and licenses.
-- Prefer WOFF2 when available and permitted.
-- Load only the font weights required by the design.
-- Define sensible system fallbacks.
-- Use the display fonts selectively; prioritize readability in product information, navigation, buttons, and long-form content.
-- Test Arabic shaping, punctuation, mixed Arabic/English text, and RTL layouts.
-- Do not download or overwrite font files without reviewing the existing assets and licensing.
+The Latin face is first in every stack and scoped to Latin, so mixed Arabic/English text picks
+the right face per character. The handwriting script is never the default heading face.
 
-**Provisional CSS font stacks**
-- English body: `Nunito, sans-serif`
-- English display: `Playwrite New Zealand Basic, cursive`
-- Arabic body: `Zain, sans-serif`
-- Arabic display: the verified local Thuluth / Thamanya family, with a suitable Arabic fallback.
-
-These stacks are provisional until the font files and browser rendering are verified.
-
-Font choices are pending owner approval.
-
-- Arabic display font: proposed Thuluth/Thamanya-style reference, exact font name and file to be confirmed by the owner.
-- Arabic body font: proposed Zain, exact family and weights to be confirmed.
-- English display font: pending owner selection.
-- English body/UI font: pending owner selection.
-
-Do not download, embed, or commit font files until their exact identities, licenses, and permitted web usage are verified.
-
-Prefer optimized WOFF2 files where licensing permits. Define robust language-specific fallbacks. Avoid loading unnecessary font weights.
+**Rules**
+- Load only the weights the design uses; one preload (Zain on the Arabic storefront, Nunito otherwise).
+- Arabic text is never letter-spaced; Arabic headings get extra line-height for Amiri's tall marks.
+- Any new font needs verified identity, weights and a licence that permits web embedding before use.
 
 ### Photography and motifs
 
@@ -255,17 +239,45 @@ The hero should have:
 - RTL/LTR compatibility
 - Sensible fallback behavior when optional content is empty
 
-Use the project's approved fonts after they are selected. Do not rebuild the entire homepage in the first milestone.
+Use the approved fonts (section 5). Do not rebuild the entire homepage in the first milestone.
 
-## 15. Open Decisions
+## 15. Job-Aligned Requirements
 
-- Final Arabic display and body fonts
-- Final English display and body fonts
+The portfolio targets a Shopify Website Designer role. The finished store must show:
+
+- **Two clear user paths** from the homepage: *Shop* (garments, accessories, home textiles) and
+  *Learn* (tatreez history, motifs, techniques).
+- **Digital patterns** sold as downloadable products with their own product template.
+- **Events**: paid workshops and free monthly community circles, with clear dates, seats and
+  registration states.
+- **Pattern library**: a browsable, filterable catalogue of motifs (name, region, meaning,
+  difficulty, chart, related products).
+- **Blog / education**: articles linked to motifs and products.
+- **Non-technical-owner handoff**: everything editable in the theme editor, plus a plain-language
+  owner guide.
+
+## 16. Milestone Roadmap
+
+| Milestone | Scope | Status |
+|---|---|---|
+| M0 | Foundation: licensed font system, brand colour check, full EN/AR locales, hero on the homepage, RTL fixes for Dawn, docs | Done (2026-10-20), owner actions pending |
+| M1 | Homepage "two paths" section (Shop / Learn), then the rest of the homepage per section 8 | Planned |
+| M2 | Store: garment product template with metafields (motif story, care, size guide); `product.pattern` template for digital patterns with Shopify Digital Downloads (verify cost first) | Planned |
+| M3 | Pattern library: `motif` metaobject, metaobject pages, filtering (full spec-kit flow) | Planned |
+| M4 | Events: workshops as products (date = variant, seats = inventory), `product.workshop` template; free monthly community circles with registration (full spec-kit flow) | Planned |
+| M5 | Learn hub page, blog and article templates linked to motifs | Planned |
+| M6 | Accessibility/performance audit, owner handoff guide, screenshots, case study | Planned |
+
+## 17. Open Decisions
+
+- ~~Final Arabic display and body fonts~~ — resolved 2026-10-20: Amiri (headings), Zain (body).
+- ~~Final English display and body fonts~~ — resolved 2026-10-20: Nunito (body and headings),
+  Playwrite NZ Basic as accent only.
 - Final logo and brand mark
 - Approved photography assets
 - Final bilingual product and article copy
-- Digital download solution
-- Workshop booking solution
+- Digital download solution (M2; Shopify Digital Downloads — cost to verify)
+- Workshop booking solution (M4)
 - Newsletter provider, if needed
-
-Record decisions when approved. Do not silently invent answers to unresolved business or design questions.
+- Colour schemes: the admin schemes use near-brand values (`#F7F2E8`, `#252722`, `#8C2633`,
+  `#F0E8D9`) and a deep green `#17352B` that is not in the palette above — confirm or align.
