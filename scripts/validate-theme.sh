@@ -12,5 +12,5 @@ SKILL="$(ls -d "$HOME"/.claude/plugins/cache/claude-plugins-official/shopify-ai-
 if [ -z "$SKILL" ]; then echo "shopify-ai-toolkit not installed"; exit 2; fi
 node "$SKILL/scripts/validate.mjs" --api liquid --theme-path "$ROOT" --files "$3" \
   --model claude-opus-5-5 --client-name claude-code --client-version 2.1.304 \
-  --artifact-id "$1" --revision "$2" | grep -E "Overall Status|Status:|Details:|Error|line" || true
+  --artifact-id "$1" --revision "$2" | grep -E "Overall Status|Status:|Details:|ERROR|WARNING|Error:" || true
 cd "$ROOT" && shopify theme check --output text 2>/dev/null | grep -E "inspected|errors|warnings" || true
