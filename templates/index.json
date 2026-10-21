@@ -49,7 +49,7 @@
             "heading": "",
             "text": "",
             "button_label": "",
-            "link": ""
+            "link": "shopify://collections/all"
           }
         },
         "path_learn": {
@@ -60,7 +60,7 @@
             "heading": "",
             "text": "",
             "button_label": "",
-            "link": ""
+            "link": "shopify://pages/tatreez-101"
           }
         }
       },
@@ -84,7 +84,7 @@
         "heading": "",
         "text": "",
         "button_label": "",
-        "link": "",
+        "link": "shopify://pages/about",
         "show_divider": true,
         "divider_tone": "accent",
         "color_scheme": "scheme-1",
@@ -139,7 +139,7 @@
         "heading": "",
         "text": "",
         "button_label": "",
-        "link": "",
+        "link": "shopify://pages/workshops",
         "show_divider": true,
         "divider_tone": "accent",
         "color_scheme": "scheme-1",

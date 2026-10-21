@@ -325,6 +325,7 @@
       "announcement_bar": "Announcement bar"
     },
     "header": {
+      "mega_feature_eyebrow": "Featured",
       "announcement": "Announcement",
       "menu": "Menu",
       "cart_count": {
@@ -450,7 +451,7 @@
       "eyebrow": "Our story",
       "heading": "Every stitch carries a story",
       "text_html": "<p>Tatreez House is a fictional demo brand created for a design portfolio. It imagines contemporary clothing and home pieces that carry Palestinian cross-stitch motifs into everyday life.</p>",
-      "cta": "About the project"
+      "cta": "Read our story"
     },
     "workshops_teaser": {
       "eyebrow": "Workshops",

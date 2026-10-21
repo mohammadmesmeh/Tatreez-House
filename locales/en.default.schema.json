@@ -1606,7 +1606,7 @@
         },
         "mega_feature": {
           "content": "Mega menu feature",
-          "info": "An image card shown as the last column of one mega menu. Requires the mega menu type on desktop."
+          "info": "A card shown as the last column of one mega menu (image optional). Requires the mega menu type on desktop."
         },
         "mega_feature_menu_handle": {
           "label": "Show in menu item",
@@ -1616,7 +1616,8 @@
           "label": "Image"
         },
         "mega_feature_heading": {
-          "label": "Heading"
+          "label": "Heading",
+          "info": "Leave empty to use the linked collection's title."
         },
         "mega_feature_link": {
           "label": "Link"

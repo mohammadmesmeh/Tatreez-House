@@ -1,7 +1,10 @@
 {% doc %}
-  Featured image card shown as the last column of one mega menu (for example "Shop").
+  Featured card shown as the last column of one mega menu (for example "Shop").
   Content comes from the header section settings, so the merchant chooses the image, heading,
-  link and which top-level menu item shows it. Renders nothing until an image or heading is set.
+  link and which top-level menu item shows it. When the heading is empty and the link points to
+  a collection, the collection's (translated) title is used. Without an image the card is a
+  linen panel with an eyebrow, so it still looks intentional. The whole card is the link.
+  Renders nothing until an image, a heading or a collection link is set.
 
   @param {object} settings - The header section settings (section.settings). Required.
   @param {string} link_handle - Handle of the top-level menu link being rendered. Required.
@@ -12,16 +15,21 @@
 {%- liquid
   assign feature_for = settings.mega_feature_menu_handle | handleize
   assign feature_alt = settings.mega_feature_image.alt | default: ''
+  assign feature_heading = settings.mega_feature_heading
+  if feature_heading == blank and settings.mega_feature_link contains '/collections/'
+    assign feature_handle = settings.mega_feature_link | split: '/collections/' | last | split: '?' | first
+    assign feature_heading = collections[feature_handle].title
+  endif
   assign show_feature = false
   if feature_for != blank and feature_for == link_handle
-    if settings.mega_feature_image != blank or settings.mega_feature_heading != blank
+    if settings.mega_feature_image != blank or feature_heading != blank
       assign show_feature = true
     endif
   endif
 -%}
 {%- if show_feature -%}
   <li class="mega-menu__feature">
-    <div class="mega-feature">
+    <div class="mega-feature{% if settings.mega_feature_image == blank %} mega-feature--text{% endif %}">
       {%- if settings.mega_feature_image != blank -%}
         <div class="mega-feature__media">
           {{
@@ -35,14 +43,15 @@
           }}
         </div>
       {%- endif -%}
-      {%- if settings.mega_feature_heading != blank -%}
+      <p class="mega-feature__eyebrow">{{ 'sections.header.mega_feature_eyebrow' | t }}</p>
+      {%- if feature_heading != blank -%}
         <p class="mega-feature__heading h4">
           {%- if settings.mega_feature_link != blank -%}
             <a href="{{ settings.mega_feature_link }}" class="mega-feature__link th-link">
-              {{- settings.mega_feature_heading | escape -}}
+              {{- feature_heading | escape -}}
             </a>
           {%- else -%}
-            {{- settings.mega_feature_heading | escape -}}
+            {{- feature_heading | escape -}}
           {%- endif -%}
         </p>
       {%- endif -%}

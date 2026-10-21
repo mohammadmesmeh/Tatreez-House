@@ -98,6 +98,23 @@ summary.list-menu__item {
   grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(24rem, 1.25fr);
 }
 
+/* One-level menus (Dawn's condensed list is display:block): links in the first column, the card
+   beside them spanning their height. Row gap 0 so spare spanned rows add no height. */
+.mega-menu .mega-menu__list--condensed:has(.mega-menu__feature) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(24rem, 36rem);
+  row-gap: 0;
+}
+
+.mega-menu__list--condensed:has(.mega-menu__feature) > li:not(.mega-menu__feature) {
+  grid-column: 1;
+}
+
+.mega-menu__list--condensed > .mega-menu__feature {
+  grid-column: 2;
+  grid-row: 1 / span 12;
+}
+
 .mega-menu__feature {
   grid-column: -2 / -1;
   grid-row: 1 / span 3;
@@ -121,12 +138,55 @@ summary.list-menu__item {
   object-fit: cover;
 }
 
+.mega-feature {
+  position: relative;
+}
+
+/* No image: a linen panel, content at the bottom, so the column still looks intentional. */
+.mega-feature--text {
+  min-block-size: 100%;
+  align-content: end;
+  gap: var(--th-space-1);
+  padding: var(--th-space-4);
+  border-radius: var(--th-radius);
+  background-color: rgb(var(--th-surface-alt));
+}
+
+.mega-feature__eyebrow {
+  margin: 0;
+  font-size: var(--th-step-eyebrow);
+  letter-spacing: var(--th-tracking-eyebrow);
+  text-transform: uppercase;
+  color: rgba(var(--color-foreground), 0.75);
+}
+
+.mega-feature__media + .mega-feature__eyebrow {
+  margin-block-start: calc(var(--th-space-1) * -1);
+}
+
 .mega-feature__heading {
   margin: 0;
 }
 
 .mega-feature__link {
   color: rgb(var(--color-foreground));
+}
+
+/* The whole card is the link's hit area. */
+.mega-feature__link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.mega-feature:has(.mega-feature__link:focus-visible) {
+  outline: 0.2rem solid rgb(var(--color-foreground));
+  outline-offset: 0.3rem;
+}
+
+.mega-feature__link:focus-visible {
+  outline: none;
+  box-shadow: none;
 }
 
 /* ---------------------------------------------------------------------------
