@@ -230,7 +230,20 @@
       "adding": "Adding {{ product }} to your cart…",
       "added": "{{ product }} added to your cart.",
       "error": "{{ product }} could not be added to your cart.",
-      "option_unavailable": "{{ value }}, sold out"
+      "option_unavailable": "{{ value }}, sold out",
+      "add_short": "Add",
+      "options_short": "Options",
+      "colors_available": {
+        "one": "Available in {{ count }} colour",
+        "other": "Available in {{ count }} colours"
+      }
+    },
+    "rating": {
+      "empty": "No reviews yet. Be the first to review.",
+      "summary": {
+        "one": "Rated {{ rating }} out of {{ max }}, {{ count }} review",
+        "other": "Rated {{ rating }} out of {{ max }}, {{ count }} reviews"
+      }
     }
   },
   "templates": {

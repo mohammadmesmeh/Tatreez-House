@@ -246,7 +246,28 @@
       "adding": "جارٍ إضافة {{ product }} إلى سلتك…",
       "added": "أُضيف {{ product }} إلى سلتك.",
       "error": "تعذّرت إضافة {{ product }} إلى سلتك.",
-      "option_unavailable": "{{ value }}، نفدت الكمية"
+      "option_unavailable": "{{ value }}، نفدت الكمية",
+      "add_short": "أضف",
+      "options_short": "الخيارات",
+      "colors_available": {
+        "zero": "لا تتوفر ألوان",
+        "one": "متوفر بلون واحد",
+        "two": "متوفر بلونين",
+        "few": "متوفر بـ {{ count }} ألوان",
+        "many": "متوفر بـ {{ count }} لونًا",
+        "other": "متوفر بـ {{ count }} لون"
+      }
+    },
+    "rating": {
+      "empty": "لا توجد مراجعات بعد. كن أول من يكتب مراجعة.",
+      "summary": {
+        "zero": "التقييم {{ rating }} من {{ max }}، دون مراجعات",
+        "one": "التقييم {{ rating }} من {{ max }}، مراجعة واحدة",
+        "two": "التقييم {{ rating }} من {{ max }}، مراجعتان",
+        "few": "التقييم {{ rating }} من {{ max }}، {{ count }} مراجعات",
+        "many": "التقييم {{ rating }} من {{ max }}، {{ count }} مراجعة",
+        "other": "التقييم {{ rating }} من {{ max }}، {{ count }} مراجعة"
+      }
     }
   },
   "templates": {

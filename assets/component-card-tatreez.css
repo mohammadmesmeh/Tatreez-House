@@ -139,65 +139,225 @@
 }
 
 /* ---------------------------------------------------------------------------
-   Quick add: chips + Add to cart. Always visible on touch / small screens; revealed on hover or
-   keyboard focus on desktop. It stays in the layout (no shift) and stays focusable while hidden,
-   so :focus-within reveals it for keyboard users.
+   Equal-height cards with one action baseline. Every element from the grid item down is a
+   full-height flex column; the information grows (flex: 1) and the action row is pinned to the
+   bottom (margin-block-start: auto), so all buttons in a row line up whatever the title length.
+*/
+.grid__item > product-component {
+  display: block;
+  block-size: 100%;
+}
+
+.product-card-wrapper,
+.product-card-wrapper > .card {
+  block-size: 100%;
+}
+
+.product-card-wrapper > .card {
+  display: flex;
+  flex-direction: column;
+}
+
+.product-card-wrapper > .card > .card__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-card-wrapper > .card > .card__content > .card__information {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Colour dots: the row always exists (fixed height) so cards with and without colours match. */
+.card-swatches {
+  min-block-size: 1.6rem;
+  margin-block-start: 0.4rem;
+}
+
+.card-swatches__dots {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.card-swatch {
+  inline-size: 1.4rem;
+  block-size: 1.4rem;
+  border-radius: 50%;
+  background-color: var(--swatch);
+  box-shadow: inset 0 0 0 var(--th-border-width) rgba(var(--color-foreground), 0.25);
+}
+
+.card-swatch--unknown {
+  background-color: transparent;
+  box-shadow: inset 0 0 0 var(--th-border-width) rgba(var(--color-foreground), 0.55);
+}
+
+.card-swatches__more {
+  font-size: 1.2rem;
+  color: rgba(var(--color-foreground), 0.75);
+}
+
+.card-swatches__more--compact {
+  display: none;
+}
+
+.card__rating {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 1.3rem;
+  color: rgba(var(--color-foreground), 0.75);
+}
+
+/* ---------------------------------------------------------------------------
+   Action row: always visible, same size and style on every card.
 */
 .card-quick-add {
   display: block;
   position: relative;
   z-index: 2;
-  margin-block-start: var(--th-space-2);
-}
-
-/* Dawn's .card__content is a grid that pins .card__information to row 2; keep quick add under
-   it (otherwise it is auto-placed into the empty first row, above the title). */
-.product-card-wrapper .card__content > .card-quick-add {
-  grid-row-start: 3;
-  align-self: start;
+  margin-block-start: auto;
+  padding-block-start: var(--th-space-2);
 }
 
 .card-quick-add .quick-add {
   margin: 0;
 }
 
-@media (hover: hover) and (pointer: fine) and (min-width: 990px) {
-  .product-card-wrapper .card-quick-add {
-    opacity: 0;
-    transform: translateY(0.4rem);
-    transition:
-      opacity var(--th-duration) var(--th-ease),
-      transform var(--th-duration) var(--th-ease);
-  }
-
-  .product-card-wrapper:hover .card-quick-add,
-  .product-card-wrapper:focus-within .card-quick-add {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-/* Chip styles (shared with the product page): component-variant-chips.css. */
-
-.card-quick-add .quick-add__submit {
+.card-action.quick-add__submit {
   min-block-size: var(--th-target);
   border-radius: var(--th-radius);
 }
 
+.card-action__label--short {
+  display: none;
+}
+
+/* Dawn's quick-add modal (opened by "Choose options"): token radius and spacing. Focus trap,
+   Escape and focus return are Dawn's ModalDialog. */
+.quick-add-modal__content {
+  border-radius: var(--th-radius);
+}
+
+.quick-add-modal__toggle {
+  min-inline-size: var(--th-target);
+  min-block-size: var(--th-target);
+}
+
 /* ---------------------------------------------------------------------------
-   Grid: 2 columns on mobile, 3 on tablet, desktop from the section setting.
+   Compact cards (narrow columns, e.g. 2 columns on a phone): decided by the card's own width
+   through a container query, so it works in every grid and carousel.
 */
+.product-card-wrapper {
+  container-type: inline-size;
+  container-name: product-card;
+}
+
+@container product-card (max-width: 22rem) {
+  .card__eyebrow {
+    display: none;
+  }
+
+  .card__heading.h5 a {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+  }
+
+  .card-swatch--overflow,
+  .card-swatches__more--full {
+    display: none;
+  }
+
+  .card-swatches__more--compact {
+    display: inline;
+  }
+
+  .card-action__label {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .card-action__label--short {
+    display: inline;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Grid columns. Mobile: Dawn's "Mobile columns" setting (1 or 2), or "auto" = 1 column below
+   480px and 2 columns from 480px. Tablet: 3 columns. Desktop: from the section setting.
+*/
+@media screen and (max-width: 479px) {
+  .product-grid.grid--auto-col-tablet-down .grid__item {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+@media screen and (min-width: 480px) and (max-width: 749px) {
+  .product-grid.grid--auto-col-tablet-down .grid__item {
+    width: calc(50% - var(--grid-mobile-horizontal-spacing) / 2);
+    max-width: calc(50% - var(--grid-mobile-horizontal-spacing) / 2);
+  }
+}
+
 @media screen and (min-width: 750px) and (max-width: 989px) {
-  .product-grid.grid--2-col-tablet-down .grid__item {
+  .product-grid:is(.grid--2-col-tablet-down, .grid--1-col-tablet-down, .grid--auto-col-tablet-down) .grid__item {
     width: calc(33.33% - var(--grid-desktop-horizontal-spacing) * 2 / 3);
     max-width: calc(33.33% - var(--grid-desktop-horizontal-spacing) * 2 / 3);
   }
 }
 
+/* ---------------------------------------------------------------------------
+   Homepage product rows on phones: a CSS scroll-snap carousel showing ~1.25 cards so the next
+   card peeks. No JavaScript; the list is focusable, so keyboard users scroll it with the arrow
+   keys. Native scrolling follows the reading direction in RTL.
+*/
+@media screen and (max-width: 749px) {
+  .th-swipe-mobile .product-grid {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: var(--grid-mobile-horizontal-spacing);
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: inline mandatory;
+    scroll-padding-inline: 1.5rem;
+    margin-inline: -1.5rem;
+    padding-inline: 1.5rem;
+    padding-block-end: var(--th-space-1);
+    scrollbar-width: thin;
+  }
+
+  .th-swipe-mobile .product-grid .grid__item {
+    flex: 0 0 78%;
+    width: 78%;
+    max-width: 78%;
+    scroll-snap-align: start;
+  }
+
+  .th-swipe-mobile .product-grid:focus-visible {
+    outline: 0.2rem solid rgb(var(--color-foreground));
+    outline-offset: 0.3rem;
+  }
+
+  .th-swipe-mobile .slider-buttons {
+    display: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .product-card-wrapper .media.media--hover-effect > img,
-  .product-card-wrapper .card__heading a,
-  .product-card-wrapper .card-quick-add {
+  .product-card-wrapper .card__heading a {
     transition: none;
   }
 

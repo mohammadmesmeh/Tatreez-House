@@ -62,3 +62,24 @@
     display: block;
   }
 }
+
+/* Tatreez House: rating-stars snippet (stars + value + count, accessible summary). */
+.rating-stars {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.6rem;
+  margin: 0;
+}
+
+.rating-stars__value,
+.rating-stars__count,
+.rating-stars--empty {
+  font-size: 1.4rem;
+  color: rgba(var(--color-foreground), 0.75);
+}
+
+.rating-stars__value {
+  font-weight: 700;
+  color: rgb(var(--color-foreground));
+}

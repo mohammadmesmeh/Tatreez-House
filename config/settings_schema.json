@@ -511,6 +511,19 @@
         "info": "t:settings_schema.cards.settings.card_new_tag.info"
       },
       {
+        "type": "text",
+        "id": "card_swatch_option_names",
+        "default": "Color, Colour",
+        "label": "t:settings_schema.cards.settings.card_swatch_option_names.label",
+        "info": "t:settings_schema.cards.settings.card_swatch_option_names.info"
+      },
+      {
+        "type": "textarea",
+        "id": "card_swatch_colors",
+        "label": "t:settings_schema.cards.settings.card_swatch_colors.label",
+        "info": "t:settings_schema.cards.settings.card_swatch_colors.info"
+      },
+      {
         "type": "select",
         "id": "card_style",
         "options": [

@@ -1,6 +1,6 @@
 /*
-  component-variant-chips.css — option chips shared by product cards (card-variant-picker) and the
-  product page variant picker (Dawn's .product-form__input--pill), so both look and behave alike.
+  component-variant-chips.css — option chips for Dawn's variant picker (.product-form__input--pill)
+  on the product page and inside the quick-add modal opened from product cards.
 */
 
 /* Option chips: a radio group (fieldset + legend). ≥ 44px targets, 2px radius. */
@@ -36,12 +36,9 @@
 /* Unavailable values: disabled but readable (75% foreground = 6.25:1 on ivory; Dawn's 60% is
    about 4:1). The strike-through carries the state, not colour alone. */
 /* Unavailable values stay focusable and selectable (keyboard and screen-reader users can still
-   find them; selecting one shows the disabled "Sold out" button). Cards mark them with
-   .card-variant-picker__input--unavailable, Dawn's product page with .disabled. */
+   find them; selecting one shows the disabled "Sold out" button). Dawn marks them with .disabled. */
 .product-form__input--pill input[type='radio']:disabled + label,
-.product-form__input--pill input[type='radio'].disabled + label,
-.product-form__input--pill input[type='radio'].card-variant-picker__input--unavailable + label,
-.card-variant-picker__value--unavailable {
+.product-form__input--pill input[type='radio'].disabled + label {
   color: rgba(var(--color-foreground), 0.75);
   text-decoration: line-through;
   border-style: dashed;

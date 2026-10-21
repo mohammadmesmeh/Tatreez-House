@@ -67,6 +67,14 @@
           "label": "\"New\" badge tag",
           "info": "Products with this tag show a New badge on cards."
         },
+        "card_swatch_option_names": {
+          "label": "Swatch option names",
+          "info": "Comma-separated option names whose values show as colour dots on cards, for example Color, Colour, اللون."
+        },
+        "card_swatch_colors": {
+          "label": "Swatch colours",
+          "info": "One per line as Name: #hex, for example Warm Ivory: #F7F3EB. Values linked to a colour metafield use that colour automatically."
+        },
         "style": {
           "options__1": {
             "label": "Standard"
