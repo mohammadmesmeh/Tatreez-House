@@ -1,23 +1,47 @@
 # M2.1 (m2-wiring) — UNTESTED items
 
-Running list, kept while the development store is unavailable (HTTP 402 since 2026-10-21).
-Checks available offline: `shopify theme check` and the Shopify AI Toolkit Liquid validator
-(`sh scripts/validate-theme.sh`). Nothing below has run in a browser against a store.
+Running list of what has and has not run in a browser. Store: `tatreez-house.myshopify.com`
+(development store, live since 2026-10-21), tested through `shopify theme dev --store
+tatreez-house` with Playwright + Microsoft Edge.
 
-| # | Item | Step | How to verify when a store exists |
+Suites (in the repo):
+
+- `python -X utf8 scripts/tests/hero_slideshow_test.py <base-url> <out-dir>`: **33/33 pass**
+  (2026-10-21).
+- `python -X utf8 scripts/tests/cards_grids_test.py <base-url> <out-dir>`: **35 pass, 0 fail,
+  1 skip** (2026-10-21). It picks products by live availability; a check with no product in the
+  needed state reports SKIP.
+
+Offline checks: `shopify theme check` (0 errors) and the Shopify AI Toolkit Liquid validator
+(`sh scripts/validate-theme.sh`).
+
+## Verified
+
+| Item | Step | Evidence |
+|---|---|---|
+| Hero: autoplay + loop (~6 s per slide), progress state, inert slides, live region off/polite, one h2, pause by button / hover / focus, arrow keys, reduced motion, JS disabled, transparent header (top / scrolled / other pages) | 2 | hero suite |
+| Hero: content edge = page container edge at 360/390/430/768/1440/1920, LTR and forced RTL | 2 | hero suite |
+| Hero visuals without images (deep-green surface, ivory text, progress bars) | 2 | screenshots 390 / 1440 |
+| Card action row: one baseline per row and equal card heights with mixed cards at 1440 / 768 / 430 | 3 | cards suite |
+| Labels: "Add to cart" (1 variant), "Choose options" (several), disabled "Sold out"; visible without hover; accessible name = label + title; Tab from title reaches the action | 3 | cards suite (7 products were sold out on the store during the run) |
+| Add to cart -> cart drawer, no reload, live region "… added to your cart.", focus in drawer, Escape closes | 3 | cards suite |
+| No chips / inline forms on cards; no rating markup without review data | 3 | cards suite |
+| Mobile columns "auto": 1 column at 360 / 430, 2 at 600, 3 at 768, no horizontal scroll | 4 | cards suite |
+| Compact cards only on phone widths (≤ 320 px card, < 750 px screen): short labels, full accessible name; every action shows text (fixed: Sold out was blank in compact cards) | 4 | cards suite |
+| Homepage product rows: scroll-snap carousels, 1.28 cards visible at 360 / 390, focusable, arrow keys scroll | 4 | cards suite |
+| Quick add in search results, related products and after a Section Rendering API refresh (sort) | 4 | cards suite (single-variant products; see open item 2) |
+| Product page: one h1; rating empty state "No reviews yet. Be the first to review." | 4 | cards suite |
+
+## Still untested
+
+| # | Item | Step | Why / how to verify |
 |---|---|---|---|
-| 1 | Hero slideshow: autoplay, loop, progress, pause (button/hover/focus/hidden tab/offscreen), arrow keys, inert slides, live region, reduced motion, JS disabled, header transparency, alignment 360–1920 px LTR + `/ar` | 2 | `python -X utf8 scripts/tests/hero_slideshow_test.py <base-url> <out-dir>` (34 checks) |
-| 2 | Hero slideshow visuals without images (deep-green surface + stitch texture) and with images (overlay floor 30% + scrim) | 2 | Screenshots at 360/390/430/768/1440/1920, EN + `/ar` |
-| 3 | "Logo over hero" setting and the ivory logo fallback | 2 | Set/unset the setting; check the transparent header |
-| 4 | Card action row: one baseline per row with mixed cards (pattern + thobe + bag); equal heights; reserved swatch row | 3 | Screenshot grids at 360/430/768/1440; measure button `top` per row (Playwright) |
-| 5 | "Add to cart" (single variant) adds and opens the drawer; live region "added" | 3 | `scratchpad quickadd_test.py` adapted to the new markup |
-| 6 | "Choose options" opens Dawn's quick-add modal: image, title, price, chips, Add to cart; focus trapped; Escape closes; focus returns to the button | 3 | Keyboard run in Playwright from every grid in item 8 |
-| 7 | Disabled "Sold out" button for unavailable products | 3 | Needs a sold-out product on the new store |
-| 8 | Same card + quick add in: homepage featured, digital patterns strip, collection, search, related products, complementary products; buttons bind after Section Rendering API injection (filters, related, search) | 4 | Apply a filter, load a product page, search; click Choose options after each |
-| 9 | Colour dots from the "Swatch colours" setting; "Available in N colours" text; "+N" in compact cards | 3 | Set `card_swatch_colors` (THEME-WIRING.md) and inspect bag / scarf / cushion cards |
-| 10 | Compact cards (container query ≤ 220 px): no eyebrow, 2-line titles, short labels with full accessible name | 4 | 2-column mobile grid at 480–749 px; check accessible names |
-| 11 | Mobile columns "auto": 1 column < 480 px, 2 columns 480–749 px, 3 on tablet | 4 | Collection + search at 360 / 430 / 600 / 768 px |
-| 12 | Homepage product rows as scroll-snap carousels (~1.25 cards), focusable list, keyboard scrolling, RTL scroll direction | 4 | `/` and `/ar` at 360 / 390 px |
-| 13 | Ratings: stars + value + count with "Rated … out of 5, N reviews"; nothing on cards without data; product page "No reviews yet" | 4 | Without reviews (empty state); with Judge.me test data only if real reviews exist (never fake) |
-| 14 | Judge.me app block placement in the product page (`@app`) | 4 | After installing the app on the new store |
-| 15 | Quick-add modal restyle (radius, 44 px close button) | 3 | Visual check |
+| 1 | "Choose options" -> quick-add modal: focus trap (30 Tabs), Escape, focus return, Add to cart from the modal | 3 | All multi-variant products were sold out during the final run. An earlier run opened the modal for Navy Village Thobe (screenshot: chips, quantity, Add to cart), but the trap/Escape results were not recorded. Re-run the cards suite once a multi-variant product is in stock. |
+| 2 | Choose options in search / related / after a filter (Section Rendering re-binding of modal-opener) | 4 | Same reason; the suite exercises it automatically when an in-stock multi-variant product exists. |
+| 3 | Real RTL at `/ar` (hero, cards, carousels scroll direction) | 2–4 | `/ar` returns 404: Arabic is not published on the new store yet. RTL was checked with forced `dir="rtl"` only. |
+| 4 | Colour dots from the "Swatch colours" setting; "Available in N colours"; "+N" in compact cards | 3 | Dots render as outlines until `card_swatch_colors` is set in Step 5 (value in `docs/store-setup/THEME-WIRING.md`). |
+| 5 | Hero with images (overlay floor 30% + scrim), "Logo over hero" setting | 2 | Image settings are left empty for the owner; check after images are set. |
+| 6 | Judge.me app block placement (`@app`) and stars with real review data | 4 | After the app is installed and real reviews exist (never fake). |
+| 7 | Hero pause on hidden tab / offscreen | 2 | Covered by code (visibilitychange, IntersectionObserver) but not asserted by the suite. |
+| 8 | Lighthouse, full keyboard pass, 360–1920 screenshots set in `docs/screenshots/m2/` | 7 | Step 7. |
+| 9 | Store name shows "tatreez-house" in the header text logo | 5 | Set the store name to "Tatreez House" in the admin (Settings → General) or set the logo. |

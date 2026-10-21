@@ -8,7 +8,7 @@ Covers autoplay + loop, progress state, inert slides, live region, heading rule,
 hover / focus, arrow keys, transparent header (top / scrolled / other pages), reduced motion,
 JavaScript disabled, and content alignment with the page container at 360-1920 px in LTR and
 real RTL (/ar). Requires Playwright and Microsoft Edge (channel msedge).
-STATUS: written in M2.1, NOT YET RUN — the store became unavailable before the first run.
+STATUS: 33/33 on tatreez-house.myshopify.com (2026-10-21); RTL used forced dir=rtl (/ar not published).
 """
 import sys
 from playwright.sync_api import sync_playwright
