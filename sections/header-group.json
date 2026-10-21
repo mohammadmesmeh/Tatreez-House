@@ -58,7 +58,12 @@
         "enable_language_selector": true,
         "margin_bottom": 0,
         "padding_top": 20,
-        "padding_bottom": 20
+        "padding_bottom": 20,
+        "logo_over_hero": "",
+        "mega_feature_menu_handle": "shop",
+        "mega_feature_image": "",
+        "mega_feature_heading": "",
+        "mega_feature_link": ""
       }
     }
   },
