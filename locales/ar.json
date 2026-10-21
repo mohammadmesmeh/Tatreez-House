@@ -251,12 +251,13 @@
       "options_short": "الخيارات",
       "colors_available": {
         "zero": "لا تتوفر ألوان",
-        "one": "متوفر بلون واحد",
-        "two": "متوفر بلونين",
-        "few": "متوفر بـ {{ count }} ألوان",
-        "many": "متوفر بـ {{ count }} لونًا",
-        "other": "متوفر بـ {{ count }} لون"
-      }
+        "one": "متوفر بلون واحد: {{ colors }}",
+        "two": "متوفر بلونين: {{ colors }}",
+        "few": "متوفر بـ {{ count }} ألوان: {{ colors }}",
+        "many": "متوفر بـ {{ count }} لونًا: {{ colors }}",
+        "other": "متوفر بـ {{ count }} لون: {{ colors }}"
+      },
+      "color_separator": "، "
     },
     "rating": {
       "empty": "لا توجد مراجعات بعد. كن أول من يكتب مراجعة.",

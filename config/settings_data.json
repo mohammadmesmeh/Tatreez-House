@@ -52,6 +52,8 @@
     "card_shadow_horizontal_offset": 0,
     "card_shadow_vertical_offset": 4,
     "card_shadow_blur": 5,
+    "card_swatch_option_names": "Color, Colour",
+    "card_swatch_colors": "Warm Ivory: #F7F3EB\nOlive Green: #667052\nEmbroidery Red: #8E3038\nTatreez Black: #292820\nLinen Beige: #D9C8AD",
     "collection_card_style": "standard",
     "collection_card_image_padding": 0,
     "collection_card_text_alignment": "left",

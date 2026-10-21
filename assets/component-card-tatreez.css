@@ -183,17 +183,21 @@
   gap: 0.6rem;
 }
 
+/* The ring keeps light colours (Warm Ivory on an ivory card) distinguishable from the card. */
 .card-swatch {
+  display: block;
+  flex: none;
   inline-size: 1.4rem;
   block-size: 1.4rem;
   border-radius: 50%;
-  background-color: var(--swatch);
-  box-shadow: inset 0 0 0 var(--th-border-width) rgba(var(--color-foreground), 0.25);
+  background-color: var(--swatch, rgba(var(--color-foreground), 0.15));
+  box-shadow: inset 0 0 0 var(--th-border-width) rgba(var(--color-foreground), 0.35);
 }
 
+/* No colour data: a neutral tinted dot with a stronger ring; the name is in the hidden text. */
 .card-swatch--unknown {
-  background-color: transparent;
-  box-shadow: inset 0 0 0 var(--th-border-width) rgba(var(--color-foreground), 0.55);
+  background-color: rgba(var(--color-foreground), 0.15);
+  box-shadow: inset 0 0 0 var(--th-border-width) rgba(var(--color-foreground), 0.6);
 }
 
 .card-swatches__more {

@@ -234,9 +234,10 @@
       "add_short": "Add",
       "options_short": "Options",
       "colors_available": {
-        "one": "Available in {{ count }} colour",
-        "other": "Available in {{ count }} colours"
-      }
+        "one": "Available in {{ count }} colour: {{ colors }}",
+        "other": "Available in {{ count }} colours: {{ colors }}"
+      },
+      "color_separator": ", "
     },
     "rating": {
       "empty": "No reviews yet. Be the first to review.",
