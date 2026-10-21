@@ -1,0 +1,26 @@
+{% doc %}
+  Optional light logo shown instead of the main logo while the header is transparent over the
+  homepage hero slideshow (section-hero-slideshow.css). Without it, the main logo is rendered in
+  ivory with a CSS filter.
+
+  @param {image} image - The header section's "Logo over hero" setting. Renders nothing if blank.
+
+  @example
+  {% render 'header-logo-over-hero', image: section.settings.logo_over_hero %}
+{% enddoc %}
+{%- if image != blank -%}
+  {%- liquid
+    assign over_hero_alt = image.alt | default: shop.name
+    assign over_hero_height = settings.logo_width | divided_by: image.aspect_ratio
+  -%}
+  {{
+    image
+    | image_url: width: 600
+    | image_tag:
+      class: 'header__heading-logo header__heading-logo--over-hero',
+      width: settings.logo_width,
+      height: over_hero_height,
+      alt: over_hero_alt,
+      loading: 'eager'
+  }}
+{%- endif -%}

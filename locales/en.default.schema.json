@@ -398,6 +398,106 @@
     }
   },
   "sections": {
+    "hero-slideshow": {
+      "name": "Hero slideshow",
+      "settings": {
+        "height": {
+          "label": "Height",
+          "options__1": {
+            "label": "Medium (70% of screen)"
+          },
+          "options__2": {
+            "label": "Large (85% of screen)"
+          },
+          "options__3": {
+            "label": "Full screen"
+          }
+        },
+        "autoplay": {
+          "label": "Autoplay",
+          "info": "Visitors who prefer reduced motion start paused. A pause button is always shown."
+        },
+        "duration": {
+          "label": "Time per slide"
+        },
+        "show_progress": {
+          "label": "Show progress bars"
+        },
+        "header_overlay": {
+          "label": "Header overlays the hero",
+          "info": "Transparent header with light text over the first slide; it turns solid on scroll and on every other page."
+        },
+        "color_scheme": {
+          "info": "Used for slides without an image."
+        }
+      },
+      "blocks": {
+        "slide": {
+          "name": "Slide",
+          "settings": {
+            "role": {
+              "label": "Default text",
+              "info": "Welcome, Learn and Patterns come with translated text. Any field you fill in replaces it.",
+              "options__1": {
+                "label": "Welcome"
+              },
+              "options__2": {
+                "label": "Learn"
+              },
+              "options__3": {
+                "label": "Patterns"
+              },
+              "options__4": {
+                "label": "Custom"
+              }
+            },
+            "image": {
+              "label": "Image",
+              "info": "Landscape, at least 2400 x 1350 px. Set the focal point in Files."
+            },
+            "mobile_image": {
+              "label": "Mobile image",
+              "info": "Optional portrait crop for phones, at least 1100 x 1650 px."
+            },
+            "image_alt": {
+              "label": "Image alt text",
+              "info": "Leave blank to use the image's own alt text."
+            },
+            "button_label_1": {
+              "label": "Primary button label"
+            },
+            "button_link_1": {
+              "label": "Primary button link"
+            },
+            "button_label_2": {
+              "label": "Secondary button label"
+            },
+            "button_link_2": {
+              "label": "Secondary button link"
+            },
+            "content_position": {
+              "label": "Content position",
+              "options__1": {
+                "label": "Start"
+              },
+              "options__2": {
+                "label": "Center"
+              },
+              "options__3": {
+                "label": "End"
+              }
+            },
+            "overlay": {
+              "label": "Overlay strength",
+              "info": "Values below 30% are raised to 30% so text stays readable."
+            }
+          }
+        }
+      },
+      "presets": {
+        "name": "Hero slideshow"
+      }
+    },
     "path-cards": {
       "name": "Choose your path",
       "settings": {
@@ -1466,6 +1566,10 @@
           "options__3": {
             "label": "Drawer"
           }
+        },
+        "logo_over_hero": {
+          "label": "Logo over hero",
+          "info": "Optional light version of the logo, shown while the header is transparent over the homepage hero. Without it, the logo is shown in ivory."
         },
         "mega_feature": {
           "content": "Mega menu feature",

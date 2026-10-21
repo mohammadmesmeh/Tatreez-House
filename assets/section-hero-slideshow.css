@@ -1,0 +1,459 @@
+/*
+  section-hero-slideshow.css — full-bleed hero slideshow (sections/hero-slideshow.liquid).
+
+  Legibility contract (docs/DECISIONS.md, M2.1): ivory text needs >= 67% Tatreez-ink under it to
+  keep 4.5:1 on a pure-white photo. Every photo slide gets a uniform overlay (merchant setting,
+  floor 30%) plus a 60% ink scrim attached behind the content and, when the header overlays the
+  hero, behind the header: 1 - (0.7 x 0.4) = 72% ink under all text.
+*/
+
+/* ---------------------------------------------------------------------------
+   Frame and heights
+*/
+.hero-slideshow {
+  --hero-under-header: 0px;
+  --hero-ink: var(--th-ivory);
+  position: relative;
+}
+
+html.th-header-over-hero .hero-slideshow {
+  --hero-under-header: var(--header-height, 0px);
+}
+
+.hero-slideshow--medium {
+  --hero-height: calc(70svh + var(--hero-under-header));
+}
+
+.hero-slideshow--large {
+  --hero-height: calc(85svh + var(--hero-under-header));
+}
+
+.hero-slideshow--full {
+  --hero-height: calc(100svh - var(--header-height, 0px) + var(--hero-under-header));
+}
+
+/* The first section slides up under the transparent header (class set by hero-slideshow.js). */
+html.th-header-over-hero main > .section-hero-slideshow:first-child {
+  margin-block-start: calc(-1 * var(--header-height, 0px));
+}
+
+.hero-slideshow__inner {
+  display: block;
+  position: relative;
+}
+
+.hero-slideshow__slides {
+  display: grid;
+}
+
+/* ---------------------------------------------------------------------------
+   Slides: stacked in one grid cell, cross-fading. Slide 1 is server-rendered active, so it is
+   visible without JavaScript; content never starts at opacity 0.
+*/
+.hero-slide {
+  grid-area: 1 / 1;
+  position: relative;
+  display: grid;
+  min-block-size: max(48rem, var(--hero-height));
+  overflow: hidden;
+  isolation: isolate;
+  color: rgb(var(--hero-ink));
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    opacity 800ms var(--th-ease),
+    visibility 0s linear 800ms;
+}
+
+.hero-slide.is-active {
+  z-index: 1;
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 800ms var(--th-ease);
+}
+
+.hero-slide__media {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+
+.hero-slide__media picture,
+.hero-slide__image {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+.hero-slide__image {
+  object-fit: cover;
+  transform-origin: center;
+}
+
+/* Uniform overlay (merchant setting, floor 30%). */
+.hero-slide:not(.hero-slide--no-image) .hero-slide__media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: rgba(var(--th-ink), var(--hero-overlay, 0.4));
+}
+
+/* Header band: keeps the transparent header readable over any photo. */
+html.th-header-over-hero .hero-slide:not(.hero-slide--no-image)::before {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: 0;
+  block-size: calc(var(--header-height, 0px) + 12rem);
+  z-index: -1;
+  background: linear-gradient(to bottom, rgba(var(--th-ink), 0.6) 0, rgba(var(--th-ink), 0.6) calc(100% - 12rem), rgba(var(--th-ink), 0));
+  pointer-events: none;
+}
+
+/* No image: the brand surface (scheme background, deep green by default) with a faint stitch
+   grid, so an image-less slide still looks designed. */
+.hero-slide--no-image {
+  --hero-ink: var(--color-foreground);
+}
+
+.hero-slide--no-image .hero-slide__media {
+  background-color: rgb(var(--color-background));
+}
+
+.hero-slide--no-image .hero-slide__media::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: rgba(var(--color-foreground), 0.07);
+  -webkit-mask: url('icon-stitch-x.svg') 0 0 / 2.4rem 2.4rem repeat;
+  mask: url('icon-stitch-x.svg') 0 0 / 2.4rem 2.4rem repeat;
+}
+
+/* ---------------------------------------------------------------------------
+   Content: inside .page-width, so its inline-start edge lines up with the sections below.
+*/
+.hero-slide__content-wrap {
+  position: relative;
+  z-index: 1;
+  align-self: end;
+  inline-size: 100%;
+  padding-block: calc(var(--hero-under-header) + var(--th-space-6)) 11rem;
+}
+
+.hero-slide__content {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--th-space-2);
+  max-inline-size: 72rem;
+}
+
+/* Scrim behind the copy: 60% ink under the text, feathering out above it. */
+.hero-slide:not(.hero-slide--no-image) .hero-slide__content::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset-inline: -100vw;
+  inset-block: -18rem -40rem;
+  background: linear-gradient(to top, rgba(var(--th-ink), 0.6) calc(100% - 18rem), rgba(var(--th-ink), 0));
+  pointer-events: none;
+}
+
+.hero-slide--center .hero-slide__content {
+  align-items: center;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.hero-slide--end .hero-slide__content {
+  align-items: flex-end;
+  margin-inline-start: auto;
+  text-align: end;
+}
+
+.hero-slide__eyebrow {
+  margin: 0;
+  color: inherit;
+}
+
+.hero-slide__eyebrow::before {
+  background-color: currentColor;
+}
+
+.hero-slide__heading {
+  margin: 0;
+  max-inline-size: 14ch;
+  font-family: var(--font-heading-family);
+  font-size: calc(var(--font-heading-scale) * clamp(4rem, 6vw, 8.8rem));
+  font-weight: 400;
+  line-height: 1.04;
+  letter-spacing: var(--th-tracking-display);
+  color: inherit;
+  text-wrap: balance;
+}
+
+:lang(ar) .hero-slide__heading {
+  line-height: 1.3;
+  letter-spacing: 0;
+}
+
+.hero-slide__text {
+  margin: 0;
+  max-inline-size: 46ch;
+  font-size: 1.7rem;
+  line-height: 1.6;
+  color: inherit;
+}
+
+.hero-slide__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--th-space-2);
+  margin-block-start: var(--th-space-1);
+}
+
+.hero-slide--center .hero-slide__buttons {
+  justify-content: center;
+}
+
+.hero-slide__button {
+  min-block-size: var(--th-target);
+}
+
+/* Photo slides: ivory primary on green label, ivory outline secondary (tokens, not the scheme,
+   because the photo + overlay decide the backdrop). */
+.hero-slide:not(.hero-slide--no-image) .hero-slide__button--primary {
+  --color-button: var(--th-ivory);
+  --color-button-text: var(--th-green);
+  --alpha-button-background: 1;
+}
+
+.hero-slide:not(.hero-slide--no-image) .hero-slide__button--secondary {
+  --color-button: var(--th-ivory);
+  --color-button-text: var(--th-ivory);
+  --color-secondary-button: var(--th-ink);
+  --color-secondary-button-text: var(--th-ivory);
+  --alpha-button-background: 0;
+  --border-opacity: 1;
+}
+
+.hero-slide :focus-visible {
+  outline-color: rgb(var(--hero-ink));
+}
+
+@media screen and (max-width: 749px) {
+  .hero-slide__content-wrap {
+    padding-block-end: 9.6rem;
+  }
+
+  .hero-slide__buttons {
+    flex-direction: column;
+    align-items: stretch;
+    inline-size: 100%;
+  }
+
+  .hero-slide__button {
+    inline-size: 100%;
+  }
+
+  /* Stronger gradient on small screens, where the copy covers more of the photo. */
+  .hero-slide:not(.hero-slide--no-image) .hero-slide__content::before {
+    background: linear-gradient(to top, rgba(var(--th-ink), 0.7) calc(100% - 18rem), rgba(var(--th-ink), 0));
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Controls: pause/play + segmented progress, aligned with the page container.
+*/
+.hero-slideshow__controls-wrap {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: var(--th-space-3);
+  z-index: 2;
+}
+
+.hero-slideshow__controls {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--th-space-1);
+  color: rgb(var(--th-ivory));
+}
+
+.hero-slideshow__toggle {
+  flex: none;
+  display: grid;
+  place-items: center;
+  inline-size: var(--th-target);
+  block-size: var(--th-target);
+  padding: 0;
+  border: var(--th-border-width) solid rgba(var(--th-ivory), 0.6);
+  border-radius: 50%;
+  background: rgba(var(--th-ink), 0.35);
+  color: inherit;
+  cursor: pointer;
+}
+
+.hero-slideshow__toggle .svg-wrapper {
+  inline-size: 1.2rem;
+  block-size: 1.2rem;
+}
+
+.hero-slideshow__toggle[aria-pressed='false'] .hero-slideshow__icon-play,
+.hero-slideshow__toggle[aria-pressed='true'] .hero-slideshow__icon-pause {
+  display: none;
+}
+
+.hero-progress {
+  display: flex;
+  flex: 1;
+  gap: var(--th-space-1);
+  max-inline-size: 40rem;
+}
+
+.hero-progress--minimal {
+  display: none;
+}
+
+.hero-progress__step {
+  flex: 1;
+  min-inline-size: var(--th-target);
+  min-block-size: var(--th-target);
+  display: flex;
+  align-items: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.hero-progress__track {
+  display: block;
+  inline-size: 100%;
+  block-size: 0.3rem;
+  overflow: hidden;
+  border-radius: var(--th-radius);
+  background-color: rgba(var(--th-ivory), 0.35);
+}
+
+.hero-progress__fill {
+  display: block;
+  block-size: 100%;
+  inline-size: 0;
+  background-color: rgb(var(--th-ivory));
+}
+
+.hero-progress__step.is-done .hero-progress__fill {
+  inline-size: 100%;
+}
+
+.hero-progress__step:focus-visible {
+  outline: 0.2rem solid rgb(var(--th-ivory));
+  outline-offset: 0.2rem;
+}
+
+/* The hidden timer drives slide changes; its end fires animationend. */
+.hero-slideshow__timer {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.is-cycling .hero-slideshow__timer {
+  animation: heroTimer var(--hero-duration) linear forwards;
+}
+
+.is-cycling .hero-progress__step.is-active .hero-progress__fill {
+  animation: heroFill var(--hero-duration) linear forwards;
+}
+
+.is-cycling .hero-slide.is-active .hero-slide__image {
+  animation: heroZoom var(--hero-duration) linear forwards;
+}
+
+.hero-slideshow__inner:not(.is-playing) .hero-slideshow__timer,
+.hero-slideshow__inner:not(.is-playing) .hero-progress__fill,
+.hero-slideshow__inner:not(.is-playing) .hero-slide__image {
+  animation-play-state: paused;
+}
+
+@keyframes heroTimer {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(1px);
+  }
+}
+
+@keyframes heroFill {
+  from {
+    inline-size: 0;
+  }
+
+  to {
+    inline-size: 100%;
+  }
+}
+
+@keyframes heroZoom {
+  from {
+    transform: scale(1);
+  }
+
+  to {
+    transform: scale(1.06);
+  }
+}
+
+/* Reduced motion: instant swaps and no zoom (autoplay is off by default in JS). */
+@media (prefers-reduced-motion: reduce) {
+  .hero-slide,
+  .hero-slide.is-active {
+    transition: none;
+  }
+
+  .is-cycling .hero-slide.is-active .hero-slide__image {
+    animation: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Transparent header over the hero (only when hero-slideshow.js set the class: first section,
+   setting on). Solid again once scrolled, or while a menu, search or drawer is open.
+*/
+html.th-header-over-hero .section-header:not(.scrolled-past-header) .header-wrapper:not(:has(details[open])) {
+  --color-foreground: var(--th-ivory);
+  background-color: transparent;
+  border-block-end-color: transparent;
+  box-shadow: none;
+  transition: background-color var(--th-duration) var(--th-ease);
+}
+
+html.th-header-over-hero .section-header:not(.scrolled-past-header) .header-wrapper:not(:has(details[open])) .header__heading-logo:not(.header__heading-logo--over-hero) {
+  filter: brightness(0) invert(1);
+}
+
+html.th-header-over-hero .section-header:not(.scrolled-past-header) .header-wrapper:not(:has(details[open])):has(.header__heading-logo--over-hero) .header__heading-logo:not(.header__heading-logo--over-hero) {
+  display: none;
+  filter: none;
+}
+
+.header__heading-logo--over-hero {
+  display: none;
+}
+
+html.th-header-over-hero .section-header:not(.scrolled-past-header) .header-wrapper:not(:has(details[open])) .header__heading-logo--over-hero {
+  display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.th-header-over-hero .header-wrapper {
+    transition: none;
+  }
+}

@@ -9,55 +9,6 @@
  */
 {
   "sections": {
-    "hero_YjYFq6": {
-      "type": "hero",
-      "blocks": {
-        "heading_q6jUjq": {
-          "type": "heading",
-          "settings": {
-            "heading": ""
-          }
-        },
-        "text_Ymr4jm": {
-          "type": "text",
-          "settings": {
-            "text": ""
-          }
-        },
-        "buttons_XXh399": {
-          "type": "buttons",
-          "settings": {
-            "button_label_1": "Explore the Collection",
-            "button_link_1": "shopify://collections/all",
-            "button_style_secondary_1": false,
-            "button_label_2": "Discover Tatreez",
-            "button_link_2": "shopify://pages/tatreez",
-            "button_style_secondary_2": true
-          }
-        }
-      },
-      "block_order": [
-        "heading_q6jUjq",
-        "text_Ymr4jm",
-        "buttons_XXh399"
-      ],
-      "name": "t:sections.hero.presets.name",
-      "settings": {
-        "image": "shopify://shop_images/shutterstock_2380757597.jpg",
-        "image_alt": "",
-        "layout": "split",
-        "split_image_position": "end",
-        "show_eyebrow": true,
-        "eyebrow": "",
-        "image_height": "large",
-        "image_overlay_opacity": 40,
-        "color_scheme": "scheme-3",
-        "desktop_content_position": "middle-center",
-        "desktop_content_alignment": "center",
-        "mobile_content_alignment": "center",
-        "heading_size": "h1"
-      }
-    },
     "featured_collection": {
       "type": "featured-collection",
       "settings": {
@@ -194,10 +145,82 @@
         "color_scheme": "scheme-1",
         "linen_surface": false
       }
+    },
+    "hero_slideshow": {
+      "type": "hero-slideshow",
+      "blocks": {
+        "slide_welcome": {
+          "type": "slide",
+          "settings": {
+            "role": "welcome",
+            "image": "",
+            "mobile_image": "",
+            "image_alt": "",
+            "eyebrow": "",
+            "heading": "",
+            "text": "",
+            "button_label_1": "",
+            "button_link_1": "shopify://collections/all",
+            "button_label_2": "",
+            "button_link_2": "shopify://pages/tatreez-101",
+            "content_position": "start",
+            "overlay": 40
+          }
+        },
+        "slide_learn": {
+          "type": "slide",
+          "settings": {
+            "role": "learn",
+            "image": "",
+            "mobile_image": "",
+            "image_alt": "",
+            "eyebrow": "",
+            "heading": "",
+            "text": "",
+            "button_label_1": "",
+            "button_link_1": "shopify://pages/tatreez-101",
+            "button_label_2": "",
+            "button_link_2": "",
+            "content_position": "start",
+            "overlay": 40
+          }
+        },
+        "slide_patterns": {
+          "type": "slide",
+          "settings": {
+            "role": "patterns",
+            "image": "",
+            "mobile_image": "",
+            "image_alt": "",
+            "eyebrow": "",
+            "heading": "",
+            "text": "",
+            "button_label_1": "",
+            "button_link_1": "shopify://collections/digital-patterns",
+            "button_label_2": "",
+            "button_link_2": "",
+            "content_position": "start",
+            "overlay": 40
+          }
+        }
+      },
+      "block_order": [
+        "slide_welcome",
+        "slide_learn",
+        "slide_patterns"
+      ],
+      "settings": {
+        "height": "large",
+        "autoplay": true,
+        "duration": 6,
+        "show_progress": true,
+        "header_overlay": true,
+        "color_scheme": "scheme-3"
+      }
     }
   },
   "order": [
-    "hero_YjYFq6",
+    "hero_slideshow",
     "path_cards",
     "featured_collection",
     "brand_story",

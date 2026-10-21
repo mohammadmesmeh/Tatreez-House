@@ -445,6 +445,28 @@
       "heading": "Learn the craft",
       "cta": "Read the journal",
       "editor_empty": "Choose a blog with published articles to show them here. Until then this section stays hidden in the store."
+    },
+    "hero_slideshow": {
+      "label": "Highlights",
+      "slide_label": "{{ index }} of {{ count }}",
+      "show_slide": "Show slide {{ index }} of {{ count }}",
+      "controls": "Slideshow controls",
+      "welcome": {
+        "button_1": "Explore the collection",
+        "button_2": "Discover tatreez"
+      },
+      "learn": {
+        "eyebrow": "Tatreez 101",
+        "heading": "Learn the stitch",
+        "text": "Start with the cross-stitch, the motifs and the stories they carry.",
+        "button_1": "Start learning"
+      },
+      "patterns": {
+        "eyebrow": "Digital patterns",
+        "heading": "Patterns, instantly",
+        "text": "Download a chart and stitch a motif at your own pace.",
+        "button_1": "Browse patterns"
+      }
     }
   },
   "localization": {
