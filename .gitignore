@@ -21,3 +21,16 @@ node_modules/
 .idea/
 *.log
 .lighthouseci/
+
+# Store setup kit: third-party / downloaded photos stay local (licences do not allow
+# redistribution in a public repo). Only the project's own logos and pattern files are tracked.
+docs/store-setup/assets/*
+!docs/store-setup/assets/tatreez-house-logo.png
+!docs/store-setup/assets/tatreez-house-logo-light.png
+!docs/store-setup/assets/tatreez-house-square.png
+!docs/store-setup/assets/cypress-motif-pattern.png
+!docs/store-setup/assets/cypress-motif-pattern.pdf
+!docs/store-setup/assets/moon-of-bethlehem-pattern.png
+!docs/store-setup/assets/moon-of-bethlehem-pattern.pdf
+!docs/store-setup/assets/tatreez-starter-pattern-bundle.png
+!docs/store-setup/assets/tatreez-starter-pattern-bundle.pdf
