@@ -53,14 +53,16 @@
 
 /* ---------------------------------------------------------------------------
    Sliders (global.js SliderComponent / SlideshowComponent): the scroll maths uses LTR
-   scrollLeft/offsetLeft, which breaks in an RTL scroll container (half-scrolled slides). Keep the
-   track LTR and restore RTL inside each slide; content and controls still read right-to-left.
+   scrollLeft/offsetLeft, which breaks in an RTL scroll container (half-scrolled slides). For the
+   JS-driven announcement bar and slideshow, keep the track LTR and restore RTL inside each slide.
+   Product rows on phones are CSS-only scroll-snap carousels (component-card-tatreez.css), so they
+   keep native RTL scrolling and reading order.
 */
-[dir='rtl'] .slider {
+[dir='rtl'] :is(.announcement-bar-slider, slideshow-component) .slider {
   direction: ltr;
 }
 
-[dir='rtl'] .slider > * {
+[dir='rtl'] :is(.announcement-bar-slider, slideshow-component) .slider > * {
   direction: rtl;
 }
 

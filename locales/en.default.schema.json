@@ -820,6 +820,9 @@
       }
     },
     "all": {
+      "columns_mobile_auto": {
+        "label": "Auto: 1 column on small phones, 2 from 480 px"
+      },
       "divider_tone": {
         "label": "Stitch divider colour",
         "options__1": { "label": "Embroidery red" },
