@@ -206,13 +206,17 @@
         <a
           href="{{ section.settings.collection.url }}"
           class="{% if section.settings.view_all_style == 'link' %}link underlined-link{% elsif section.settings.view_all_style == 'solid' %}button{% else %}button button--secondary{% endif %}"
-          aria-label="{{ 'sections.featured_collection.view_all_label' | t: collection_name: section.settings.collection.title | escape }}"
         >
+          {%- comment -%}
+            The accessible name is the visible label plus the collection name (hidden), so it always
+            contains the visible text (WCAG 2.5.3), also when the label is custom or untranslated.
+          {%- endcomment -%}
           {%- if section.settings.view_all_label != blank -%}
             {{- section.settings.view_all_label | escape -}}
           {%- else -%}
             {{- 'sections.featured_collection.view_all' | t -}}
           {%- endif -%}
+          <span class="visually-hidden">: {{ section.settings.collection.title | escape }}</span>
         </a>
       </div>
     {%- endif -%}
