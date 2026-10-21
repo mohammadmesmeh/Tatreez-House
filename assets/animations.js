@@ -1,23 +1,20 @@
 const SCROLL_ANIMATION_TRIGGER_CLASSNAME = 'scroll-trigger';
-const SCROLL_ANIMATION_OFFSCREEN_CLASSNAME = 'scroll-trigger--offscreen';
 const SCROLL_ZOOM_IN_TRIGGER_CLASSNAME = 'animate--zoom-in';
-const SCROLL_ANIMATION_CANCEL_CLASSNAME = 'scroll-trigger--cancel';
+// Tatreez House: content is visible by default (tatreez-tokens.css, "Scroll reveal"). The script
+// only ADDS an entrance animation, so content never depends on it to become visible.
+const SCROLL_ANIMATION_RUN_CLASSNAME = 'th-reveal-run';
+const SCROLL_ANIMATION_READY_CLASSNAME = 'js-reveal-ready';
 
 // Scroll in animation logic
-function onIntersection(elements, observer) {
-  elements.forEach((element, index) => {
-    if (element.isIntersecting) {
-      const elementTarget = element.target;
-      if (elementTarget.classList.contains(SCROLL_ANIMATION_OFFSCREEN_CLASSNAME)) {
-        elementTarget.classList.remove(SCROLL_ANIMATION_OFFSCREEN_CLASSNAME);
-        if (elementTarget.hasAttribute('data-cascade'))
-          elementTarget.setAttribute('style', `--animation-order: ${index};`);
-      }
-      observer.unobserve(elementTarget);
-    } else {
-      element.target.classList.add(SCROLL_ANIMATION_OFFSCREEN_CLASSNAME);
-      element.target.classList.remove(SCROLL_ANIMATION_CANCEL_CLASSNAME);
+function onIntersection(entries, observer) {
+  entries.forEach((entry, index) => {
+    if (!entry.isIntersecting) return;
+    const elementTarget = entry.target;
+    if (elementTarget.hasAttribute('data-cascade')) {
+      elementTarget.style.setProperty('--animation-order', index);
     }
+    elementTarget.classList.add(SCROLL_ANIMATION_RUN_CLASSNAME);
+    observer.unobserve(elementTarget);
   });
 }
 
@@ -32,10 +29,20 @@ function initializeScrollAnimationTrigger(rootEl = document, isDesignModeEvent =
     return;
   }
 
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  document.documentElement.classList.add(SCROLL_ANIMATION_READY_CLASSNAME);
+
+  // Start the animation just before an element enters (32px early), so the shopper never sees
+  // it jump from visible to hidden. Elements already on screen at load are never animated.
   const observer = new IntersectionObserver(onIntersection, {
-    rootMargin: '0px 0px -50px 0px',
+    rootMargin: '0px 0px 32px 0px',
   });
-  animationTriggerElements.forEach((element) => observer.observe(element));
+  const viewportHeight = window.innerHeight;
+  animationTriggerElements.forEach((element) => {
+    if (element.getBoundingClientRect().top < viewportHeight) return;
+    observer.observe(element);
+  });
 }
 
 // Zoom in animation logic

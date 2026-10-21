@@ -339,6 +339,39 @@ h4,
 /* ---------------------------------------------------------------------------
    7. Motion
 */
+/*
+  Scroll reveal (Dawn's .scroll-trigger, assets/animations.js). Content is ALWAYS visible by
+  default: Dawn's base.css starts these elements at opacity 0.01 and relies on JS to reveal them,
+  so a late, failed or never-scrolled page (preview, crawlers, Lighthouse) kept content hidden.
+  Now the entrance animation only runs once animations.js has added html.js-reveal-ready AND
+  marked the element .th-reveal-run just before it scrolls into view. Elements already on screen
+  at load are never animated. Reduced motion: never animated.
+  (0,3,1) / (0,4,1) selectors outrank base.css's (0,3,0) rules.
+*/
+html .scroll-trigger.animate--fade-in:not(.th-reveal-run),
+html .scroll-trigger.animate--slide-in:not(.th-reveal-run) {
+  opacity: 1;
+  transform: none;
+  animation: none;
+}
+
+html .scroll-trigger:not(.th-reveal-run) .slider {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html.js-reveal-ready .scroll-trigger.th-reveal-run.animate--slide-in {
+    animation: var(--animation-slide-in);
+    animation-delay: calc(var(--animation-order, 0) * 75ms);
+    animation-fill-mode: both;
+  }
+
+  html.js-reveal-ready .scroll-trigger.th-reveal-run.animate--fade-in {
+    animation: var(--animation-fade-in);
+    animation-fill-mode: both;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .th-link {
     transition: none;
