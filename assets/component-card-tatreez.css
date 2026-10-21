@@ -249,47 +249,50 @@
 }
 
 /* ---------------------------------------------------------------------------
-   Compact cards (narrow columns, e.g. 2 columns on a phone): decided by the card's own width
-   through a container query, so it works in every grid and carousel.
+   Compact cards: on phone-width screens, a card at most 320px wide (the 2-column grid, the
+   peeking carousel) gets the compact layout. A one-column phone grid (cards > 320px) and every
+   desktop/tablet grid keep the full layout.
 */
 .product-card-wrapper {
   container-type: inline-size;
   container-name: product-card;
 }
 
-@container product-card (max-width: 22rem) {
-  .card__eyebrow {
-    display: none;
-  }
+@media screen and (max-width: 749px) {
+  @container product-card (max-width: 32rem) {
+    .card__eyebrow {
+      display: none;
+    }
 
-  .card__heading.h5 a {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    overflow: hidden;
-  }
+    .card__heading.h5 a {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      overflow: hidden;
+    }
 
-  .card-swatch--overflow,
-  .card-swatches__more--full {
-    display: none;
-  }
+    .card-swatch--overflow,
+    .card-swatches__more--full {
+      display: none;
+    }
 
-  .card-swatches__more--compact {
-    display: inline;
-  }
+    .card-swatches__more--compact {
+      display: inline;
+    }
 
-  .card-action__label {
-    position: absolute;
-    inline-size: 1px;
-    block-size: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-  }
+    .card-action__label {
+      position: absolute;
+      inline-size: 1px;
+      block-size: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
 
-  .card-action__label--short {
-    display: inline;
+    .card-action__label--short {
+      display: inline;
+    }
   }
 }
 
@@ -339,9 +342,9 @@
   }
 
   .th-swipe-mobile .product-grid .grid__item {
-    flex: 0 0 78%;
-    width: 78%;
-    max-width: 78%;
+    flex: 0 0 82%;
+    width: 82%;
+    max-width: 82%;
     scroll-snap-align: start;
   }
 

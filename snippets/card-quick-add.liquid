@@ -40,6 +40,7 @@
         disabled
       >
         <span class="card-action__label" id="{{ label_id }}">{{ 'products.product.sold_out' | t }}</span>
+        <span class="card-action__label--short" aria-hidden="true">{{ 'products.product.sold_out' | t }}</span>
       </button>
     {%- elsif needs_options -%}
       <modal-opener data-modal="#QuickAdd-{{ card_product.id }}">
