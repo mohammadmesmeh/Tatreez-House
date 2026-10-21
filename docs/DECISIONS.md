@@ -2,6 +2,24 @@
 
 Short, dated record of project decisions and why they were made. Newest milestone first.
 
+## 2026-10-21 — Milestone M2.1 (wiring and verification), branch `m2-wiring`
+
+| # | Decision | Reason |
+|---|---|---|
+| 1 | Scroll-reveal content is **visible by default**; the slide-in animation only runs when JS has marked the element (`th-reveal-run`) and `html.js-reveal-ready` is set. | Root cause of the hidden content: Dawn sets `.scroll-trigger` to opacity 0.01 and depends on JS to reveal it; late or failing JS, previews and Lighthouse left content invisible. |
+| 2 | Hero slideshow timing is a CSS animation (`animationend` advances the slide; `animation-play-state` pauses it). Header turns transparent only when the slideshow is the first section in `<main>`. | One timer drives autoplay and the progress bar; pause/hover/focus/hidden/offscreen and reduced motion are all CSS states. Other pages keep the solid header. |
+| 3 | Hero overlay floor 30% plus a 60% content scrim. | Ivory text needs ≥ 67% ink over a white photo for 4.5:1; floor + scrim give ≥ 72% whatever the merchant sets. |
+| 4 | Card actions are always visible: "Add to cart" (one variant), "Choose options" (Dawn's quick-add modal), disabled "Sold out". Variant chips and inline forms removed from cards. | One button, one baseline per row on every grid; variant choice belongs in the modal or product page. |
+| 5 | Ratings come only from Shopify's standard `reviews.rating` / `reviews.rating_count` metafields; nothing renders on cards without data, the product page shows "No reviews yet". | Never fake reviews; any reviews app that writes the standard metafields works (Judge.me does). |
+| 6 | Compact cards via a container query, limited to phone-width screens (card ≤ 320 px, screen < 750 px). | Narrow desktop/tablet cards (e.g. 3 columns at 768 px) must keep full labels. |
+| 7 | Homepage product rows on phones are a CSS scroll-snap list (82% items, ~1.28 cards visible), focusable for arrow keys, no JS. | Swipeable with the next card peeking; native RTL scrolling. |
+| 8 | Swatch dots: Shopify swatch data first, then the "Swatch colours" theme setting (brand palette); unmapped colours show a neutral ringed dot; the hidden text names every colour. | Merchant-editable mapping; an unmapped colour is still understandable and announced. |
+| 9 | **Minimal footer, no menu columns** (owner decision, 2026-10-21): brand + newsletter, language selector, policy links, copyright, demo-brand note. Replaces M2 #20 (footer accordions removed with `footer-accordion.js`). Payment icons, Follow on Shop and the country selector are off (settings kept). | Calmer footer; policies come from Settings → Policies, so no footer menus are needed. |
+| 10 | Blank text settings fall back to translated defaults in the new footer fields and the mega menu card (empty heading → the linked collection's translated title). Extends M2 #16. | `/ar` shows Arabic without hard-coded English setting values. |
+| 11 | New development store `tatreez-house.myshopify.com` (the previous store froze with HTTP 402). Theme code has no store-specific values; store data is recreated from `docs/store-setup/`. | Portability; the store can be rebuilt. |
+| 12 | Acceptance suites live in `scripts/tests/` and pick products by live availability (SKIP when no product is in the needed state). | Inventory changed during testing (all physical products briefly sold out). |
+| 13 | The `[shopify-account] Menu … not found in Storefront API` console message is left as is. | The menu exists for Liquid; the account component's API lookup does not find it and falls back to the same default items. Not fixable in theme code. |
+
 ## 2026-10-20 — Milestone M2 (design system and UX), branch `m2-design-system`
 
 | # | Decision | Reason |

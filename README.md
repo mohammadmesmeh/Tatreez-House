@@ -107,6 +107,44 @@ node scripts/contrast-check.mjs     # WCAG contrast of every colour scheme
 
 Never run `shopify theme publish` or `theme push --live` against the live theme.
 
+### Permanent preview theme: pull before push
+
+The unpublished theme "Tatreez House" is edited in the theme editor too, so its JSON is always
+pulled and committed before code is pushed to it:
+
+```sh
+# 1. Pull the editor state and review it
+shopify theme pull --store tatreez-house --theme <theme-id>   --only config/settings_data.json --only "templates/*.json" --only "sections/*.json"
+git diff                            # commit editor changes before anything else
+
+# 2. Push code + JSON to the same unpublished theme (never --live, never publish)
+shopify theme push --store tatreez-house --theme <theme-id>
+```
+
+The first time only: `shopify theme push --store tatreez-house --unpublished` creates it; record the
+theme ID in [`docs/DECISIONS.md`](docs/DECISIONS.md).
+
+### Acceptance tests
+
+Playwright (Python) with Microsoft Edge, against `shopify theme dev` or a preview URL:
+
+```sh
+python -X utf8 scripts/tests/hero_slideshow_test.py http://127.0.0.1:9393 out/hero
+python -X utf8 scripts/tests/cards_grids_test.py   http://127.0.0.1:9393 out/cards
+python -X utf8 scripts/tests/keyboard_test.py      http://127.0.0.1:9393 out/kbd
+python -X utf8 scripts/tests/wired_screens_test.py http://127.0.0.1:9393 docs/screenshots/m2/wired
+```
+
+What is still untested is tracked in [`specs/m2-wiring-untested.md`](specs/m2-wiring-untested.md).
+
+## Product reviews
+
+The theme shows ratings only from Shopify's **standard metafields** `reviews.rating` and
+`reviews.rating_count`, which review apps such as **Judge.me** write. Without data, cards show
+nothing and the product page shows "No reviews yet". To add reviews: install Judge.me (free plan),
+then add its review widget as an **app block** in the product template (Customize → Product →
+Add block → Apps). Never import or create fake reviews.
+
 ## Roadmap
 
 | Milestone | Scope | Status |
@@ -115,6 +153,7 @@ Never run `shopify theme publish` or `theme push --live` against the live theme.
 | M0 | Foundation: licensed fonts, colour check, full Arabic locale, hero on homepage, RTL fixes, docs | Done (owner admin actions pending) |
 | M1 | Homepage "two paths" (Shop / Learn) | Done (delivered with M2) |
 | M2 | Design system and UX overhaul: tokens, Fraunces, header/mega menu, product cards with quick add, collection hero, homepage story sections, footer, sticky add to cart | Done (admin menus and images pending) |
+| M2.1 | Wiring and verification: hero slideshow, always-visible card actions + quick add in every grid, swatch colour map, minimal footer, header/homepage wiring on the new store, acceptance suites | Done (permanent theme push and images pending) |
 | M3 | Garment product template (metafields); digital pattern template | Planned |
 | M4 | Pattern library (`motif` metaobjects, filtering) | Planned |
 | M5 | Workshops (products as events) and free community circles; Learn hub, blog and article templates | Planned |
