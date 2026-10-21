@@ -59,11 +59,8 @@ About → Pages › About                        (handle about)
 The top-level item **Shop** must keep the handle `shop`: the mega menu featured card is attached
 to it (header setting "Show in menu item" = `shop`).
 
-**`footer-shop`**: Clothing, Accessories, Home & Textiles, Digital Patterns
-
-**`footer-learn`**: Tatreez 101, Journal, Digital Patterns, Workshops
-
-**`footer-about`**: About, Contact, Shipping policy, Refund policy, Privacy policy
+Footer menus (`footer-shop`, `footer-learn`, `footer-about`) are **not used**: the footer is minimal
+(decision 2026-10-21) and shows the policy links from Settings → Policies instead. Do not create them.
 
 **`customer-account-main-menu`**: created automatically by Shopify; keep it (the theme setting
 "Customer account menu" points to it).
@@ -72,4 +69,6 @@ to it (header setting "Show in menu item" = `shop`).
 
 Render the handles once (for example with `shopify theme dev` and a temporary snippet that loops
 `linklists` and prints `handle` and `links.size`), or open the storefront and confirm:
-the Shop mega menu, the Learn dropdown, the mobile drawer groups and the three footer columns.
+the Shop mega menu (with the featured Clothing card), the Learn dropdown and the mobile drawer groups.
+
+Verified on `tatreez-house` (2026-10-21): `main-menu` exactly as above, including Journal.

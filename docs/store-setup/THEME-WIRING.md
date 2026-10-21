@@ -6,8 +6,8 @@ new store. Theme code contains no store-specific values (no shop domain, theme I
 checked with `grep` on 2026-10-21). Store data itself is set up with [`SETUP.md`](SETUP.md) and
 [`MENUS.md`](MENUS.md).
 
-Status column: **set** = value present in the repo; **Step 5** = wired in M2.1 Step 5 (waits for
-the new store); **editor** = the owner sets it in the theme editor (images).
+Status column: **set** = value present in the repo (wired in M2.1 Step 5 on `tatreez-house`,
+2026-10-21); **editor** = the owner sets it in the theme editor (images).
 
 > Note: a setting **missing** from a JSON template or section group renders as empty, not as the
 > schema default. Every value below must exist explicitly in the file.
@@ -18,12 +18,10 @@ the new store); **editor** = the owner sets it in the theme editor (images).
 |---|---|---|---|---|
 | `sections/header-group.json` | header › `menu` | `main-menu` | menu `main-menu` | set |
 | `sections/header-group.json` | header › `menu_type_desktop` | `mega` | — | set |
-| `sections/header-group.json` | header › `mega_feature_menu_handle` | `shop` | top-level item **Shop** in `main-menu` | Step 5 (currently missing → no card) |
-| `sections/header-group.json` | header › `mega_feature_heading` | e.g. "New in Clothing" | — | Step 5 |
-| `sections/header-group.json` | header › `mega_feature_link` | `shopify://collections/clothing` | collection `clothing` | Step 5 |
-| `sections/footer-group.json` | footer › Menu block 1 › `menu` / `heading` | `footer-shop` / Shop | menu `footer-shop` | Step 5 |
-| `sections/footer-group.json` | footer › Menu block 2 › `menu` / `heading` | `footer-learn` / Learn | menu `footer-learn` | Step 5 |
-| `sections/footer-group.json` | footer › Menu block 3 › `menu` / `heading` | `footer-about` / About | menu `footer-about` | Step 5 |
+| `sections/header-group.json` | header › `mega_feature_menu_handle` | `shop` | top-level item **Shop** in `main-menu` | set |
+| `sections/header-group.json` | header › `mega_feature_heading` | empty → the linked collection's translated title | — | set |
+| `sections/header-group.json` | header › `mega_feature_link` | `shopify://collections/clothing` | collection `clothing` | set |
+| `sections/footer-group.json` | footer | no menu blocks (minimal footer: brand, newsletter, language, policies) | — | set |
 | `config/settings_data.json` | `customer_account_menu` | `customer-account-main-menu` | menu `customer-account-main-menu` | set |
 
 ## Links (pages, collections)
@@ -35,10 +33,10 @@ the new store); **editor** = the owner sets it in the theme editor (images).
 | `templates/index.json` | hero slideshow › Welcome › `button_link_2` | `shopify://pages/tatreez-101` | page `tatreez-101` | set |
 | `templates/index.json` | hero slideshow › Learn › `button_link_1` | `shopify://pages/tatreez-101` | page `tatreez-101` | set |
 | `templates/index.json` | hero slideshow › Patterns › `button_link_1` | `shopify://collections/digital-patterns` | collection `digital-patterns` | set |
-| `templates/index.json` | path cards › Shop › `link` | `shopify://collections/all` (blank also defaults to all products) | — | Step 5 |
-| `templates/index.json` | path cards › Learn › `link` | `shopify://pages/tatreez-101` | page `tatreez-101` | Step 5 |
-| `templates/index.json` | brand story › `link` + `button_label` | `shopify://pages/about`, "Read our story" | page `about` | Step 5 |
-| `templates/index.json` | workshops teaser › `link` | `shopify://pages/workshops` | page `workshops` | Step 5 |
+| `templates/index.json` | path cards › Shop › `link` | `shopify://collections/all` | — | set |
+| `templates/index.json` | path cards › Learn › `link` | `shopify://pages/tatreez-101` | page `tatreez-101` | set |
+| `templates/index.json` | brand story › `link` (label empty → translated "Read our story") | `shopify://pages/about` | page `about` | set |
+| `templates/index.json` | workshops teaser › `link` (label empty → translated "See workshops") | `shopify://pages/workshops` | page `workshops` | set |
 
 ## Collections, blog
 
@@ -57,9 +55,11 @@ the new store); **editor** = the owner sets it in the theme editor (images).
 | `card_hidden_title_suffix` | `(PDF)` (schema default) | pattern titles end with " (PDF)" | set (default) |
 | `card_new_tag` | `new-collection` (schema default) | tag on new products | set (default) |
 | `card_swatch_option_names` | `Color, Colour` (schema default) | option name **Color** in `products.csv` | set (default) |
-| `card_swatch_colors` | see below | colour option values in `products.csv` | Step 5 |
+| `card_swatch_colors` | see below | colour option values in `products.csv` | set |
 
-`card_swatch_colors` value for the demo catalogue (brand palette, one per line):
+`card_swatch_colors` value for the demo catalogue (brand palette, one per line). Names are matched
+in the storefront language: if the colour option values get Arabic translations, add the Arabic
+names too, or link the option values to Shopify colour swatches (locale-independent):
 
 ```
 Warm Ivory: #F7F3EB
@@ -86,7 +86,8 @@ image-less state. Recommended sizes:
 | Choose your path › Shop / Learn › Image | landscape 5:4, ≥ 1400 × 1120 px |
 | Brand story › Image | portrait 4:5, ≥ 1200 × 1500 px |
 | Workshops teaser › Image | portrait 4:5, ≥ 1200 × 1500 px |
-| Header › Mega menu feature › Image | landscape 4:3, ≥ 720 × 540 px |
+| Header › Mega menu feature › Image (optional) | landscape 4:3, ≥ 720 × 540 px |
+| Footer › Footer logo (optional) | light/small logo, transparent PNG/SVG, ~ 480 px wide |
 | Collection hero › Image (optional override) | landscape 4:3, ≥ 1600 × 1200 px; otherwise the collection image is used |
 
 ## Re-check after pushing to a new store
@@ -94,4 +95,5 @@ image-less state. Recommended sizes:
 1. `shopify theme pull --only config/settings_data.json --only "templates/*.json" --only "sections/*.json"`
    and diff: nothing above may have been reset.
 2. Open each link in the tables: no 404.
-3. Header: mega menu card under Shop; footer: three columns; homepage: Journal teaser visible.
+3. Header: mega menu card under Shop; footer: brand + newsletter, language selector, policy links;
+   homepage: Journal teaser visible.
