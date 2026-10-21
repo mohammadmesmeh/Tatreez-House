@@ -45,17 +45,17 @@
       "settings": {
         "image": "shopify://shop_images/shutterstock_2380757597.jpg",
         "image_alt": "",
+        "layout": "split",
+        "split_image_position": "end",
+        "show_eyebrow": true,
+        "eyebrow": "",
         "image_height": "large",
         "image_overlay_opacity": 40,
         "color_scheme": "scheme-3",
         "desktop_content_position": "middle-center",
         "desktop_content_alignment": "center",
         "mobile_content_alignment": "center",
-        "heading_size": "h1",
-        "layout": "split",
-        "split_image_position": "end",
-        "show_eyebrow": true,
-        "eyebrow": ""
+        "heading_size": "h1"
       }
     },
     "featured_collection": {
@@ -143,19 +143,19 @@
     "digital_patterns": {
       "type": "featured-collection",
       "settings": {
+        "collection": "digital-patterns",
+        "products_to_show": 3,
         "title": "Digital patterns",
         "heading_size": "h2",
         "description": "<p>Instant download. Stitch the motifs yourself, at your own pace.</p>",
         "show_description": true,
         "description_style": "body",
-        "collection": "digital-patterns",
-        "products_to_show": 3,
         "columns_desktop": 3,
+        "enable_desktop_slider": false,
         "full_width": false,
         "show_view_all": true,
         "view_all_style": "link",
         "view_all_label": "All patterns",
-        "enable_desktop_slider": false,
         "color_scheme": "scheme-80059332-ff5c-4f81-a22c-80e5aab949f5",
         "image_ratio": "portrait",
         "image_shape": "default",
@@ -172,7 +172,7 @@
     "learn_teaser": {
       "type": "learn-teaser",
       "settings": {
-        "blog": "news",
+        "blog": "journal",
         "eyebrow": "",
         "heading": "",
         "show_date": true,
