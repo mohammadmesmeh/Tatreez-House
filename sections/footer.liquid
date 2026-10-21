@@ -321,8 +321,13 @@
     </div>
 
     <div class="footer__legal">
-      <small class="copyright__content">
-        &copy; {{ 'now' | date: '%Y' }}, {{ shop.name | link_to: routes.root_url }}. {{ powered_by_link }}
+      {%- comment -%}
+        Each fragment is isolated with <bdi> and there is no Latin punctuation between them, so
+        the line reads correctly in RTL even when the store name is in Latin script.
+      {%- endcomment -%}
+      <small class="copyright__content footer__copyright-line">
+        <span>&copy; <bdi>{{ 'now' | date: '%Y' }}</bdi> <bdi>{{ shop.name | link_to: routes.root_url }}</bdi></span>
+        <bdi>{{ powered_by_link }}</bdi>
       </small>
       {%- if section.settings.show_demo_note -%}
         <small class="copyright__content footer__demo-note">{{ 'sections.footer.demo_note' | t }}</small>

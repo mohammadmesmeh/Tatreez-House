@@ -287,3 +287,10 @@
 .footer--minimal .copyright__content {
   color: var(--footer-muted);
 }
+
+.footer__copyright-line {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0 var(--th-space-2);
+}
