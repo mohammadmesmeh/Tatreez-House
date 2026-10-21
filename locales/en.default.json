@@ -368,7 +368,11 @@
     },
     "footer": {
       "payment": "Payment methods",
-      "demo_note": "Tatreez House is a fictional demo brand created for a design portfolio."
+      "demo_note": "Tatreez House is a fictional demo brand created for a design portfolio.",
+      "brand_text": "Palestinian tatreez, stitched by hand and shared as patterns.",
+      "newsletter_heading": "Join the newsletter",
+      "newsletter_text": "New patterns, workshop dates and stories from the Journal. Unsubscribe anytime.",
+      "policies": "Policies"
     },
     "featured_blog": {
       "view_all": "View all",

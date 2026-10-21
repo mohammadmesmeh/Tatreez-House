@@ -1503,6 +1503,28 @@
         "newsletter_enable": {
           "label": "Email signup"
         },
+        "header_brand": {
+          "content": "Brand"
+        },
+        "show_brand": {
+          "label": "Show logo or store name"
+        },
+        "logo": {
+          "label": "Footer logo",
+          "info": "A small or light version of the logo. Without one, the store name is shown as a wordmark."
+        },
+        "logo_width": {
+          "label": "Logo width"
+        },
+        "brand_text": {
+          "label": "Brand line"
+        },
+        "translated_default": {
+          "info": "Leave empty to use the translated default text."
+        },
+        "newsletter_text": {
+          "label": "Newsletter text"
+        },
         "newsletter_heading": {
           "label": "Heading",
           "default": "Subscribe to our emails"
