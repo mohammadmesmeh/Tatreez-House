@@ -113,49 +113,6 @@
   align-items: stretch;
 }
 
-/* Newsletter states: error (red ring + message, announced via role=alert) and success. */
-.footer__form-message {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--th-space-1);
-  margin: var(--th-space-2) 0 0;
-  font-size: 1.4rem;
-  line-height: 1.5;
-  text-align: start;
-}
-
-.footer__form-message .svg-wrapper {
-  flex: none;
-  inline-size: 1.6rem;
-  block-size: 1.6rem;
-  margin-block-start: 0.2rem;
-}
-
-.footer__form-message--error {
-  color: rgb(var(--th-red));
-}
-
-.footer__form-message--success {
-  padding: var(--th-space-1) var(--th-space-2);
-  border-inline-start: 0.3rem solid rgb(var(--th-green));
-  background-color: rgba(var(--th-green), 0.08);
-  color: rgb(var(--th-green));
-  font-weight: 500;
-}
-
-.footer__form-message--success:focus {
-  outline: none;
-}
-
-.footer__form-message--success:focus-visible {
-  outline: 0.2rem solid rgb(var(--color-foreground));
-  outline-offset: 0.3rem;
-}
-
-.footer--minimal .field:has(.field__input[aria-invalid='true'])::after {
-  box-shadow: 0 0 0 var(--inputs-border-width) rgb(var(--th-red));
-}
-
 .footer__follow-on-shop {
   display: flex;
   justify-content: center;

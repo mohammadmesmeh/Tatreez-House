@@ -1,0 +1,82 @@
+{% doc %}
+  Newsletter sign-up form (Shopify customer form, tag "newsletter") with clear states: the error
+  is announced (role=alert) and rings the field (aria-invalid); success is announced as a status
+  message. Used by the footer and by the events "no dates" states. Shopify's posted state is not
+  scoped per form id, so when two of these forms are on one page both show the result.
+
+  @param {string} form_id - Unique form id, e.g. 'ContactFooter'. Required.
+  @param {string} [described_by] - Id of the intro text that describes the field.
+
+  @example
+  {% render 'newsletter-form', form_id: 'ContactFooter', described_by: 'NewsletterText-footer' %}
+{% enddoc %}
+{{ 'component-newsletter-tatreez.css' | asset_url | stylesheet_tag }}
+{%- assign input_id = 'NewsletterForm--' | append: form_id -%}
+{%- form 'customer', id: form_id, class: 'newsletter-form th-newsletter' -%}
+  <input type="hidden" name="contact[tags]" value="newsletter">
+  {%- liquid
+    assign error_id = form_id | append: '-error'
+    assign success_id = form_id | append: '-success'
+    assign field_described_by = described_by
+    if form.errors
+      assign field_described_by = field_described_by | append: ' ' | append: error_id | strip
+    elsif form.posted_successfully?
+      assign field_described_by = field_described_by | append: ' ' | append: success_id | strip
+    endif
+  -%}
+  <div class="newsletter-form__field-wrapper">
+    <div class="field">
+      <input
+        id="{{ input_id }}"
+        type="email"
+        name="contact[email]"
+        class="field__input"
+        value="{{ form.email }}"
+        aria-required="true"
+        {% if field_described_by != blank %}
+          aria-describedby="{{ field_described_by }}"
+        {% endif %}
+        autocorrect="off"
+        autocapitalize="off"
+        autocomplete="email"
+        {% if form.errors %}
+          autofocus
+          aria-invalid="true"
+        {% endif %}
+        placeholder="{{ 'newsletter.label' | t }}"
+        required
+      >
+      <label class="field__label" for="{{ input_id }}">
+        {{ 'newsletter.label' | t }}
+      </label>
+      <button
+        type="submit"
+        class="newsletter-form__button field__button"
+        name="commit"
+        aria-label="{{ 'newsletter.button_label' | t }}"
+      >
+        <span class="svg-wrapper">
+          {{- 'icon-arrow.svg' | inline_asset_content -}}
+        </span>
+      </button>
+    </div>
+  </div>
+  {%- if form.errors -%}
+    <p class="th-form-message th-form-message--error" id="{{ error_id }}" role="alert">
+      <span class="svg-wrapper">{{- 'icon-error.svg' | inline_asset_content -}}</span>
+      <span>
+        {{- form.errors.translated_fields.email | capitalize }}
+        {{ form.errors.messages.email -}}
+      </span>
+    </p>
+  {%- elsif form.posted_successfully? -%}
+    <p
+      class="th-form-message th-form-message--success"
+      id="{{ success_id }}"
+      role="status"
+    >
+      <span class="svg-wrapper">{{- 'icon-success.svg' | inline_asset_content -}}</span>
+      <span>{{ 'newsletter.success' | t }}</span>
+    </p>
+  {%- endif -%}
+{%- endform -%}
