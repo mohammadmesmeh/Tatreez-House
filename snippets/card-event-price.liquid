@@ -19,9 +19,10 @@
     assign next_text = ''
     if next_key != blank
       assign variant_index = next_key | split: ':' | last | plus: 0
-      assign next_raw = product.variants[variant_index].options[date_index]
+      assign next_variant = product.variants[variant_index]
+      assign next_raw = next_variant.options[date_index]
       capture next_text
-        render 'event-date', value: next_raw, output: 'short'
+        render 'event-date', value: next_raw, start: next_variant.metafields.custom.event_start.value, output: 'short'
       endcapture
     endif
     assign next_text = next_text | strip

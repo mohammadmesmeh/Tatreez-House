@@ -51,6 +51,29 @@ Go to **Products → Collections → Create collection** and fill:
    - Join a circle: a $0 checkout needs no card.
    - Check that the inventory (seats) drops by 1.
 
+## Translation-safe dates (recommended)
+
+Translate & Adapt can change the variant option: on 2026-10-22 its auto-translate renamed the
+option **Date** to **التاريخ**, which emptied the Arabic Workshops page. The theme no longer depends
+on that name: it finds the date option **by position** (Theme settings → Events → "Date option
+position", default 1) and reads Arabic-Indic or Persian digits correctly. If a translation ever
+rewrites a value into words (for example "٧ نوفمبر"), that session is still listed, with the text
+as written, but it can't be sorted or hidden when past.
+
+To make dates immune to translation, add a **variant** metafield that the theme reads first:
+
+1. **Settings → General → Store defaults → Time zone:** choose **(GMT+02:00) Jerusalem**. The admin
+   date picker uses the store time zone, so this lets you type Palestine times as they are.
+2. **Settings → Metafields and metaobjects → Variants → Add definition**:
+   - Name: `Event start`
+   - Namespace and key: `custom.event_start`
+   - Type: **Date and time**
+3. For each date: open the product, click the date variant, and fill **Event start** with the
+   same date and time as the option value (for example 7 Nov 2026, 18:00). Save.
+
+When the metafield is filled, the option value is only a label; the date, sorting, "past" check,
+calendar links and cart all use the metafield.
+
 ## Owner guide (for the handoff doc)
 
 - **Add a date:**

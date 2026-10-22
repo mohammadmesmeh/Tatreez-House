@@ -1,6 +1,12 @@
 {% doc %}
-  Prints the zero-based position of a product's "Date" option, or -1 when it has none. A product
-  with a Date option is an event product (workshop or circle, see docs/store-setup/EVENTS-SETUP.md).
+  Prints the zero-based position of an event product's date option, or -1 for other products.
+  Nothing here depends on names that translation can change (the option name "Date" becomes
+  "التاريخ" with Translate & Adapt):
+  - the date option is found by position (theme setting "Date option position", default 1); if
+    that option holds no date but another option does, that one is used;
+  - a product with variants is an event when its type is listed in the theme setting "Event
+    product types", or its first variant has custom.event_start, or an option's first value
+    parses as a date. Products without variants (only "Default Title") are never events.
 
   @param {product} product - The product. Required.
 
@@ -10,12 +16,53 @@
 {% enddoc %}
 {%- liquid
   assign found = -1
-  for option in product.options_with_values
-    assign option_name = option.name | downcase | strip
-    if option_name == 'date'
-      assign found = forloop.index0
-      break
+  assign position = settings.event_date_option_position | default: 1
+  if product.has_only_default_variant == false and product.options.size >= position
+    assign candidate = position | minus: 1
+    assign first_variant = product.variants.first
+
+    assign typed_event = false
+    assign product_type = product.type | downcase | strip
+    assign event_types = settings.event_product_types | downcase | split: ','
+    for event_type in event_types
+      assign wanted_type = event_type | strip
+      if wanted_type != blank and wanted_type == product_type
+        assign typed_event = true
+        break
+      endif
+    endfor
+    if first_variant.metafields.custom.event_start != blank
+      assign typed_event = true
     endif
-  endfor
+
+    # Which option's first value is a date: the configured one first, then the others.
+    assign date_option = -1
+    capture probe
+      render 'event-date', value: first_variant.options[candidate], output: 'timestamp'
+    endcapture
+    assign probe = probe | strip
+    if probe != blank
+      assign date_option = candidate
+    else
+      for option_value in first_variant.options
+        if forloop.index0 != candidate
+          capture probe
+            render 'event-date', value: option_value, output: 'timestamp'
+          endcapture
+          assign probe = probe | strip
+          if probe != blank
+            assign date_option = forloop.index0
+            break
+          endif
+        endif
+      endfor
+    endif
+
+    if date_option >= 0
+      assign found = date_option
+    elsif typed_event
+      assign found = candidate
+    endif
+  endif
 -%}
 {{- found -}}

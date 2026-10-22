@@ -18,9 +18,10 @@
 
 {%- for value in option.values -%}
   {%- if event_dates -%}
-    {%- capture value_ts -%}{% render 'event-date', value: value.name, output: 'timestamp' %}{%- endcapture -%}
+    {%- capture value_ts -%}{% render 'event-date', value: value.name, start: value.variant.metafields.custom.event_start.value, output: 'timestamp' %}{%- endcapture -%}
     {%- assign value_ts = value_ts | strip | plus: 0 -%}
-    {%- if value_ts <= now -%}
+    {%- comment -%} Unparseable values stay visible (value_ts 0), only real past dates are skipped. {%- endcomment -%}
+    {%- if value_ts > 0 and value_ts <= now -%}
       {%- continue -%}
     {%- endif -%}
   {%- endif -%}
@@ -116,7 +117,7 @@
             endif
           endif
         -%}
-        <span class="event-chip__date">{% render 'event-date', value: value.name, output: 'short' %}</span>
+        <span class="event-chip__date">{% render 'event-date', value: value.name, start: value.variant.metafields.custom.event_start.value, output: 'short' %}</span>
         {%- if seats_note != blank -%}
           <span class="event-chip__seats">{{ seats_note }}</span>
         {%- endif -%}

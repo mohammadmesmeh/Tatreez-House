@@ -136,6 +136,13 @@ with sync_playwright() as p:
             mismatches.append((handle, local, i['seats'], want))
     ok('events: seats text matches the inventory (workshops.csv)', not mismatches, mismatches[:3])
     ok('events: booking links preselect the date (?variant=)', all('variant=' in i['book'] for i in items if i['book']))
+    # QA round 1, issue 5: translating the products (option "Date" -> "التاريخ") emptied /ar.
+    pg_ar = ctx.new_page()
+    pg_ar.goto(BASE + '/ar' + PAGE, wait_until='load', timeout=120000); pg_ar.wait_for_timeout(800)
+    ar_items = pg_ar.evaluate(ITEMS)
+    ok('events /ar: same sessions as English (translated option name must not matter)',
+       len(ar_items) == len(items) and pg_ar.locator('.events-empty').count() == 0, (len(ar_items), len(items)))
+    pg_ar.close()
     shot(pg, 'events-1440-en', full_page=True)
 
     # Filters with JS

@@ -1,18 +1,20 @@
 {% doc %}
-  Parses an event date option value ("YYYY-MM-DD HH:MM", Palestine time) and renders it for the
-  current locale. Weekday and month names, the time pattern and "Palestine time" come from the
+  Parses an event date and renders it for the current locale. Sources, most robust first:
+  1. `start`: the variant metafield custom.event_start (date_time). Never translated; converted to
+     Palestine wall time here (the shop's own time zone may differ, e.g. America/New_York);
+  2. `value`: the "Date" option value ("YYYY-MM-DD HH:MM", Palestine time). Translation tools may
+     rewrite it, so Arabic-Indic (٠-٩) and Persian (۰-۹) digits are normalised to Latin and "/"
+     to "-" before parsing. Weekday and month names, the time pattern and "Palestine time" come from the
   `events.date.*` locale keys, so English and Arabic each read naturally (Latin digits in both).
 
-  UTC offset rule (docs/DECISIONS.md, M4): summer time (+03:00) from the last Saturday of March
-  to the day before the last Saturday of October, otherwise +02:00. The value is parsed with
-  that explicit offset, so the timestamp is correct whatever the shop's timezone setting is.
-  Palestine sometimes moves the change (e.g. around Ramadan); in those weeks the offset can be
-  one hour off. Google Calendar links use ctz=Asia/Hebron and are always right.
+  UTC offset: snippets/event-utc-offset (DECISIONS.md, M4). The value is parsed with that
+  explicit offset, so the timestamp is correct whatever the shop's time zone setting is.
 
   A value that cannot be parsed renders as the raw text; in the theme editor it is also flagged
   in the browser console. Nothing is printed for `timestamp` / `iso` in that case.
 
   @param {string} value - The variant option value, e.g. "2026-11-07 18:00". Required.
+  @param {string} [start] - The variant's custom.event_start metafield value; wins over `value`.
   @param {string} [output] - What to print:
     'time' (default): <time> with the full date, time and "Palestine time";
     'tile': date tile (day, month, weekday + time) inside a <time>, full text for screen readers;
@@ -27,6 +29,54 @@
 {% enddoc %}
 {%- liquid
   assign raw = value | strip
+  assign raw = raw | replace: '٠', '0' | replace: '١', '1' | replace: '٢', '2' | replace: '٣', '3' | replace: '٤', '4'
+  assign raw = raw | replace: '٥', '5' | replace: '٦', '6' | replace: '٧', '7' | replace: '٨', '8' | replace: '٩', '9'
+  assign raw = raw | replace: '۰', '0' | replace: '۱', '1' | replace: '۲', '2' | replace: '۳', '3' | replace: '۴', '4'
+  assign raw = raw | replace: '۵', '5' | replace: '۶', '6' | replace: '۷', '7' | replace: '۸', '8' | replace: '۹', '9'
+  assign raw = raw | replace: '/', '-' | replace: '：', ':' | replace: 'T', ' '
+
+  # custom.event_start wins: convert the instant to Palestine wall time. Shift the timestamp by
+  # (Palestine offset - shop offset) and format it in the shop's zone; try +02:00 first and
+  # switch to +03:00 when that date is in summer time.
+  if start != blank
+    assign start_ts = start | date: '%s' | plus: 0
+    if start_ts > 1000000000
+      assign shop_zone = start | date: '%z'
+      assign shop_seconds = shop_zone | slice: 1, 2 | plus: 0 | times: 3600
+      assign shop_minutes = shop_zone | slice: 3, 2 | plus: 0 | times: 60
+      assign shop_seconds = shop_seconds | plus: shop_minutes
+      assign shop_sign = shop_zone | slice: 0
+      if shop_sign == '-'
+        assign shop_seconds = 0 | minus: shop_seconds
+      endif
+      assign wall_seconds = start_ts | plus: 7200 | minus: shop_seconds
+      # The shop's own offset can differ at the shifted instant (its DST change): re-read it there.
+      assign shop_zone_at_wall = wall_seconds | date: '%z'
+      if shop_zone_at_wall != shop_zone
+        assign wall_shop_seconds = shop_zone_at_wall | slice: 1, 2 | plus: 0 | times: 3600
+        assign wall_shop_minutes = shop_zone_at_wall | slice: 3, 2 | plus: 0 | times: 60
+        assign wall_shop_seconds = wall_shop_seconds | plus: wall_shop_minutes
+        assign wall_shop_sign = shop_zone_at_wall | slice: 0
+        if wall_shop_sign == '-'
+          assign wall_shop_seconds = 0 | minus: wall_shop_seconds
+        endif
+        assign wall_seconds = start_ts | plus: 7200 | minus: wall_shop_seconds
+      endif
+      assign wall = wall_seconds | date: '%Y-%m-%d %H:%M'
+      assign wall_year = wall | slice: 0, 4 | plus: 0
+      assign wall_month = wall | slice: 5, 2 | plus: 0
+      assign wall_day = wall | slice: 8, 2 | plus: 0
+      capture wall_offset
+        render 'event-utc-offset', year: wall_year, month: wall_month, day: wall_day
+      endcapture
+      assign wall_offset = wall_offset | strip
+      if wall_offset == '+03:00'
+        assign wall = wall_seconds | plus: 3600 | date: '%Y-%m-%d %H:%M'
+      endif
+      assign raw = wall
+    endif
+  endif
+
   assign valid = false
   if raw.size == 16
     assign c4 = raw | slice: 4
@@ -47,19 +97,10 @@
   endif
 
   if valid
-    # Last Saturday of March / October of this year (weekday of the 31st, stepped back to Saturday).
-    assign march_back = year | append: '-03-31' | date: '%w' | plus: 1 | modulo: 7
-    assign march_saturday = 31 | minus: march_back
-    assign october_back = year | append: '-10-31' | date: '%w' | plus: 1 | modulo: 7
-    assign october_saturday = 31 | minus: october_back
-    assign offset = '+02:00'
-    if month > 3 and month < 10
-      assign offset = '+03:00'
-    elsif month == 3 and day >= march_saturday
-      assign offset = '+03:00'
-    elsif month == 10 and day < october_saturday
-      assign offset = '+03:00'
-    endif
+    capture offset
+      render 'event-utc-offset', year: year, month: month, day: day
+    endcapture
+    assign offset = offset | strip
     assign date_part = raw | slice: 0, 10
     assign time_part = raw | slice: 11, 5
     assign iso = date_part | append: 'T' | append: time_part | append: offset
@@ -120,10 +161,10 @@
   {%- endcase -%}
 {%- else -%}
   {%- unless output == 'timestamp' or output == 'iso' -%}
-    <span class="event-date event-date--raw">{{ raw | escape }}</span>
+    <span class="event-date event-date--raw" dir="auto">{{ value | escape }}</span>
     {%- if request.design_mode -%}
       <script>
-        console.warn({{ 'events.date.invalid_editor' | t: value: raw | json }});
+        console.warn({{ 'events.date.invalid_editor' | t: value: value | json }});
       </script>
     {%- endif -%}
   {%- endunless -%}

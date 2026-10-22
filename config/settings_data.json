@@ -53,6 +53,8 @@
     "card_shadow_vertical_offset": 4,
     "card_shadow_blur": 5,
     "card_swatch_option_names": "Color, Colour",
+    "event_date_option_position": 1,
+    "event_product_types": "Workshop, Community Circle",
     "card_swatch_colors": "Warm Ivory: #F7F3EB\nOlive Green: #667052\nEmbroidery Red: #8E3038\nTatreez Black: #292820\nLinen Beige: #D9C8AD",
     "collection_card_style": "standard",
     "collection_card_image_padding": 0,

@@ -2,11 +2,12 @@
   Lists the upcoming sessions of event products, sorted chronologically, as a comma-separated
   string of "timestamp:product_index:variant_index" keys. Liquid cannot sort objects, so callers
   capture this, split it, and read `products[product_index].variants[variant_index]` directly.
-  An event product is any product with an option named "Date" (value "YYYY-MM-DD HH:MM",
-  see snippets/event-date.liquid).
+  Event products and their date option come from snippets/event-date-index (by position, so a
+  translated option name doesn't matter); custom.event_start wins over the option value.
 
   Past dates are never listed. Sold-out upcoming dates are listed unless `available_only` is
-  true (callers show them as "Fully booked"). Malformed dates are skipped.
+  true (callers show them as "Fully booked"). A date that cannot be parsed is not hidden: it is
+  listed last (key 9999999999) without the upcoming check, and the card shows the raw text.
 
   @param {product[]} [products] - The products to scan, e.g. collection.products.
   @param {product} [product] - A single product to scan instead of `products` (product_index 0).
@@ -44,9 +45,12 @@
       endif
       assign raw_date = event_variant.options[date_index]
       capture session_ts
-        render 'event-date', value: raw_date, output: 'timestamp'
+        render 'event-date', value: raw_date, start: event_variant.metafields.custom.event_start.value, output: 'timestamp'
       endcapture
       assign session_ts = session_ts | strip | plus: 0
+      if session_ts == 0
+        assign session_ts = 9999999999
+      endif
       if session_ts > now
         assign keys = keys | append: session_ts | append: ':' | append: scan_index | append: ':' | append: forloop.index0 | append: ','
       endif
