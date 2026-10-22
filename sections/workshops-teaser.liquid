@@ -20,14 +20,66 @@
   endif
 -%}
 
-{% render 'editorial-split',
-  section: section,
-  eyebrow: eyebrow,
-  heading: heading,
-  text: text,
-  cta_label: cta_label,
-  cta_link: section.settings.link
-%}
+{%- liquid
+  # Next upcoming sessions from the events collection (snippets/event-session-keys). Without any,
+  # the section keeps its editorial text as before.
+  assign session_keys = ''
+  if section.settings.collection != blank
+    capture session_keys
+      render 'event-session-keys', products: section.settings.collection.products, available_only: true
+    endcapture
+    assign session_keys = session_keys | strip | split: ','
+  endif
+-%}
+{%- if session_keys.size > 0 -%}
+  {{ 'component-event-session.css' | asset_url | stylesheet_tag }}
+  {{ 'section-editorial-split.css' | asset_url | stylesheet_tag }}
+  {%- liquid
+    assign sessions_label = section.settings.button_label
+    if sessions_label == blank
+      assign sessions_label = 'events.actions.see_all_workshops' | t
+    endif
+  -%}
+  <div class="workshops-sessions color-{{ section.settings.color_scheme }} gradient{% if section.settings.linen_surface %} th-linen{% endif %}">
+    <div class="page-width th-section">
+      <div class="workshops-sessions__head">
+        {%- if section.settings.show_divider -%}
+          {% render 'stitch-divider', id: section.id, tone: section.settings.divider_tone, class: 'editorial-split__divider' %}
+        {%- endif -%}
+        {%- if eyebrow != blank -%}
+          <p class="th-eyebrow">{{ eyebrow | escape }}</p>
+        {%- endif -%}
+        <h2 class="workshops-sessions__heading h1" id="WorkshopsSessions-{{ section.id }}">{{ heading | escape }}</h2>
+      </div>
+      <ol class="workshops-sessions__list list-unstyled" role="list" aria-labelledby="WorkshopsSessions-{{ section.id }}">
+        {%- for key in session_keys limit: section.settings.sessions_count -%}
+          {%- liquid
+            assign key_parts = key | split: ':'
+            assign product_index = key_parts[1] | plus: 0
+            assign variant_index = key_parts[2] | plus: 0
+            assign event_product = section.settings.collection.products[product_index]
+            assign event_variant = event_product.variants[variant_index]
+          -%}
+          <li class="workshops-sessions__item">
+            {% render 'event-session-card', product: event_product, variant: event_variant, heading_tag: 'h3', compact: true %}
+          </li>
+        {%- endfor -%}
+      </ol>
+      {%- if section.settings.link != blank -%}
+        <a href="{{ section.settings.link }}" class="button button--secondary workshops-sessions__all">{{ sessions_label | escape }}</a>
+      {%- endif -%}
+    </div>
+  </div>
+{%- else -%}
+  {% render 'editorial-split',
+    section: section,
+    eyebrow: eyebrow,
+    heading: heading,
+    text: text,
+    cta_label: cta_label,
+    cta_link: section.settings.link
+  %}
+{%- endif -%}
 
 {% schema %}
 {
@@ -35,7 +87,10 @@
   "tag": "section",
   "class": "section",
   "disabled_on": {
-    "groups": ["header", "footer"]
+    "groups": [
+      "header",
+      "footer"
+    ]
   },
   "settings": [
     {
@@ -88,6 +143,25 @@
       "id": "link",
       "label": "t:sections.editorial.settings.link.label",
       "info": "t:sections.editorial.settings.link.info"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.workshops-teaser.settings.header_sessions.content",
+      "info": "t:sections.workshops-teaser.settings.header_sessions.info"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "t:sections.workshops-teaser.settings.collection.label"
+    },
+    {
+      "type": "range",
+      "id": "sessions_count",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 2,
+      "label": "t:sections.workshops-teaser.settings.sessions_count.label"
     },
     {
       "type": "checkbox",

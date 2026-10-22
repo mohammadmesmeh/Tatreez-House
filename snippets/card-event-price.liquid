@@ -1,0 +1,42 @@
+{% doc %}
+  Price line for event products on product cards: the next bookable date ("Next: Sat 7 Nov ·
+  6:00 PM") and "From $45" or "Free". Prints nothing for other products, so the card falls back
+  to the normal price snippet.
+
+  @param {product} product - The card's product. Required.
+
+  @example
+  {% capture event_price %}{% render 'card-event-price', product: card_product %}{% endcapture %}
+{% enddoc %}
+{%- capture date_index -%}{% render 'event-date-index', product: product %}{%- endcapture -%}
+{%- assign date_index = date_index | strip | plus: 0 -%}
+{%- if date_index >= 0 -%}
+  {%- liquid
+    capture next_keys
+      render 'event-session-keys', product: product, available_only: true
+    endcapture
+    assign next_key = next_keys | strip | split: ',' | first
+    assign next_text = ''
+    if next_key != blank
+      assign variant_index = next_key | split: ':' | last | plus: 0
+      assign next_raw = product.variants[variant_index].options[date_index]
+      capture next_text
+        render 'event-date', value: next_raw, output: 'short'
+      endcapture
+    endif
+    assign next_text = next_text | strip
+    assign from_price = product.price_min | money
+  -%}
+  <div class="card-event price">
+    {%- if next_text != blank -%}
+      <p class="card-event__next">{{ 'events.next_date' | t: date: next_text }}</p>
+    {%- endif -%}
+    <p class="card-event__price price-item price-item--regular">
+      {%- if product.price_max == 0 -%}
+        {{ 'events.free' | t }}
+      {%- else -%}
+        {{ 'events.from_price' | t: price: from_price }}
+      {%- endif -%}
+    </p>
+  </div>
+{%- endif -%}

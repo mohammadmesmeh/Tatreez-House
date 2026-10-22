@@ -373,3 +373,19 @@
     transform: none;
   }
 }
+
+/* Event products: next bookable date above "From $45" / "Free" (snippets/card-event-price). */
+.card-event {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.card-event p {
+  margin: 0;
+}
+
+.card-event__next {
+  font-size: 1.3rem;
+  color: rgba(var(--color-foreground), 0.75);
+}

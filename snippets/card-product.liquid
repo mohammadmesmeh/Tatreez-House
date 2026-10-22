@@ -213,7 +213,12 @@
               {%- endif -%}
 
               <div data-card-price>
-                {% render 'price', product: card_product, price_class: '', show_compare_at_price: true %}
+                {%- capture event_price -%}{% render 'card-event-price', product: card_product %}{%- endcapture -%}
+                {%- if event_price != blank -%}
+                  {{ event_price }}
+                {%- else -%}
+                  {% render 'price', product: card_product, price_class: '', show_compare_at_price: true %}
+                {%- endif -%}
               </div>
               {% render 'card-swatches', product: card_product %}
               {%- if card_product.quantity_price_breaks_configured? -%}
