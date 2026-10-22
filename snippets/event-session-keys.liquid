@@ -1,0 +1,57 @@
+{% doc %}
+  Lists the upcoming sessions of event products, sorted chronologically, as a comma-separated
+  string of "timestamp:product_index:variant_index" keys. Liquid cannot sort objects, so callers
+  capture this, split it, and read `products[product_index].variants[variant_index]` directly.
+  An event product is any product with an option named "Date" (value "YYYY-MM-DD HH:MM",
+  see snippets/event-date.liquid).
+
+  Past dates are never listed. Sold-out upcoming dates are listed unless `available_only` is
+  true (callers show them as "Fully booked"). Malformed dates are skipped.
+
+  @param {product[]} [products] - The products to scan, e.g. collection.products.
+  @param {product} [product] - A single product to scan instead of `products` (product_index 0).
+  @param {boolean} [available_only] - Skip sold-out dates (default false).
+
+  @example
+  {% capture keys %}{% render 'event-session-keys', products: collection.products %}{% endcapture %}
+  {% capture keys %}{% render 'event-session-keys', product: product, available_only: true %}{% endcapture %}
+  {% assign keys = keys | strip | split: ',' %}
+{% enddoc %}
+{%- liquid
+  assign now = 'now' | date: '%s' | plus: 0
+  assign keys = ''
+  assign scan_size = products.size
+  if product != blank
+    assign scan_size = 1
+  endif
+  for scan_position in (1..scan_size)
+    assign scan_index = scan_position | minus: 1
+    if product != blank
+      assign event_product = product
+    else
+      assign event_product = products[scan_index]
+    endif
+    capture date_index
+      render 'event-date-index', product: event_product
+    endcapture
+    assign date_index = date_index | strip | plus: 0
+    if date_index < 0
+      continue
+    endif
+    for event_variant in event_product.variants
+      if available_only and event_variant.available == false
+        continue
+      endif
+      assign raw_date = event_variant.options[date_index]
+      capture session_ts
+        render 'event-date', value: raw_date, output: 'timestamp'
+      endcapture
+      assign session_ts = session_ts | strip | plus: 0
+      if session_ts > now
+        assign keys = keys | append: session_ts | append: ':' | append: scan_index | append: ':' | append: forloop.index0 | append: ','
+      endif
+    endfor
+  endfor
+  assign sorted = keys | split: ',' | sort | join: ','
+-%}
+{{- sorted -}}

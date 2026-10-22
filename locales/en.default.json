@@ -638,5 +638,97 @@
       "send_on": "YYYY-MM-DD",
       "send_on_label": "Send on (optional)"
     }
+  },
+  "events": {
+    "date": {
+      "weekdays": "Sun|Mon|Tue|Wed|Thu|Fri|Sat",
+      "months": "Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec",
+      "full": "{{ weekday }}, {{ day }} {{ month }} {{ year }} · {{ time }}",
+      "short": "{{ weekday }} {{ day }} {{ month }} · {{ time }}",
+      "time": "{{ hour }}:{{ minute }} {{ meridiem }}",
+      "am": "AM",
+      "pm": "PM",
+      "timezone": "Palestine time",
+      "invalid_editor": "Tatreez House: the date option value \"{{ value }}\" could not be read. Use YYYY-MM-DD HH:MM, e.g. 2026-11-07 18:00."
+    },
+    "type": {
+      "workshop": "Workshop",
+      "circle": "Community circle",
+      "free_circle": "Free circle"
+    },
+    "free": "Free",
+    "from_price": "From {{ price }}",
+    "next_date": "Next: {{ date }}",
+    "seats": {
+      "left": {
+        "one": "{{ count }} seat left",
+        "other": "{{ count }} seats left"
+      },
+      "few": {
+        "one": "Only {{ count }} seat left",
+        "other": "Only {{ count }} seats left"
+      },
+      "full": "Fully booked"
+    },
+    "actions": {
+      "book": "Book a seat",
+      "reserve_free": "Reserve a free spot",
+      "reserve_my_free": "Reserve my free spot",
+      "details": "Details",
+      "show_all": "Show all dates",
+      "see_all_workshops": "See all workshops"
+    },
+    "page": {
+      "eyebrow": "Workshops and circles",
+      "title": "Workshops",
+      "upcoming": "Upcoming sessions",
+      "empty_heading": "New dates are coming soon.",
+      "empty_text": "Leave your email and we'll tell you when the next session opens.",
+      "filter_label": "Show",
+      "filter_all": "All",
+      "filter_workshops": "Workshops",
+      "filter_circles": "Community circles",
+      "filter_empty": "No sessions of this kind right now.",
+      "filter_status": {
+        "one": "{{ count }} session shown",
+        "other": "{{ count }} sessions shown"
+      }
+    },
+    "steps": {
+      "heading": "How booking works",
+      "step_1_title": "Choose a date",
+      "step_1_text": "Pick a workshop or a circle and the date that suits you.",
+      "step_2_title": "Book your seat",
+      "step_2_text": "Pay securely, or reserve a free spot in the monthly circle.",
+      "step_3_title": "Get your Zoom link by email",
+      "step_3_text": "We email the session link before it starts."
+    },
+    "faq": {
+      "heading": "Questions",
+      "q1": "Can I cancel or get a refund?",
+      "a1": "Yes. Cancel up to 48 hours before the session for a full refund. After that, you can move to another date if seats are free.",
+      "q2": "What do I need?",
+      "a2": "A device with Zoom and a stable connection. Each workshop lists what to bring; most need only fabric, thread, a needle and scissors.",
+      "q3": "Are sessions recorded?",
+      "a3": "No. Sessions are live so everyone can ask questions freely. You keep the pattern and the step-by-step notes.",
+      "q4": "I live in another time zone. Can I join?",
+      "a4": "Yes. All times are Palestine time. Use “Add to calendar” on the session page to see the time in your own zone."
+    },
+    "cart": {
+      "taxes_included_no_shipping": "Taxes included. Discounts are calculated at checkout.",
+      "taxes_at_checkout_no_shipping": "Taxes and discounts are calculated at checkout."
+    },
+    "product": {
+      "choose_date": "Choose a date",
+      "no_dates_heading": "No upcoming dates",
+      "no_dates_text": "Get notified when new dates open.",
+      "includes": "What's included",
+      "bring": "What to bring",
+      "add_to_calendar": "Add to calendar",
+      "google_calendar": "Google Calendar",
+      "ics": "Download calendar file (.ics)",
+      "policy": "Free cancellation up to 48 hours before. The Zoom link is sent by email.",
+      "other_sessions": "Other upcoming sessions"
+    }
   }
 }

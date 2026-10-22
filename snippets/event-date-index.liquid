@@ -1,0 +1,21 @@
+{% doc %}
+  Prints the zero-based position of a product's "Date" option, or -1 when it has none. A product
+  with a Date option is an event product (workshop or circle, see docs/store-setup/EVENTS-SETUP.md).
+
+  @param {product} product - The product. Required.
+
+  @example
+  {% capture date_index %}{% render 'event-date-index', product: product %}{% endcapture %}
+  {% assign date_index = date_index | strip | plus: 0 %}
+{% enddoc %}
+{%- liquid
+  assign found = -1
+  for option in product.options_with_values
+    assign option_name = option.name | downcase | strip
+    if option_name == 'date'
+      assign found = forloop.index0
+      break
+    endif
+  endfor
+-%}
+{{- found -}}

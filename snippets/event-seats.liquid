@@ -1,0 +1,19 @@
+{% doc %}
+  Seats text for a session (variant): "Fully booked" when unavailable; otherwise "8 seats left" /
+  "Only 3 seats left" (3 or fewer) when Shopify tracks the inventory. Prints nothing when the
+  inventory is not tracked, so seats are never invented.
+
+  @param {variant} variant - The session. Required.
+
+  @example
+  {% capture seats_text %}{% render 'event-seats', variant: variant %}{% endcapture %}
+{% enddoc %}
+{%- if variant.available == false -%}
+  {{- 'events.seats.full' | t -}}
+{%- elsif variant.inventory_management == 'shopify' and variant.inventory_policy != 'continue' -%}
+  {%- if variant.inventory_quantity <= 3 -%}
+    {{- 'events.seats.few' | t: count: variant.inventory_quantity -}}
+  {%- else -%}
+    {{- 'events.seats.left' | t: count: variant.inventory_quantity -}}
+  {%- endif -%}
+{%- endif -%}
