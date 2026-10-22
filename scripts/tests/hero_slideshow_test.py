@@ -53,7 +53,8 @@ with sync_playwright() as p:
         const log = window.__hs.changes; if (!log.length || log[log.length - 1][1] !== i) log.push([performance.now(), i]);
       }).observe(document, { subtree: true, attributes: true, attributeFilter: ['class'] });
     """)
-    goto(pg, base + '/')
+    # Timing starts at DOMContentLoaded: waiting for the full load (goto helper) lets autoplay advance.
+    pg.goto(base + '/', wait_until='domcontentloaded', timeout=120000)
     pg.mouse.move(5, 1390)
     pg.wait_for_function('window.__hs.starts.length > 0', timeout=60000)
     s0 = pg.evaluate(STATE)
