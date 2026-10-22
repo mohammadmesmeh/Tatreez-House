@@ -11,8 +11,58 @@
   @example
   {% render 'buy-buttons', block: block, product: product, product_form_id: product_form_id, section_id: section.id, show_pickup_availability: true %}
 {% enddoc %}
+{%- liquid
+  # Event products (an option named "Date", see snippets/event-date): booking labels, no dynamic
+  # checkout for free products, "Fully booked" when every upcoming date is sold out, and no form
+  # at all when there is no upcoming date.
+  assign event_product = false
+  assign event_upcoming = 0
+  assign event_bookable = 0
+  assign event_selected_upcoming = true
+  if product != blank
+    capture event_date_index
+      render 'event-date-index', product: product
+    endcapture
+    assign event_date_index = event_date_index | strip | plus: 0
+    if event_date_index >= 0
+      assign event_product = true
+    endif
+  endif
+  if event_product
+    capture event_keys
+      render 'event-session-keys', product: product
+    endcapture
+    assign event_upcoming = event_keys | strip | split: ',' | size
+    capture event_keys
+      render 'event-session-keys', product: product, available_only: true
+    endcapture
+    assign event_bookable = event_keys | strip | split: ',' | size
+    assign event_selected_raw = product.selected_or_first_available_variant.options[event_date_index]
+    capture event_selected_ts
+      render 'event-date', value: event_selected_raw, output: 'timestamp'
+    endcapture
+    assign event_selected_ts = event_selected_ts | strip | plus: 0
+    assign event_now = 'now' | date: '%s' | plus: 0
+    if event_selected_ts <= event_now
+      assign event_selected_upcoming = false
+    endif
+  endif
+-%}
 <div {{ block.shopify_attributes }}>
-  {%- if product != blank -%}
+  {%- if event_product -%}
+    {{ 'component-event-session.css' | asset_url | stylesheet_tag }}
+    <script src="{{ 'event-session.js' | asset_url }}" defer="defer"></script>
+    <event-booking data-section="{{ section_id }}"></event-booking>
+  {%- endif -%}
+  {%- if event_product and event_upcoming == 0 -%}
+    <div class="event-no-dates">
+      <p class="event-no-dates__heading h4">{{ 'events.product.no_dates_heading' | t }}</p>
+      <p class="event-no-dates__text" id="EventNoDates-{{ section_id }}">{{ 'events.product.no_dates_text' | t }}</p>
+      {%- assign no_dates_form_id = 'ContactEventDates-' | append: section_id -%}
+      {%- assign no_dates_text_id = 'EventNoDates-' | append: section_id -%}
+      {% render 'newsletter-form', form_id: no_dates_form_id, described_by: no_dates_text_id %}
+    </div>
+  {%- elsif product != blank -%}
     {%- liquid
       assign gift_card_recipient_feature_active = false
       if block.settings.show_gift_card_recipient and product.gift_card?
@@ -22,6 +72,9 @@
       assign show_dynamic_checkout = false
       if block.settings.show_dynamic_checkout and gift_card_recipient_feature_active == false
         assign show_dynamic_checkout = true
+      endif
+      if event_product and product.price_max == 0
+        assign show_dynamic_checkout = false
       endif
     -%}
 
@@ -81,6 +134,8 @@
             {% if product.selected_or_first_available_variant.available == false
               or quantity_rule_soldout
               or product.selected_or_first_available_variant == null
+              or event_selected_upcoming == false
+              or event_product and event_bookable == 0
             %}
               disabled
             {% endif %}
@@ -88,8 +143,18 @@
             <span>
               {%- if product.selected_or_first_available_variant == null -%}
                 {{ 'products.product.unavailable' | t }}
+              {%- elsif event_product and event_bookable == 0 -%}
+                {{ 'events.seats.full' | t }}
+              {%- elsif event_selected_upcoming == false -%}
+                {{ 'events.product.choose_date' | t }}
+              {%- elsif event_product and product.selected_or_first_available_variant.available == false -%}
+                {{ 'events.seats.full' | t }}
               {%- elsif product.selected_or_first_available_variant.available == false or quantity_rule_soldout -%}
                 {{ 'products.product.sold_out' | t }}
+              {%- elsif event_product and product.selected_or_first_available_variant.price == 0 -%}
+                {{ 'events.actions.reserve_my_free' | t }}
+              {%- elsif event_product -%}
+                {{ 'events.actions.book' | t }}
               {%- else -%}
                 {{ 'products.product.add_to_cart' | t }}
               {%- endif -%}

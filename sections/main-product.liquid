@@ -193,6 +193,8 @@
                       {%- endif -%}
                     {%- endif -%}
                   </p>
+                {%- when 'event_summary', 'event_session', 'event_list' -%}
+                  {% render 'event-product-block', product: product, block: block, section_id: section.id %}
                 {%- when 'description' -%}
                   {%- if product.description != blank -%}
                     <div class="product__description rte quick-add-hidden" {{ block.shopify_attributes }}>
@@ -909,6 +911,70 @@
           "default": true,
           "label": "t:sections.main-product.blocks.buy_buttons.settings.show_gift_card_recipient.label",
           "info": "t:sections.main-product.blocks.buy_buttons.settings.show_gift_card_recipient.info"
+        }
+      ]
+    },
+    {
+      "type": "event_summary",
+      "name": "t:sections.main-product.blocks.event_summary.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "t:sections.main-product.blocks.event_summary.settings.paragraph.content"
+        }
+      ]
+    },
+    {
+      "type": "event_session",
+      "name": "t:sections.main-product.blocks.event_session.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_calendar",
+          "default": true,
+          "label": "t:sections.main-product.blocks.event_session.settings.show_calendar.label"
+        },
+        {
+          "type": "range",
+          "id": "duration_minutes",
+          "min": 30,
+          "max": 300,
+          "step": 15,
+          "unit": "min",
+          "default": 120,
+          "label": "t:sections.main-product.blocks.event_session.settings.duration_minutes.label",
+          "info": "t:sections.main-product.blocks.event_session.settings.duration_minutes.info"
+        },
+        {
+          "type": "text",
+          "id": "policy",
+          "label": "t:sections.main-product.blocks.event_session.settings.policy.label",
+          "info": "t:sections.main-product.blocks.event_session.settings.policy.info"
+        }
+      ]
+    },
+    {
+      "type": "event_list",
+      "name": "t:sections.main-product.blocks.event_list.name",
+      "settings": [
+        {
+          "type": "select",
+          "id": "content",
+          "options": [
+            {
+              "value": "includes",
+              "label": "t:sections.main-product.blocks.event_list.settings.content.options__1.label"
+            },
+            {
+              "value": "bring",
+              "label": "t:sections.main-product.blocks.event_list.settings.content.options__2.label"
+            }
+          ],
+          "default": "includes",
+          "label": "t:sections.main-product.blocks.event_list.settings.content.label",
+          "info": "t:sections.main-product.blocks.event_list.settings.content.info"
         }
       ]
     },
