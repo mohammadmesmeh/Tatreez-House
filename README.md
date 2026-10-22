@@ -1,77 +1,99 @@
 # Tatreez House | دار التطريز
 
-A bilingual (English / Arabic) Shopify Online Store 2.0 theme for a Palestinian tatreez
-(embroidery) brand: contemporary clothing, digital embroidery patterns, workshops and community
-events, and learning content about motifs and technique.
+A bilingual (English / Arabic, full RTL) Shopify Online Store 2.0 theme for a Palestinian tatreez
+(cross-stitch embroidery) brand: contemporary clothing and home textiles, digital embroidery
+patterns, workshops, and learning content about motifs and technique.
 
 > **Fictional demo brand.** Tatreez House is a portfolio project, not a real business. Products,
-> prices and copy on the development store are demonstration content. No sales figures,
-> testimonials or credentials are claimed.
+> prices and copy are demonstration content. No sales figures, reviews, testimonials or
+> credentials are claimed.
 
-## Features
+| Home, desktop (English) | Home, phone (Arabic, RTL) |
+|---|---|
+| ![Homepage at 1440 px in English](docs/screenshots/m2/hero-slideshow/hero-1440.jpg) | ![Homepage at 390 px in Arabic](docs/screenshots/m2/hero-slideshow/hero-390-rtl.jpg) |
 
-- **Editorial design system** ("Editorial heritage"): Fraunces + Nunito (Latin), Amiri + Zain
-  (Arabic), fluid type scale, 8 px spacing, 2 px radius, and an original cross-stitch graphic
-  language (dividers, eyebrows, stitched link underline, woven linen surface).
-  See [`docs/DESIGN_SYSTEM.md`](docs/DESIGN_SYSTEM.md).
-- **Two clear paths** on the homepage: *Shop the collection* and *Learn tatreez*.
-- **Product cards** with 4:5 media (uncropped charts for digital patterns), data-driven badges
-  (Sale, Sold out, New, Instant download) and accessible quick add: one tap for single-variant
-  products, option chips for multi-variant products, all through Dawn's cart drawer.
-- **Collection hero**, clean filter toolbar, mobile filter drawer.
-- **Header** with mega menu + featured card, pausable announcements, shrinking sticky header.
-- **Product page** with shared option chips and a mobile sticky add to cart.
-- **Footer** with stitch divider, mobile accordions and a demo-brand note.
-- **Bilingual EN / AR** with RTL support throughout (`assets/rtl.css`).
-- **Accessibility as acceptance criteria**: WCAG 2.2 AA contrast (checked by script), visible
-  focus, keyboard-operable quick add and drawers, 44 px targets, reduced motion.
+## Highlights
+
+- **Editorial design system.** Fraunces + Nunito for Latin, Amiri + Zain for Arabic, a fluid
+  type scale, design tokens in one file, and an original cross-stitch graphic language
+  (stitched dividers, eyebrows and link underlines). See [`docs/DESIGN_SYSTEM.md`](docs/DESIGN_SYSTEM.md).
+- **Full-bleed hero slideshow** with a transparent header, segmented progress, pause on hover,
+  focus or button, arrow keys, reduced-motion and no-JavaScript fallbacks. A CSS animation drives
+  the timer, with no slideshow library.
+- **Product cards that behave the same everywhere.** An always-visible action on one baseline
+  per row: "Add to cart" for single-variant products, "Choose options" opens a quick-add modal,
+  "Sold out" is disabled. Quick add works in every grid, including search, related products and
+  after filtering. Colour dots come from a merchant-editable palette, and ratings come only from
+  real review data.
+- **Mobile-first grids:** one column on small phones and two from 480 px, plus swipeable
+  homepage rows that show the next card.
+- **Header and mega menu** with a featured collection card; minimal footer with newsletter,
+  language selector and policy links.
+- **Bilingual EN / AR.** Every storefront string is translated, including the six Arabic plural
+  forms. Empty text settings fall back to translated defaults, so Arabic pages never show
+  hard-coded English.
+- **Merchant-editable throughout.** Every value is a section or theme setting, and the theme
+  editor is kept in sync with the repository (pull before every push).
+
+## Quality and verification
+
+Accessibility (WCAG 2.2 AA) and behaviour are acceptance criteria, checked against the real store:
+
+| Check | Result |
+|---|---|
+| Hero slideshow suite (autoplay, pause, keyboard, reduced motion, no-JS, alignment 360–1920 px, EN + `/ar`) | 33 / 33 |
+| Cards and grids suite (baselines, add to cart, quick-add modal focus trap, mobile columns, carousels, quick add in every grid) | 40 pass, 1 skipped (needs a sold-out product; passed when one existed) |
+| Keyboard suite (skip link, mega menu, focus indicators, drawer, language selector) | 12 / 12 |
+| Layout suite (4 pages × 6 widths × EN / AR: no horizontal scroll, correct direction, one h1) | 50 / 50 |
+| Lighthouse accessibility (home, collection, product, Arabic home; live store) | 100 |
+| `shopify theme check` | 0 errors |
+
+Mobile performance is measured but not yet tuned: Lighthouse scores 30–59 on the live store, with
+main-thread blocking as the main cost. That work is planned for milestone M6. Open items and their
+reasons are listed in [`specs/m2-wiring-untested.md`](specs/m2-wiring-untested.md).
 
 ## Screenshots
 
-Before / after pairs: [`docs/screenshots/m2/before-after.md`](docs/screenshots/m2/before-after.md).
+- [`docs/screenshots/m2/wired/`](docs/screenshots/m2/wired): home, collection, product and
+  page at 360 / 390 / 430 / 768 / 1440 / 1920 px in English and Arabic, plus the mega menu and footer
+- [`docs/screenshots/m2/hero-slideshow/`](docs/screenshots/m2/hero-slideshow) and
+  [`docs/screenshots/m2/cards/`](docs/screenshots/m2/cards)
+- Before and after the design overhaul: [`docs/screenshots/m2/before-after.md`](docs/screenshots/m2/before-after.md)
 
-| Home (desktop) | Collection (mobile) |
-|---|---|
-| ![Home page at 1440 px](docs/screenshots/m2/after/home-1440.jpg) | ![Clothing collection at 390 px](docs/screenshots/m2/after/collection-390.jpg) |
+The storefront runs on a password-protected Shopify development store.
 
 ## Tech stack
 
 - Shopify Online Store 2.0, based on **Dawn**
-- Liquid, JSON templates, sections and snippets; vanilla CSS and JS (no build step)
-- Shopify CLI for local development and theme checks
-- Spec Kit (`.specify/`, `specs/`) for planning complex features
-- Small Node and Python scripts for checks (`scripts/`)
+- Liquid, JSON templates, sections and snippets; vanilla CSS and small custom elements (no build step)
+- Shopify CLI (theme dev, pull/push, theme check) and the Shopify AI Toolkit Liquid validator
+- Playwright (Python) acceptance suites; Lighthouse; Node and Python helper scripts
 
 ## Architecture
 
 ```
-layout/      theme.liquid (sets lang/dir, loads rtl.css for Arabic), password.liquid
-sections/    Dawn sections + custom hero, path-cards, collection-hero, brand-story,
-             workshops-teaser, learn-teaser
-snippets/    Dawn snippets + theme-fonts, stitch-divider, editorial-split, card-badges,
-             card-quick-add, card-variant-picker, mega-menu-feature, sticky-atc
-templates/   JSON templates; index.json places the custom hero
-assets/      Dawn CSS/JS + tatreez-tokens.css (design tokens), component/section CSS, small custom
-             elements (card-quick-add, footer-accordion, sticky-atc), rtl.css, fonts.css.liquid,
-             self-hosted WOFF2 fonts
-locales/     en.default.json, en.default.schema.json, ar.json (full Arabic storefront)
-config/      settings_schema.json, settings_data.json (pulled from the theme editor)
-docs/        PROJECT_BRIEF.md, DECISIONS.md, fonts/
-specs/       per-feature specifications (001-homepage-hero)
-scripts/     contrast-check.mjs (WCAG pairs), capture-screens.py (screenshot matrix)
+layout/      theme.liquid (lang/dir, rtl.css for Arabic), password.liquid
+sections/    Dawn sections + hero-slideshow, path-cards, collection-hero, brand-story,
+             workshops-teaser, learn-teaser, minimal footer
+snippets/    Dawn snippets + card-quick-add, card-swatches, rating-stars, card-badges,
+             mega-menu-feature, header-logo-over-hero, stitch-divider, editorial-split, sticky-atc
+templates/   JSON templates
+assets/      Dawn CSS/JS + tatreez-tokens.css (design tokens), component and section CSS,
+             custom elements (hero-slideshow, card-quick-add, sticky-atc), rtl.css, self-hosted WOFF2
+locales/     en.default.json, ar.json (full Arabic storefront), en.default.schema.json
+config/      settings_schema.json, settings_data.json (synced with the theme editor)
+docs/        PROJECT_BRIEF, DECISIONS, DESIGN_SYSTEM, fonts, screenshots, store-setup (rebuild kit)
+specs/       feature specifications and the untested list
+scripts/     tests/ (Playwright suites), validate-theme.sh, contrast-check.mjs
 ```
 
 Conventions:
-- Every merchant-facing value is a section or theme setting. Every string is a locale key.
-- Colours come from the theme's colour schemes (`rgb(var(--color-foreground))`, …), never hex in custom CSS.
-- New CSS uses logical properties (`margin-inline`, `text-align: start`, …). Dawn's own physical
-  rules are mirrored for Arabic in one file, `assets/rtl.css`.
-
-## Bilingual and RTL
-
-- `layout/theme.liquid` sets `dir="rtl"` for the Arabic locale and loads `rtl.css` only there.
-- `locales/ar.json` translates every storefront key, with all six Arabic plural forms.
-- Hero position and alignment settings use `start / center / end`, so they mirror automatically.
+- Every merchant-facing value is a setting, and every string is a locale key.
+- Custom CSS uses colour-scheme variables and tokens, never hex values.
+- New CSS uses logical properties (`margin-inline`, `inset-inline-start`, …). Dawn's own
+  physical rules are mirrored for Arabic in one file, `assets/rtl.css`.
+- Store data (menus, pages, collections, images) is never hard-coded; it is documented in
+  [`docs/store-setup/`](docs/store-setup) so the store can be rebuilt.
 
 ## Fonts and licences
 
@@ -89,44 +111,36 @@ Sources, versions, subsetting commands, hashes and licence texts: [`docs/fonts/R
 
 ## Local development
 
-Requires [Shopify CLI](https://shopify.dev/docs/api/shopify-cli) and Node 18+.
+Requires [Shopify CLI](https://shopify.dev/docs/api/shopify-cli), Node 18+ and, for the tests,
+Python with Playwright and Microsoft Edge.
 
 ```sh
-# Serve the theme against the development theme (never the live theme)
-shopify theme dev --store <your-store>.myshopify.com --theme <development-theme-id> \
-  --theme-editor-sync --reconciliation-strategy keep-local
-
-# Pull settings changed in the theme editor before editing locally
-shopify theme pull --theme <development-theme-id> \
-  --only config/settings_data.json --only "templates/*.json" --only "sections/*.json"
+# Local preview against a temporary development theme
+shopify theme dev --store <your-store>
 
 # Static checks
 shopify theme check                 # expect 0 errors
 node scripts/contrast-check.mjs     # WCAG contrast of every colour scheme
 ```
 
-Never run `shopify theme publish` or `theme push --live` against the live theme.
+### The store theme: pull before push
 
-### Permanent preview theme: pull before push
-
-The unpublished theme "Tatreez House" is edited in the theme editor too, so its JSON is always
-pulled and committed before code is pushed to it:
+The store theme "Tatreez House" is also edited in the theme editor (images, logo). Its editor
+state is always pulled and committed before code is pushed:
 
 ```sh
-# 1. Pull the editor state and review it
-shopify theme pull --store tatreez-house --theme <theme-id>   --only config/settings_data.json --only "templates/*.json" --only "sections/*.json"
-git diff                            # commit editor changes before anything else
+# 1. Pull the editor state, review it, commit it
+shopify theme pull --store <your-store> --theme <theme-id> \
+  --only config/settings_data.json --only "templates/*.json" --only "sections/*.json"
+git diff
 
-# 2. Push code + JSON to the same unpublished theme (never --live, never publish)
-shopify theme push --store tatreez-house --theme <theme-id>
+# 2. Push code + JSON to the same theme
+shopify theme push --store <your-store> --theme <theme-id>
 ```
 
-The first time only: `shopify theme push --store tatreez-house --unpublished` creates it; record the
-theme ID in [`docs/DECISIONS.md`](docs/DECISIONS.md).
+The theme ID and its history are recorded in [`docs/DECISIONS.md`](docs/DECISIONS.md).
 
 ### Acceptance tests
-
-Playwright (Python) with Microsoft Edge, against `shopify theme dev` or a preview URL:
 
 ```sh
 python -X utf8 scripts/tests/hero_slideshow_test.py http://127.0.0.1:9393 out/hero
@@ -135,34 +149,33 @@ python -X utf8 scripts/tests/keyboard_test.py      http://127.0.0.1:9393 out/kbd
 python -X utf8 scripts/tests/wired_screens_test.py http://127.0.0.1:9393 docs/screenshots/m2/wired
 ```
 
-What is still untested is tracked in [`specs/m2-wiring-untested.md`](specs/m2-wiring-untested.md).
-
 ## Product reviews
 
 The theme shows ratings only from Shopify's **standard metafields** `reviews.rating` and
 `reviews.rating_count`, which review apps such as **Judge.me** write. Without data, cards show
-nothing and the product page shows "No reviews yet". To add reviews: install Judge.me (free plan),
-then add its review widget as an **app block** in the product template (Customize → Product →
-Add block → Apps). Never import or create fake reviews.
+nothing and the product page shows "No reviews yet". To add reviews, install Judge.me, then add its
+review widget as an **app block** in the product template. Never import or create fake reviews.
 
 ## Roadmap
 
 | Milestone | Scope | Status |
 |---|---|---|
 | 001 | Custom homepage hero section | Done |
-| M0 | Foundation: licensed fonts, colour check, full Arabic locale, hero on homepage, RTL fixes, docs | Done (owner admin actions pending) |
-| M1 | Homepage "two paths" (Shop / Learn) | Done (delivered with M2) |
-| M2 | Design system and UX overhaul: tokens, Fraunces, header/mega menu, product cards with quick add, collection hero, homepage story sections, footer, sticky add to cart | Done (admin menus and images pending) |
-| M2.1 | Wiring and verification: hero slideshow, always-visible card actions + quick add in every grid, swatch colour map, minimal footer, header/homepage wiring on the new store, acceptance suites | Done (permanent theme push and images pending) |
+| M0 | Foundation: licensed fonts, colour check, full Arabic locale, RTL fixes, docs | Done |
+| M1 | Homepage "two paths" (Shop / Learn) | Done (with M2) |
+| M2 | Design system and UX: tokens, Fraunces, header/mega menu, product cards, collection hero, homepage story sections, sticky add to cart | Done |
+| M2.1 | Hero slideshow, consistent card actions + quick add in every grid, swatch palette, minimal footer, store wiring, acceptance suites, live theme | Done |
 | M3 | Garment product template (metafields); digital pattern template | Planned |
 | M4 | Pattern library (`motif` metaobjects, filtering) | Planned |
-| M5 | Workshops (products as events) and free community circles; Learn hub, blog and article templates | Planned |
-| M6 | Accessibility/performance audit on production, owner handoff guide, case study | Planned |
+| M5 | Workshops (products as events) and community circles; Learn hub, blog and article templates | Planned |
+| M6 | Performance and accessibility audit on production, owner handoff guide, case study | Planned |
 
 Decisions and their reasons: [`docs/DECISIONS.md`](docs/DECISIONS.md). Full brief:
 [`docs/PROJECT_BRIEF.md`](docs/PROJECT_BRIEF.md).
 
 ## Credits
 
-Built on [Dawn](https://github.com/Shopify/dawn) by Shopify (see the Dawn repository for its licence). Fonts by the Nunito, Zain,
-Amiri and Playwrite project authors (SIL OFL 1.1).
+Built on [Dawn](https://github.com/Shopify/dawn) by Shopify (see the Dawn repository for its
+licence). Fonts by the Fraunces, Nunito, Zain, Amiri and Playwrite project authors (SIL OFL 1.1).
+Some product and editorial photos visible in the screenshots are third-party placeholder images
+used only on the demo store. They are not part of this repository.
