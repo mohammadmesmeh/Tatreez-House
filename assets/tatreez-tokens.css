@@ -345,6 +345,12 @@ h4,
   inset-inline-end: 0;
 }
 
+/* Dawn's physical margin-right put the label's gap on the wrong side in RTL. */
+.facets-container .facet-filters__label {
+  margin: 0;
+  margin-inline-end: 1.2rem;
+}
+
 /* ---------------------------------------------------------------------------
    6. Section rhythm for new sections
 */
