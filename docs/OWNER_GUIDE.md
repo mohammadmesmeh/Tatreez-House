@@ -18,7 +18,14 @@ by themselves: past dates disappear, full dates show "Fully booked".
 4. Click **Save**. The date appears on the Workshops page right away.
 
 If a date is typed in another format, the page shows it as plain text and the booking still works,
-but it can't be sorted or hidden when it's past. Fix the format to make it behave normally.
+but it can't be sorted or hidden when it's past, so it stays bookable until you close it (set
+its inventory to 0). Fix the format, or fill **Event start** (below), to make it behave normally.
+
+**Translating the store is safe.** Translate & Adapt may rename the "Date" option or change its
+digits; the Workshops page keeps working because the theme finds the date by position (Theme
+settings → Events). For full safety, also fill the variant field **Event start** for each date
+(set up once as described in `docs/store-setup/EVENTS-SETUP.md`, "Translation-safe dates"); the
+theme then reads the date from there.
 
 Avoid the weeks when Palestine changes the clocks (late March and late October): the calendar file
 can be one hour off then. The Google Calendar link is always right.

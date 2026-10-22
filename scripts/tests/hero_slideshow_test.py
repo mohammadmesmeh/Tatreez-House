@@ -15,6 +15,18 @@ from playwright.sync_api import sync_playwright
 
 base, out = sys.argv[1], sys.argv[2]
 R = []
+
+def goto(page, url):
+    """Navigate and wait for the DOM, then up to 20s for full load. The theme dev proxy sometimes
+    stalls on one asset, which would otherwise hang the whole suite."""
+    response = page.goto(url, wait_until='domcontentloaded', timeout=120000)
+    try:
+        page.wait_for_load_state('load', timeout=20000)
+    except Exception:
+        pass
+    return response
+
+
 def ok(name, cond, detail=''):
     R.append((name, bool(cond), str(detail)))
 
@@ -41,6 +53,7 @@ with sync_playwright() as p:
         const log = window.__hs.changes; if (!log.length || log[log.length - 1][1] !== i) log.push([performance.now(), i]);
       }).observe(document, { subtree: true, attributes: true, attributeFilter: ['class'] });
     """)
+    # Timing starts at DOMContentLoaded: waiting for the full load (goto helper) lets autoplay advance.
     pg.goto(base + '/', wait_until='domcontentloaded', timeout=120000)
     pg.mouse.move(5, 1390)
     pg.wait_for_function('window.__hs.starts.length > 0', timeout=60000)
@@ -86,13 +99,13 @@ with sync_playwright() as p:
     ok('header transparent over hero at top', pg.evaluate(hdr) in ('rgba(0, 0, 0, 0)', 'transparent'), pg.evaluate(hdr))
     pg.mouse.wheel(0, 1400); pg.wait_for_timeout(900)
     ok('header solid after scrolling', pg.evaluate(hdr) not in ('rgba(0, 0, 0, 0)', 'transparent'), pg.evaluate(hdr))
-    pg.goto(base + '/collections/clothing', wait_until='load', timeout=120000); pg.wait_for_timeout(1000)
+    goto(pg, base + '/collections/clothing'); pg.wait_for_timeout(1000)
     ok('header solid on other pages', pg.evaluate(hdr) not in ('rgba(0, 0, 0, 0)', 'transparent') and not pg.evaluate("document.documentElement.classList.contains('th-header-over-hero')"), pg.evaluate(hdr))
     ctx.close()
 
     # --- Reduced motion ---
     ctx = b.new_context(viewport={'width': 1440, 'height': 900}, reduced_motion='reduce'); pg = ctx.new_page()
-    pg.goto(base + '/', wait_until='load', timeout=120000); pg.wait_for_timeout(1200); pg.mouse.move(5, 1390)
+    goto(pg, base + '/'); pg.wait_for_timeout(1200); pg.mouse.move(5, 1390)
     a = pg.evaluate(ACTIVE); pg.wait_for_timeout(7500)
     st = pg.evaluate(STATE)
     ok('reduced motion: no autoplay, button offers play', pg.evaluate(ACTIVE) == a and st['pressed'] == 'true', st['pressed'])
@@ -103,7 +116,7 @@ with sync_playwright() as p:
 
     # --- JS disabled ---
     ctx = b.new_context(viewport={'width': 1440, 'height': 900}, java_script_enabled=False); pg = ctx.new_page()
-    pg.goto(base + '/', wait_until='load', timeout=120000); pg.wait_for_timeout(800)
+    goto(pg, base + '/'); pg.wait_for_timeout(800)
     vis = pg.evaluate("""() => [...document.querySelectorAll('[data-slide]')].map(s => { const c=getComputedStyle(s); return c.visibility + '/' + c.opacity })""")
     txt = pg.evaluate("() => { const h=document.querySelector('[data-slide] .hero-slide__heading'); const b=h.getBoundingClientRect(); return [h.textContent.trim(), b.width>0, getComputedStyle(h).color] }")
     ok('JS off: slide 1 visible, others hidden', vis[0] == 'visible/1' and all(v.startswith('hidden') for v in vis[1:]), vis)
@@ -120,7 +133,7 @@ with sync_playwright() as p:
     for path, rtl in (('/', False), (rtl_path, True)):
         for w in (360, 390, 430, 768, 1440, 1920):
             ctx = b.new_context(viewport={'width': w, 'height': 900}); pg = ctx.new_page()
-            pg.goto(base + path, wait_until='load', timeout=120000); pg.wait_for_timeout(1000)
+            goto(pg, base + path); pg.wait_for_timeout(1000)
             if rtl and not ar_ok:
                 pg.evaluate("() => { document.documentElement.dir = 'rtl'; const base = document.querySelector('link[href*=\"/assets/base.css\"]'); const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = base.href.split('/assets/')[0] + '/assets/rtl.css'; document.head.appendChild(l); }")
                 pg.wait_for_timeout(500)
@@ -132,6 +145,26 @@ with sync_playwright() as p:
             if w in (390, 1440):
                 pg.screenshot(path=f'{out}/hero-{w}{"-rtl" if rtl else ""}.jpg', type='jpeg', quality=72, clip={'x': 0, 'y': 0, 'width': w, 'height': 900})
             ctx.close()
+
+    # --- QA round 1, issue 4: the light "logo over hero" exists only on the homepage ---
+    LOGOS = """() => { const imgs = [...document.querySelectorAll('.header__heading-logo')];
+      return { total: imgs.length, light: imgs.filter(i => i.classList.contains('header__heading-logo--over-hero')).length,
+               visible: imgs.filter(i => i.getClientRects().length && getComputedStyle(i).display !== 'none').map(i => i.classList.contains('header__heading-logo--over-hero') ? 'light' : 'dark') } }"""
+    for lang, prefix in (('en', ''), ('ar', '/ar')):
+        for w in (390, 1440):
+            ctx = b.new_context(viewport={'width': w, 'height': 900}); pg = ctx.new_page()
+            goto(pg, base + prefix + '/'); pg.mouse.move(2, 2); pg.wait_for_timeout(1500)
+            top = pg.evaluate(LOGOS)
+            pg.mouse.wheel(0, 1600); pg.wait_for_timeout(900)
+            scrolled = pg.evaluate(LOGOS)
+            ok(f'QA4 {lang} {w}px home: exactly one logo visible at the top and after scrolling',
+               len(top['visible']) == 1 and scrolled['visible'] == ['dark'], {'top': top, 'scrolled': scrolled})
+            for path in ('/collections/all', '/products/navy-village-thobe', '/pages/workshops', '/cart'):
+                goto(pg, base + prefix + path); pg.wait_for_timeout(800)
+                lg = pg.evaluate(LOGOS)
+                ok(f'QA4 {lang} {w}px {path}: only the dark logo is visible (no light logo shown)', lg['visible'] == ['dark'], lg)
+            ctx.close()
+
     b.close()
 
 for name, cond, detail in R:

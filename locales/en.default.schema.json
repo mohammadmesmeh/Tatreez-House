@@ -403,6 +403,22 @@
           "label": "Vertical space"
         }
       }
+    },
+    "events": {
+      "name": "Events",
+      "settings": {
+        "paragraph": {
+          "content": "Workshops and circles are products whose dates are variants (see docs/OWNER_GUIDE.md). These settings keep them working when the store is translated."
+        },
+        "event_date_option_position": {
+          "label": "Date option position",
+          "info": "Which product option holds the date (1 = first option). The option is found by position, so translating its name doesn't break the events."
+        },
+        "event_product_types": {
+          "label": "Event product types",
+          "info": "Comma-separated product types treated as events, e.g. Workshop, Community Circle. Products of these types must have the date option."
+        }
+      }
     }
   },
   "sections": {

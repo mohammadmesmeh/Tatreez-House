@@ -1,5 +1,5 @@
 {% doc %}
-  One bookable session (a product variant whose "Date" option is a future date): date tile, type
+  One bookable session (a variant whose date, see event-date-index, is in the future): date tile, type
   badge, title, level · duration · format (custom.event_* metafields), price or "Free", seats
   left (only when Shopify tracks the inventory), "Book a seat" / "Reserve a free spot" to the
   product page with the date preselected, and a "Details" link. A sold-out upcoming date shows
@@ -21,6 +21,7 @@
   endcapture
   assign date_index = date_index | strip | plus: 0 | at_least: 0
   assign raw_date = variant.options[date_index]
+  assign event_start = variant.metafields.custom.event_start.value
 
   assign product_type = product.type | downcase
   assign event_type = 'workshop'
@@ -55,7 +56,7 @@
   endif
 
   capture short_date
-    render 'event-date', value: raw_date, output: 'short'
+    render 'event-date', value: raw_date, start: event_start, output: 'short'
   endcapture
   assign short_date = short_date | strip
 
@@ -75,12 +76,12 @@
   data-event-type="{{ event_type }}"
   aria-labelledby="{{ title_id }}"
 >
-  {% render 'event-date', value: raw_date, output: 'tile' %}
+  {% render 'event-date', value: raw_date, start: event_start, output: 'tile' %}
   <div class="event-session__body">
     <p class="event-session__badge event-session__badge--{{ event_type }}">{{ badge }}</p>
-    <{{ heading_tag }} class="event-session__title h4" id="{{ title_id }}">{{ product.title | escape }}</{{ heading_tag }}>
+    <{{ heading_tag }} class="event-session__title h4" id="{{ title_id }}"><span dir="auto">{{ product.title | escape }}</span></{{ heading_tag }}>
     {%- if meta_parts.size > 0 and compact != true -%}
-      <p class="event-session__meta">{{ meta_parts | join: ' · ' | escape }}</p>
+      <p class="event-session__meta" dir="auto">{{ meta_parts | join: ' · ' | escape }}</p>
     {%- endif -%}
     <p class="event-session__facts">
       <span class="event-session__price">

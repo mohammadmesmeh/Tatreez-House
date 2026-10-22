@@ -25,7 +25,7 @@
                     class="header__active-menu-item"
                   {% endif %}
                 >
-                  {{- link.title | escape -}}
+                  <span dir="auto">{{- link.title | escape -}}</span>
                 </span>
                 {{- 'icon-caret.svg' | inline_asset_content -}}
               </summary>
@@ -46,7 +46,7 @@
                           aria-current="page"
                         {% endif %}
                       >
-                        <span class="th-dropdown__label">{{ childlink.title | escape }}</span>
+                        <span class="th-dropdown__label" dir="auto">{{ childlink.title | escape }}</span>
                       </a>
                     {%- else -%}
                       <details id="Details-HeaderSubMenu-{{ link.handle }}-{{ childlink.handle }}">
@@ -54,7 +54,7 @@
                           id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}"
                           class="header__menu-item link link--text list-menu__item focus-inset caption-large"
                         >
-                          <span>{{ childlink.title | escape }}</span>
+                          <span dir="auto">{{ childlink.title | escape }}</span>
                           {{- 'icon-caret.svg' | inline_asset_content -}}
                         </summary>
                         <ul
@@ -71,7 +71,7 @@
                                   aria-current="page"
                                 {% endif %}
                               >
-                                <span class="th-dropdown__label">{{ grandchildlink.title | escape }}</span>
+                                <span class="th-dropdown__label" dir="auto">{{ grandchildlink.title | escape }}</span>
                               </a>
                             </li>
                           {%- endfor -%}
@@ -97,7 +97,7 @@
                 class="header__active-menu-item"
               {% endif %}
             >
-              {{- link.title | escape -}}
+              <span dir="auto">{{- link.title | escape -}}</span>
             </span>
           </a>
         {%- endif -%}

@@ -1,0 +1,29 @@
+{% doc %}
+  Palestine UTC offset for a local date (docs/DECISIONS.md, M4): summer time (+03:00) from the
+  last Saturday of March to the day before the last Saturday of October, otherwise +02:00.
+  Palestine sometimes moves the change (e.g. around Ramadan); in those weeks it can be one hour
+  off. Prints "+02:00" or "+03:00".
+
+  @param {number} year - Four-digit year. Required.
+  @param {number} month - Month 1-12. Required.
+  @param {number} day - Day of the month. Required.
+
+  @example
+  {% capture offset %}{% render 'event-utc-offset', year: 2026, month: 11, day: 7 %}{% endcapture %}
+{% enddoc %}
+{%- liquid
+  # Last Saturday of March / October: weekday of the 31st, stepped back to Saturday.
+  assign march_back = year | append: '-03-31' | date: '%w' | plus: 1 | modulo: 7
+  assign march_saturday = 31 | minus: march_back
+  assign october_back = year | append: '-10-31' | date: '%w' | plus: 1 | modulo: 7
+  assign october_saturday = 31 | minus: october_back
+  assign offset = '+02:00'
+  if month > 3 and month < 10
+    assign offset = '+03:00'
+  elsif month == 3 and day >= march_saturday
+    assign offset = '+03:00'
+  elsif month == 10 and day < october_saturday
+    assign offset = '+03:00'
+  endif
+-%}
+{{- offset -}}

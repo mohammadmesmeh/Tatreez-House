@@ -20,6 +20,9 @@
     data-selected-price-amount="{{ product.selected_or_first_available_variant.price | default: 0 | money_amount | escape }}"
     {{ block.shopify_attributes }}
   >
+    {%- comment -%} Event products: the date option is found by position (snippets/event-date-index). {%- endcomment -%}
+    {%- capture event_date_index -%}{% render 'event-date-index', product: product %}{%- endcapture -%}
+    {%- assign event_date_index = event_date_index | strip | plus: 0 -%}
     {%- for option in product.options_with_values -%}
       {%- liquid
         assign swatch_count = option.values | map: 'swatch' | compact | size
@@ -48,8 +51,7 @@
           %}
         </fieldset>
       {%- elsif picker_type == 'button' -%}
-        {%- assign option_handle = option.name | downcase | strip -%}
-        {%- if option_handle == 'date' -%}
+        {%- if event_date_index == forloop.index0 -%}
           {%- comment -%} Event dates: upcoming dates only, formatted per locale (snippets/event-date). {%- endcomment -%}
           <fieldset class="js product-form__input product-form__input--pill product-form__input--event-dates" data-event-dates>
             <legend class="form__label">{{ 'events.product.choose_date' | t }}</legend>

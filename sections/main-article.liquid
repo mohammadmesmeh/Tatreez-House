@@ -49,7 +49,7 @@
           <h1
             class="article-template__title"
           >
-            {{ article.title | escape }}
+            <span dir="auto">{{ article.title | escape }}</span>
           </h1>
           {%- if block.settings.blog_show_date -%}
             <span class="circle-divider caption-with-letter-spacing">
@@ -67,6 +67,7 @@
         <div
           class="article-template__content page-width page-width--narrow rte{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
           {{ block.shopify_attributes }}
+          dir="auto"
         >
           {{ article.content }}
         </div>

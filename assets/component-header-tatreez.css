@@ -357,3 +357,9 @@ details[open] > .th-dropdown.header__submenu {
     transition: none;
   }
 }
+
+/* Light "logo over hero" (snippets/header-logo-over-hero.liquid): hidden unless the header is
+   transparent over the homepage hero (section-hero-slideshow.css shows it then). */
+.header__heading-logo--over-hero {
+  display: none;
+}

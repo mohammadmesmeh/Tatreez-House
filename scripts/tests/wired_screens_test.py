@@ -12,6 +12,18 @@ from playwright.sync_api import sync_playwright
 
 base, out = sys.argv[1], sys.argv[2]
 R = []
+
+def goto(page, url):
+    """Navigate and wait for the DOM, then up to 20s for full load. The theme dev proxy sometimes
+    stalls on one asset, which would otherwise hang the whole suite."""
+    response = page.goto(url, wait_until='domcontentloaded', timeout=120000)
+    try:
+        page.wait_for_load_state('load', timeout=20000)
+    except Exception:
+        pass
+    return response
+
+
 def ok(name, cond, detail=''):
     R.append((name, bool(cond), str(detail)))
 
@@ -33,21 +45,21 @@ with sync_playwright() as p:
         for w in WIDTHS:
             ctx = b.new_context(viewport={'width': w, 'height': 1080 if w >= 1440 else 900}); pg = ctx.new_page()
             for name, path in PAGES.items():
-                pg.goto(base + prefix + path, wait_until='load', timeout=120000); pg.wait_for_timeout(900)
+                goto(pg, base + prefix + path); pg.wait_for_timeout(900)
                 m = pg.evaluate(LAYOUT)
                 want_dir = 'rtl' if lang == 'ar' else 'ltr'
                 ok(f'{lang} {w}px {name}: no horizontal scroll, dir {want_dir}, one h1',
                    m['overflow'] <= 0 and m['dir'] == want_dir and m['h1'] == 1, m)
                 shot(pg, f'{name}-{w}-{lang}')
             if w in (390, 1440):
-                pg.goto(base + prefix + '/', wait_until='load', timeout=120000); pg.wait_for_timeout(600)
+                goto(pg, base + prefix + '/'); pg.wait_for_timeout(600)
                 pg.locator('footer.footer').scroll_into_view_if_needed(); pg.wait_for_timeout(400)
                 try:
                     pg.locator('footer.footer').screenshot(path=f'{out}/footer-{w}-{lang}.jpg', type='jpeg', quality=72)
                 except Exception as e:
                     print('NOTE footer screenshot skipped:', str(e)[:80])
             if w == 1440:
-                pg.goto(base + prefix + '/collections/all', wait_until='load', timeout=120000); pg.wait_for_timeout(600)
+                goto(pg, base + prefix + '/collections/all'); pg.wait_for_timeout(600)
                 pg.locator('#Details-HeaderMenu-1 > summary').click(); pg.wait_for_timeout(500)
                 ok(f'{lang} 1440px: Shop opens as a compact dropdown', pg.locator('#Details-HeaderMenu-1 .th-dropdown').is_visible())
                 shot(pg, f'dropdown-1440-{lang}', clip={'x': 0, 'y': 0, 'width': 1440, 'height': 440})

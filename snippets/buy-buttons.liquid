@@ -12,7 +12,7 @@
   {% render 'buy-buttons', block: block, product: product, product_form_id: product_form_id, section_id: section.id, show_pickup_availability: true %}
 {% enddoc %}
 {%- liquid
-  # Event products (an option named "Date", see snippets/event-date): booking labels, no dynamic
+  # Event products (snippets/event-date-index: date option by position): booking labels, no dynamic
   # checkout for free products, "Fully booked" when every upcoming date is sold out, and no form
   # at all when there is no upcoming date.
   assign event_product = false
@@ -39,11 +39,12 @@
     assign event_bookable = event_keys | strip | split: ',' | size
     assign event_selected_raw = product.selected_or_first_available_variant.options[event_date_index]
     capture event_selected_ts
-      render 'event-date', value: event_selected_raw, output: 'timestamp'
+      render 'event-date', value: event_selected_raw, start: product.selected_or_first_available_variant.metafields.custom.event_start.value, output: 'timestamp'
     endcapture
     assign event_selected_ts = event_selected_ts | strip | plus: 0
     assign event_now = 'now' | date: '%s' | plus: 0
-    if event_selected_ts <= event_now
+    # 0 = the date can't be parsed: it is listed as written, so it stays bookable.
+    if event_selected_ts > 0 and event_selected_ts <= event_now
       assign event_selected_upcoming = false
     endif
   endif
