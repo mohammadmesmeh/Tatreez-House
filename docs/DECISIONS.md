@@ -2,6 +2,15 @@
 
 Short, dated record of project decisions and why they were made. Newest milestone first.
 
+## 2026-10-22 — Header: compact dropdowns instead of mega menu panels, branch `header-dropdowns`
+
+| # | Decision | Reason |
+|---|---|---|
+| 1 | Desktop menus use Dawn's **dropdown** type (header setting "Desktop menu type" = Dropdown) restyled as a compact card: anchored under its own trigger at the inline-start (mirrors in RTL), content width (min 220px), 8px below the header edge, ivory surface, 1px linen border, soft shadow, 2px radius, 44px Nunito rows with the stitched underline. Replaces M2 #9's mega menu panels. | Two short menus (Shop 4 links, Learn 3) don't need full-width panels; a small card keeps the eye near the trigger. Using the existing setting keeps it merchant-reversible. |
+| 2 | **The mega menu featured-card settings stay in the header schema, unused** while the menu type is Dropdown (they only render with the Mega type; the editor info already says "Requires the mega menu type on desktop"). Values in `header-group.json` are kept. | Preserves merchant configuration and setting IDs (AGENTS.md); switching back to Mega restores the card with no data loss. Deleting them would silently drop the owner's Clothing card setup. |
+| 3 | Behaviour lives in Dawn's `HeaderMenu` (details-disclosure.js): hover opens on real pointers (150ms grace on leave), a click on a hover-opened trigger keeps it open, outside click and focus leaving close, one menu at a time, `aria-expanded` synced on every toggle. Escape (global.js) closes and returns focus. | One implementation for click, keyboard and hover; `<details>`/`<summary>` keeps it working without the enhancement. |
+| 4 | The card's top offset is measured on open (`--th-dropdown-offset`), so it sits 8px under the header edge whatever the header padding or sticky state. | The trigger is vertically centred in the header, so a fixed `top` would land inside the header at some paddings. |
+
 ## 2026-10-22 — Milestone M4 (events: workshops and community circles), branch `m4-events`
 
 | # | Decision | Reason |

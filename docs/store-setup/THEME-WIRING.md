@@ -17,8 +17,8 @@ Status column: **set** = value present in the repo (wired in M2.1 Step 5 on `tat
 | File | Setting | Value | Must exist in store | Status |
 |---|---|---|---|---|
 | `sections/header-group.json` | header › `menu` | `main-menu` | menu `main-menu` | set |
-| `sections/header-group.json` | header › `menu_type_desktop` | `mega` | — | set |
-| `sections/header-group.json` | header › `mega_feature_menu_handle` | `shop` | top-level item **Shop** in `main-menu` | set |
+| `sections/header-group.json` | header › `menu_type_desktop` | `dropdown` (compact cards; `mega` brings back the full-width panels and the featured card below) | — | set |
+| `sections/header-group.json` | header › `mega_feature_menu_handle` | `shop` (used only with the `mega` menu type) | top-level item **Shop** in `main-menu` | set, unused |
 | `sections/header-group.json` | header › `mega_feature_heading` | empty → the linked collection's translated title | — | set |
 | `sections/header-group.json` | header › `mega_feature_link` | `shopify://collections/clothing` | collection `clothing` | set |
 | `sections/footer-group.json` | footer | no menu blocks (minimal footer: brand, newsletter, language, policies) | — | set |
@@ -95,5 +95,5 @@ image-less state. Recommended sizes:
 1. `shopify theme pull --only config/settings_data.json --only "templates/*.json" --only "sections/*.json"`
    and diff: nothing above may have been reset.
 2. Open each link in the tables: no 404.
-3. Header: mega menu card under Shop; footer: brand + newsletter, language selector, policy links;
+3. Header: Shop and Learn open compact dropdowns; footer: brand + newsletter, language selector, policy links;
    homepage: Journal teaser visible.
