@@ -34,6 +34,18 @@ PAGE = '/pages/workshops' + view(args.page_view)
 PRODUCT = lambda handle, extra='': f'/products/{handle}' + view(args.product_view) + (('&' if args.product_view else '?') + extra if extra else '')
 
 R = []
+
+def goto(page, url):
+    """Navigate and wait for the DOM, then up to 20s for full load. The theme dev proxy sometimes
+    stalls on one asset, which would otherwise hang the whole suite."""
+    response = page.goto(url, wait_until='domcontentloaded', timeout=120000)
+    try:
+        page.wait_for_load_state('load', timeout=20000)
+    except Exception:
+        pass
+    return response
+
+
 def ok(name, cond, detail=''):
     R.append((name, None if cond is None else bool(cond), str(detail)))
 
@@ -77,12 +89,12 @@ def new_ctx(b, **kw):
     if args.preview_theme:
         pg = ctx.new_page()
         if os.environ.get('STORE_PW'):
-            pg.goto(STORE + '/password', wait_until='load', timeout=120000)
+            goto(pg, STORE + '/password')
             if pg.locator('input[type="password"]').count():
                 pg.fill('input[type="password"]', os.environ['STORE_PW'])
                 with pg.expect_navigation(timeout=120000):
                     pg.press('input[type="password"]', 'Enter')
-        pg.goto(f'{STORE}/?preview_theme_id={args.preview_theme}', wait_until='load', timeout=120000)
+        goto(pg, f'{STORE}/?preview_theme_id={args.preview_theme}')
         pg.close()
     return ctx
 
@@ -94,7 +106,7 @@ def hide_preview_bar(pg):
 
 def circle_flow(pg):
     """Free circle: Reserve my free spot -> drawer -> $0 checkout (stops on the checkout page)."""
-    pg.goto(BASE + PRODUCT('monthly-stitch-circle'), wait_until='load', timeout=120000); pg.wait_for_timeout(2000)
+    goto(pg, BASE + PRODUCT('monthly-stitch-circle')); pg.wait_for_timeout(2000)
     hide_preview_bar(pg)
     label = pg.locator('.product-form__submit span').first.inner_text().strip()
     ok('circle: "Reserve my free spot", price "Free", no Buy it now',
@@ -115,7 +127,7 @@ with sync_playwright() as p:
 
     # ---------- Events page ----------
     ctx = new_ctx(b, viewport={'width': 1440, 'height': 1000}); pg = ctx.new_page()
-    pg.goto(BASE + PAGE, wait_until='load', timeout=120000); pg.wait_for_timeout(800)
+    goto(pg, BASE + PAGE); pg.wait_for_timeout(800)
     items = pg.evaluate(ITEMS)
     now = datetime.now(timezone.utc)
     starts = [datetime.fromisoformat(i['start']) for i in items if i['start']]
@@ -138,7 +150,7 @@ with sync_playwright() as p:
     ok('events: booking links preselect the date (?variant=)', all('variant=' in i['book'] for i in items if i['book']))
     # QA round 1, issue 5: translating the products (option "Date" -> "التاريخ") emptied /ar.
     pg_ar = ctx.new_page()
-    pg_ar.goto(BASE + '/ar' + PAGE, wait_until='load', timeout=120000); pg_ar.wait_for_timeout(800)
+    goto(pg_ar, BASE + '/ar' + PAGE); pg_ar.wait_for_timeout(800)
     ar_items = pg_ar.evaluate(ITEMS)
     ok('events /ar: same sessions as English (translated option name must not matter)',
        len(ar_items) == len(items) and pg_ar.locator('.events-empty').count() == 0, (len(ar_items), len(items)))
@@ -160,20 +172,20 @@ with sync_playwright() as p:
     ok('filter (JS): All shows everything again, type removed from URL',
        all(not i['hidden'] for i in pg.evaluate(ITEMS)) and 'type=' not in pg.url)
     sep = '&' if '?' in PAGE else '?'
-    pg.goto(BASE + PAGE + sep + 'type=circle', wait_until='load', timeout=120000); pg.wait_for_timeout(500)
+    goto(pg, BASE + PAGE + sep + 'type=circle'); pg.wait_for_timeout(500)
     vis = [i for i in pg.evaluate(ITEMS) if not i['hidden']]
     ok('filter (JS): shared link ?type=circle opens filtered', vis and all(i['type'] == 'circle' for i in vis))
     ctx.close()
 
     ctx = new_ctx(b, viewport={'width': 1440, 'height': 1000}, java_script_enabled=False); pg = ctx.new_page()
-    pg.goto(BASE + PAGE + sep + 'type=workshop', wait_until='load', timeout=120000)
+    goto(pg, BASE + PAGE + sep + 'type=workshop')
     vis = [i for i in pg.evaluate(ITEMS) if not i['hidden']]
     ok('filter (no JS): falls back to showing every session', {i['type'] for i in vis} == {'workshop', 'circle'}, len(vis))
     ctx.close()
 
     if args.empty_view:
         ctx = new_ctx(b, viewport={'width': 1440, 'height': 1000}); pg = ctx.new_page()
-        pg.goto(BASE + '/pages/workshops?view=' + args.empty_view, wait_until='load', timeout=120000)
+        goto(pg, BASE + '/pages/workshops?view=' + args.empty_view)
         empty = pg.locator('.events-empty')
         ok('empty state: "New dates are coming soon." + newsletter, no sessions',
            empty.count() == 1 and 'New dates are coming soon.' in empty.inner_text() and empty.locator('input[type=email]').count() == 1
@@ -185,9 +197,9 @@ with sync_playwright() as p:
 
     # ---------- Workshop template ----------
     ctx = new_ctx(b, viewport={'width': 1440, 'height': 1000}); pg = ctx.new_page()
-    pg.goto(BASE + '/cart/clear', wait_until='load', timeout=120000)
+    goto(pg, BASE + '/cart/clear')
     handle = 'tatreez-foundations-workshop'
-    pg.goto(BASE + PRODUCT(handle), wait_until='load', timeout=120000); pg.wait_for_timeout(1500)
+    goto(pg, BASE + PRODUCT(handle)); pg.wait_for_timeout(1500)
     chips = pg.locator('[data-event-dates] input[type=radio]')
     upcoming = [d for (h, d) in SEATS if h == handle and datetime.strptime(d, '%Y-%m-%d %H:%M') > datetime.now()]
     ok('workshop: only upcoming dates as chips', chips.count() == len(upcoming), (chips.count(), upcoming))
@@ -216,7 +228,7 @@ with sync_playwright() as p:
     ok('cart drawer: no shipping wording when nothing ships', 'shipping' not in pg.locator('cart-drawer .tax-note').inner_text().lower(),
        pg.locator('cart-drawer .tax-note').inner_text())
     shot(pg, 'workshop-drawer-1440-en')
-    pg.goto(BASE + '/cart', wait_until='load', timeout=120000)
+    goto(pg, BASE + '/cart')
     ok('cart page: formatted date, no shipping wording', 'Sat, 21 Nov 2026' in pg.locator('main').inner_text()
        and 'shipping' not in pg.locator('.tax-note').first.inner_text().lower())
 
@@ -227,7 +239,7 @@ with sync_playwright() as p:
         for w in (360, 768, 1440):
             ctx = new_ctx(b, viewport={'width': w, 'height': 900}); pg = ctx.new_page()
             for name, path in (('events', PAGE), ('workshop', PRODUCT('compose-your-own-panel-workshop'))):
-                pg.goto(BASE + prefix + path, wait_until='load', timeout=120000); pg.wait_for_timeout(800)
+                goto(pg, BASE + prefix + path); pg.wait_for_timeout(800)
                 m = pg.evaluate(LAYOUT)
                 want = 'rtl' if lang == 'ar' else 'ltr'
                 ok(f'{lang} {w}px {name}: no horizontal scroll, dir {want}, one h1', m['overflow'] <= 0 and m['dir'] == want and m['h1'] == 1, m)
@@ -239,8 +251,8 @@ with sync_playwright() as p:
             ctx.close()
 
     ctx = new_ctx(b, viewport={'width': 1440, 'height': 1000}); pg = ctx.new_page()
-    pg.goto(BASE + '/cart/clear', wait_until='load', timeout=120000)
-    pg.goto(BASE + PRODUCT('compose-your-own-panel-workshop'), wait_until='load', timeout=120000); pg.wait_for_timeout(1500)
+    goto(pg, BASE + '/cart/clear')
+    goto(pg, BASE + PRODUCT('compose-your-own-panel-workshop')); pg.wait_for_timeout(1500)
     pg.locator('[data-event-dates] input:checked').focus()
     pg.keyboard.press('ArrowRight'); pg.wait_for_timeout(1500)
     checked = pg.evaluate("() => document.querySelector('[data-event-dates] input:checked')?.value")
@@ -260,7 +272,7 @@ with sync_playwright() as p:
     ctx.close()
     # Cards: next date + "From"/"Free", and Choose options opens the quick-add modal with date chips.
     ctx = new_ctx(b); pg = ctx.new_page()
-    pg.goto(BASE + '/collections/events', wait_until='load', timeout=120000); pg.wait_for_timeout(1000)
+    goto(pg, BASE + '/collections/events'); pg.wait_for_timeout(1000)
     cards = pg.evaluate("""() => [...document.querySelectorAll('.product-card-wrapper')].map(c => ({
         title: c.querySelector('.card__heading a')?.textContent.trim(), next: c.querySelector('.card-event__next')?.textContent.trim(),
         price: c.querySelector('.card-event__price')?.textContent.trim(), badges: c.querySelector('.card-badges')?.textContent.trim() || '' }))""")
@@ -279,6 +291,16 @@ with sync_playwright() as p:
         ok('cards: Choose options opens the quick-add modal with formatted date chips', False, str(e)[:160])
     ctx.close()
 
+    # --- QA round 1, issue 3: merchant text keeps its own direction on /ar ---
+    ctx = new_ctx(b); pg = ctx.new_page()
+    goto(pg, BASE + '/ar' + PAGE); pg.wait_for_timeout(800)
+    d = pg.evaluate("""() => { const body = document.querySelector('.editorial-split__body'), title = document.querySelector('.event-session__title span[dir]');
+      return { bodyDir: body?.getAttribute('dir'), bodyResolved: body && getComputedStyle(body).direction, pageDir: document.documentElement.dir,
+               titleDir: title?.getAttribute('dir'), english: /[A-Za-z]/.test(body?.textContent || '') } }""")
+    ok('QA3 /ar events: page content and session titles use dir="auto" (English content resolves to ltr)',
+       d['bodyDir'] == 'auto' and d['titleDir'] == 'auto' and d['pageDir'] == 'rtl' and (d['bodyResolved'] == 'ltr' or not d['english']), d)
+    ctx.close()
+
     # ---------- Checkout flows last (they leave the dev proxy for the real checkout) ----------
     if not args.preview_theme:
         ok('workshop: "Buy it now" reaches checkout', None, 'needs --preview-theme')
@@ -286,8 +308,8 @@ with sync_playwright() as p:
         b.close()
         raise SystemExit(report())
     ctx = new_ctx(b); pg = ctx.new_page()
-    pg.goto(BASE + '/cart/clear', wait_until='load', timeout=120000)
-    pg.goto(BASE + PRODUCT(handle), wait_until='load', timeout=120000); pg.wait_for_timeout(3000)
+    goto(pg, BASE + '/cart/clear')
+    goto(pg, BASE + PRODUCT(handle)); pg.wait_for_timeout(3000)
     hide_preview_bar(pg)
     buy = pg.locator('.shopify-payment-button__button--unbranded, .shopify-payment-button button').first
     if buy.count():
@@ -303,7 +325,7 @@ with sync_playwright() as p:
 
     # Free circle: $0 checkout (stop on the checkout page).
     ctx = new_ctx(b); pg = ctx.new_page()
-    pg.goto(BASE + '/cart/clear', wait_until='load', timeout=120000)
+    goto(pg, BASE + '/cart/clear')
     try:
         circle_flow(pg)
     except Exception as e:

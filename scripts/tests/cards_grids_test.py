@@ -15,6 +15,18 @@ from playwright.sync_api import sync_playwright
 
 base, out = sys.argv[1], sys.argv[2]
 R = []
+
+def goto(page, url):
+    """Navigate and wait for the DOM, then up to 20s for full load. The theme dev proxy sometimes
+    stalls on one asset, which would otherwise hang the whole suite."""
+    response = page.goto(url, wait_until='domcontentloaded', timeout=120000)
+    try:
+        page.wait_for_load_state('load', timeout=20000)
+    except Exception:
+        pass
+    return response
+
+
 def ok(name, cond, detail=''):
     """cond None = SKIP (the store has no product in the state the check needs)."""
     R.append((name, None if cond is None else bool(cond), str(detail)))
@@ -71,7 +83,7 @@ with sync_playwright() as p:
     # --- Step 3: mixed rows on one baseline (patterns + garments + bags + home in /collections/all) ---
     for w in (1440, 768, 430):
         ctx = b.new_context(viewport={'width': w, 'height': 1000}); pg = ctx.new_page()
-        pg.goto(base + '/collections/all', wait_until='load', timeout=120000); pg.wait_for_timeout(800)
+        goto(pg, base + '/collections/all'); pg.wait_for_timeout(800)
         rows = pg.evaluate(ROWS)
         multi = [r for r in rows if len(r) > 1]
         aligned = all(max(x[0] for x in r) - min(x[0] for x in r) <= 1 for r in multi)
@@ -90,7 +102,7 @@ with sync_playwright() as p:
     sold = pick(lambda pr: not avail(pr))
     print('NOTE products used: single', single and single['handle'], '| multi', multi and multi['handle'], '| sold out', sold and sold['handle'])
 
-    pg.goto(base + '/collections/all', wait_until='load', timeout=120000); pg.wait_for_timeout(800)
+    goto(pg, base + '/collections/all'); pg.wait_for_timeout(800)
     expected = {pr['handle']: ('Add to cart' if len(pr['variants']) == 1 else 'Choose options') if avail(pr) else 'Sold out' for pr in products}
     actual = {h: card(pg, h).locator('.card-action .card-action__label').inner_text().strip() for h in expected}
     ok('every card: "Add to cart" (1 variant) / "Choose options" (several) / "Sold out"', actual == expected,
@@ -118,8 +130,8 @@ with sync_playwright() as p:
 
     # Add to cart (single variant) -> drawer.
     if single:
-        pg.goto(base + '/cart/clear', wait_until='load', timeout=120000)
-        pg.goto(base + '/collections/all', wait_until='load', timeout=120000); pg.wait_for_timeout(800)
+        goto(pg, base + '/cart/clear')
+        goto(pg, base + '/collections/all'); pg.wait_for_timeout(800)
         url = pg.url
         c = card(pg, single['handle']); c.locator('.card-action').click()
         pg.wait_for_function(DRAWER_OPEN, timeout=30000); pg.wait_for_timeout(800)
@@ -157,7 +169,7 @@ with sync_playwright() as p:
     expect = {360: 1, 430: 1, 600: 2, 768: 3}
     for w, n in expect.items():
         ctx = b.new_context(viewport={'width': w, 'height': 900}); pg = ctx.new_page()
-        pg.goto(base + '/collections/all', wait_until='load', timeout=120000); pg.wait_for_timeout(600)
+        goto(pg, base + '/collections/all'); pg.wait_for_timeout(600)
         cols = pg.evaluate(COLUMNS)
         info = card(pg, single['handle']).evaluate("""c => { const full = c.querySelector('.card-action__label'), short = c.querySelector('.card-action__label--short');
             return { width: Math.round(c.getBoundingClientRect().width), fullVisible: full.getBoundingClientRect().width > 2,
@@ -174,7 +186,7 @@ with sync_playwright() as p:
     # --- Step 4: homepage swipe carousels ---
     for w in (360, 390):
         ctx = b.new_context(viewport={'width': w, 'height': 844}); pg = ctx.new_page()
-        pg.goto(base + '/', wait_until='load', timeout=120000); pg.wait_for_timeout(800)
+        goto(pg, base + '/'); pg.wait_for_timeout(800)
         lists = pg.evaluate("""() => [...document.querySelectorAll('.th-swipe-mobile .product-grid')].map(ul => { const li = ul.querySelector('li');
             return { snap: getComputedStyle(ul).scrollSnapType, scrollable: ul.scrollWidth > ul.clientWidth + 10, tab: ul.tabIndex,
                      visible: +[...ul.children].reduce((n, el) => { const r = el.getBoundingClientRect();
@@ -194,17 +206,17 @@ with sync_playwright() as p:
     # --- Step 4: quick add in search, related products, after Section Rendering ---
     ctx = b.new_context(viewport={'width': 1440, 'height': 1000}); pg = ctx.new_page()
     target = multi or single
-    pg.goto(base + '/search?type=product&q=' + target['title'].split()[0], wait_until='load', timeout=120000); pg.wait_for_timeout(800)
+    goto(pg, base + '/search?type=product&q=' + target['title'].split()[0]); pg.wait_for_timeout(800)
     ok('search: results have card actions', pg.locator('#product-grid .card-action').count() >= 1)
     exercise(pg, card(pg, target['handle']), 'search')
 
-    pg.goto(base + '/collections/all', wait_until='load', timeout=120000); pg.wait_for_timeout(800)
+    goto(pg, base + '/collections/all'); pg.wait_for_timeout(800)
     pg.evaluate("() => FacetFiltersForm.renderPage('sort_by=price-descending')")
     pg.wait_for_function("() => location.search.includes('price-descending') && !document.querySelector('.collection.loading')", timeout=30000)
     pg.wait_for_timeout(1200)
     exercise(pg, card(pg, target['handle']), 'after sort (Section Rendering API)')
 
-    pg.goto(base + '/products/' + target['handle'], wait_until='load', timeout=120000)
+    goto(pg, base + '/products/' + target['handle'])
     ok('product page: one h1', pg.locator('h1').count() == 1)
     empty = pg.locator('.product__info-container .rating-stars').inner_text() if pg.locator('.product__info-container .rating-stars').count() else ''
     ok('product page: rating empty state "No reviews yet"', 'No reviews yet' in empty, empty)
@@ -223,6 +235,39 @@ with sync_playwright() as p:
     except Exception as e:
         ok('related products: cards with actions', False, f'no recommendations rendered: {e}'[:160])
     ctx.close()
+
+    # --- QA round 1, issues 1-3: card title underline, toolbar alignment, merchant text direction ---
+    TITLE = """(handle) => { const c = [...document.querySelectorAll('.product-card-wrapper')].find(c => c.querySelector('a[href*="/products/' + handle + '"]'));
+      const a = [...c.querySelectorAll('.card__heading a')].find(x => x.getClientRects().length), s = a.querySelector('.card__title-text');
+      const as = getComputedStyle(a), ss = getComputedStyle(s);
+      return { linkDeco: as.textDecorationLine, spanSize: ss.backgroundSize, clone: ss.boxDecorationBreak || ss.webkitBoxDecorationBreak,
+               spanW: Math.round(s.getBoundingClientRect().width), linkW: Math.round(a.getBoundingClientRect().width), dir: s.getAttribute('dir'),
+               display: ss.display } }"""
+    TOOLBAR = """() => { const q = s => document.querySelector(s); const cy = e => { const r = e.getBoundingClientRect(); return Math.round(r.top + r.height / 2); };
+      const sel = q('.facet-filters__sort'), caret = q('.facet-filters__field .icon-caret'), count = q('.product-count');
+      const ctx = document.createElement('canvas').getContext('2d'); const st = getComputedStyle(sel); ctx.font = `${st.fontWeight} ${st.fontSize} ${st.fontFamily}`;
+      const textW = ctx.measureText(sel.options[sel.selectedIndex].text).width; const sr = sel.getBoundingClientRect(), cr = caret.getBoundingClientRect();
+      const rtl = document.documentElement.dir === 'rtl';
+      const gap = rtl ? Math.round((sr.right - textW) - cr.right) : Math.round(cr.left - (sr.left + textW));
+      return { centres: [q('.facets__heading'), q('.facets__summary'), q('.facet-filters__label'), sel, count].map(cy), gap,
+               countAfterSort: rtl ? count.getBoundingClientRect().right <= sr.left : count.getBoundingClientRect().left >= sr.right } }"""
+    for lang, prefix in (('en', ''), ('ar', '/ar')):
+        for w in (768, 1024, 1440):
+            ctx = b.new_context(viewport={'width': w, 'height': 900}); pg = ctx.new_page()
+            goto(pg, base + prefix + '/collections/all'); pg.wait_for_timeout(1500)
+            tb = pg.evaluate(TOOLBAR)
+            ok(f'QA2 {lang} {w}px: toolbar items centred on one line, count grouped after Sort, chevron right after the text',
+               max(tb['centres']) - min(tb['centres']) <= 1 and tb['countAfterSort'] and 0 <= tb['gap'] <= 16, tb)
+            if w == 1440:
+                c = pg.locator('.product-card-wrapper:has(a[href*="tatreez-starter-pattern-bundle"])').first
+                c.scroll_into_view_if_needed(); c.locator('.card__heading a >> visible=true').first.hover(); pg.wait_for_timeout(500)
+                ti = pg.evaluate(TITLE, 'tatreez-starter-pattern-bundle')
+                ok(f'QA1 {lang}: hovered title has one underline (stitched, under the words, per line)',
+                   ti['linkDeco'] == 'none' and ti['spanSize'].startswith('100%') and ti['clone'] == 'clone'
+                   and ti['display'] == 'inline' and ti['spanW'] < ti['linkW'], ti)
+                ok(f'QA3 {lang}: card titles carry dir="auto"', ti['dir'] == 'auto', ti['dir'])
+            ctx.close()
+
     b.close()
 
 for name, cond, detail in R:

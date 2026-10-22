@@ -14,6 +14,18 @@ from playwright.sync_api import sync_playwright
 
 base, out = sys.argv[1].rstrip('/'), sys.argv[2]
 R = []
+
+def goto(page, url):
+    """Navigate and wait for the DOM, then up to 20s for full load. The theme dev proxy sometimes
+    stalls on one asset, which would otherwise hang the whole suite."""
+    response = page.goto(url, wait_until='domcontentloaded', timeout=120000)
+    try:
+        page.wait_for_load_state('load', timeout=20000)
+    except Exception:
+        pass
+    return response
+
+
 def ok(name, cond, detail=''):
     R.append((name, bool(cond), str(detail)))
 
@@ -35,7 +47,7 @@ with sync_playwright() as p:
         for w in (1024, 1440):
             tag = f'{lang} {w}px'
             ctx = b.new_context(viewport={'width': w, 'height': 900}); pg = ctx.new_page()
-            pg.goto(base + prefix + '/collections/all', wait_until='domcontentloaded', timeout=120000); pg.wait_for_timeout(800)
+            goto(pg, base + prefix + '/collections/all'); pg.wait_for_timeout(800)
             pg.mouse.move(5, 880)
             ok(f'{tag}: no mega menu card in the desktop header', pg.locator('.header__inline-menu .mega-feature').count() == 0)
             main_before = pg.evaluate(MAIN_TOP)
@@ -94,7 +106,7 @@ with sync_playwright() as p:
 
     # Reduced motion: no open animation.
     ctx = b.new_context(viewport={'width': 1440, 'height': 900}, reduced_motion='reduce'); pg = ctx.new_page()
-    pg.goto(base + '/collections/all', wait_until='domcontentloaded', timeout=120000); pg.wait_for_timeout(500)
+    goto(pg, base + '/collections/all'); pg.wait_for_timeout(500)
     pg.click('#Details-HeaderMenu-1 > summary'); pg.wait_for_timeout(50)
     anim = pg.evaluate("() => { const c = document.querySelector('#Details-HeaderMenu-1 .th-dropdown'); const s = getComputedStyle(c); return [s.animationName, s.opacity]; }")
     ok('reduced motion: the card appears without animation', anim[0] == 'none' and anim[1] == '1', anim)
@@ -102,7 +114,7 @@ with sync_playwright() as p:
 
     # Mobile drawer unchanged: still opens with its groups.
     ctx = b.new_context(viewport={'width': 390, 'height': 844}); pg = ctx.new_page()
-    pg.goto(base + '/', wait_until='domcontentloaded', timeout=120000); pg.wait_for_timeout(800)
+    goto(pg, base + '/'); pg.wait_for_timeout(800)
     pg.click('header-drawer summary'); pg.wait_for_timeout(600)
     items = pg.locator('#menu-drawer .menu-drawer__menu > li').count()
     ok('mobile drawer still opens with the menu groups', pg.evaluate("() => document.querySelector('header-drawer details').hasAttribute('open')") and items >= 4, items)

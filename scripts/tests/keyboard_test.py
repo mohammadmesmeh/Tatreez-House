@@ -13,6 +13,18 @@ from playwright.sync_api import sync_playwright
 
 base, out = sys.argv[1], sys.argv[2]
 R = []
+
+def goto(page, url):
+    """Navigate and wait for the DOM, then up to 20s for full load. The theme dev proxy sometimes
+    stalls on one asset, which would otherwise hang the whole suite."""
+    response = page.goto(url, wait_until='domcontentloaded', timeout=120000)
+    try:
+        page.wait_for_load_state('load', timeout=20000)
+    except Exception:
+        pass
+    return response
+
+
 def ok(name, cond, detail=''):
     R.append((name, bool(cond), str(detail)))
 
@@ -33,7 +45,7 @@ with sync_playwright() as p:
     b = p.chromium.launch(headless=True, channel='msedge')
     for lang, prefix in (('en', ''), ('ar', '/ar')):
         pg = b.new_page(viewport={'width': 1440, 'height': 900})
-        pg.goto(base + prefix + '/collections/all', wait_until='load', timeout=120000); pg.wait_for_timeout(1000)
+        goto(pg, base + prefix + '/collections/all'); pg.wait_for_timeout(1000)
 
         pg.keyboard.press('Tab')
         first = pg.evaluate("() => document.activeElement.classList.contains('skip-to-content-link')")
@@ -57,7 +69,7 @@ with sync_playwright() as p:
         ok(f'{lang}: Shop dropdown opens with Enter, its first link reachable by Tab', opened and reached)
         ok(f'{lang}: Escape closes the dropdown and focus returns to Shop', closed and back, pg.evaluate(ACTIVE))
 
-        pg.goto(base + prefix + '/', wait_until='load', timeout=120000); pg.wait_for_timeout(1000)
+        goto(pg, base + prefix + '/'); pg.wait_for_timeout(1000)
         missing = []
         for i in range(60):
             pg.keyboard.press('Tab'); pg.wait_for_timeout(60)
@@ -81,7 +93,7 @@ with sync_playwright() as p:
         pg.close()
 
         pg = b.new_page(viewport={'width': 390, 'height': 844})
-        pg.goto(base + prefix + '/', wait_until='load', timeout=120000); pg.wait_for_timeout(1000)
+        goto(pg, base + prefix + '/'); pg.wait_for_timeout(1000)
         menu = pg.locator('header-drawer summary').first
         menu.focus(); pg.keyboard.press('Enter'); pg.wait_for_timeout(600)
         open_ = pg.evaluate("() => document.querySelector('header-drawer details').hasAttribute('open')")
