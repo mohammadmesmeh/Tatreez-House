@@ -710,7 +710,7 @@
       "q2": "What do I need?",
       "a2": "A device with Zoom and a stable connection. Each workshop lists what to bring; most need only fabric, thread, a needle and scissors.",
       "q3": "Are sessions recorded?",
-      "a3": "No. Sessions are live so everyone can ask questions freely. You keep the pattern and the step-by-step notes.",
+      "a3": "Workshops include a recording for 7 days after the session. Community circles are live only.",
       "q4": "I live in another time zone. Can I join?",
       "a4": "Yes. All times are Palestine time. Use “Add to calendar” on the session page to see the time in your own zone."
     },
@@ -720,6 +720,7 @@
     },
     "product": {
       "choose_date": "Choose a date",
+      "selected_date": "Selected date",
       "no_dates_heading": "No upcoming dates",
       "no_dates_text": "Get notified when new dates open.",
       "includes": "What's included",

@@ -117,7 +117,7 @@
       <div id="EventSession-{{ section_id }}" class="event-session-info__content">
         {%- if upcoming -%}
           <p class="event-session-info__date">
-            <span class="visually-hidden">{{ 'events.product.choose_date' | t }}:</span>
+            <span class="visually-hidden">{{ 'events.product.selected_date' | t }}:</span>
             {% render 'event-date', value: raw_date %}
           </p>
           {%- if seats_text != blank -%}

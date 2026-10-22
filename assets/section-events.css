@@ -145,6 +145,11 @@
   margin: 0;
 }
 
+.events-steps__title {
+  font-size: var(--th-step-h6);
+  font-weight: 500;
+}
+
 .events-steps__text {
   color: rgba(var(--color-foreground), 0.75);
 }
