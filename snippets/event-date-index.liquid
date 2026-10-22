@@ -2,8 +2,9 @@
   Prints the zero-based position of an event product's date option, or -1 for other products.
   Nothing here depends on names that translation can change (the option name "Date" becomes
   "التاريخ" with Translate & Adapt):
-  - the date option is found by position (theme setting "Date option position", default 1); if
-    that option holds no date but another option does, that one is used;
+  - the date option is found by position (theme setting "Date option position", default 1, or
+    the first option when a product has fewer); if that option holds no date but another option
+    does, that one is used;
   - a product with variants is an event when its type is listed in the theme setting "Event
     product types", or its first variant has custom.event_start, or an option's first value
     parses as a date. Products without variants (only "Default Title") are never events.
@@ -17,8 +18,11 @@
 {%- liquid
   assign found = -1
   assign position = settings.event_date_option_position | default: 1
-  if product.has_only_default_variant == false and product.options.size >= position
+  if product.has_only_default_variant == false
     assign candidate = position | minus: 1
+    if candidate >= product.options.size
+      assign candidate = 0
+    endif
     assign first_variant = product.variants.first
 
     assign typed_event = false

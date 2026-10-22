@@ -18,7 +18,8 @@ by themselves: past dates disappear, full dates show "Fully booked".
 4. Click **Save**. The date appears on the Workshops page right away.
 
 If a date is typed in another format, the page shows it as plain text and the booking still works,
-but it can't be sorted or hidden when it's past. Fix the format to make it behave normally.
+but it can't be sorted or hidden when it's past, so it stays bookable until you close it (set
+its inventory to 0). Fix the format, or fill **Event start** (below), to make it behave normally.
 
 **Translating the store is safe.** Translate & Adapt may rename the "Date" option or change its
 digits; the Workshops page keeps working because the theme finds the date by position (Theme
