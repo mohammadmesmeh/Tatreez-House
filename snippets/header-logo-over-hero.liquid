@@ -1,7 +1,10 @@
 {% doc %}
   Optional light logo shown instead of the main logo while the header is transparent over the
   homepage hero slideshow (section-hero-slideshow.css). Without it, the main logo is rendered in
-  ivory with a CSS filter.
+  ivory with a CSS filter. Hidden by default in component-header-tatreez.css (loaded on every
+  page) and shown only while the header is transparent over a hero-slideshow, so only one of the
+  two logos is ever displayed and screen readers never get the logo name twice. Loaded lazily
+  outside the homepage, so a hidden copy costs no request there.
 
   @param {image} image - The header section's "Logo over hero" setting. Renders nothing if blank.
 
@@ -12,6 +15,10 @@
   {%- liquid
     assign over_hero_alt = image.alt | default: shop.name
     assign over_hero_height = settings.logo_width | divided_by: image.aspect_ratio
+    assign over_hero_loading = 'lazy'
+    if template.name == 'index'
+      assign over_hero_loading = 'eager'
+    endif
   -%}
   {{
     image
@@ -21,6 +28,6 @@
       width: settings.logo_width,
       height: over_hero_height,
       alt: over_hero_alt,
-      loading: 'eager'
+      loading: over_hero_loading
   }}
 {%- endif -%}

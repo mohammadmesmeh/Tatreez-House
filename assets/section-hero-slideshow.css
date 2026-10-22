@@ -452,10 +452,6 @@ html.th-header-over-hero .section-header:not(.scrolled-past-header) .header-wrap
   filter: none;
 }
 
-.header__heading-logo--over-hero {
-  display: none;
-}
-
 html.th-header-over-hero .section-header:not(.scrolled-past-header) .header-wrapper:not(:has(details[open])) .header__heading-logo--over-hero {
   display: block;
 }
