@@ -18,6 +18,7 @@
 
   {% unless product.has_only_default_variant %}
     {{ 'component-product-variant-picker.css' | asset_url | stylesheet_tag }}
+    {{ 'component-variant-chips.css' | asset_url | stylesheet_tag }}
     {{ 'component-swatch-input.css' | asset_url | stylesheet_tag }}
     {{ 'component-swatch.css' | asset_url | stylesheet_tag }}
   {% endunless %}
@@ -274,6 +275,7 @@
                           type="number"
                           name="quantity"
                           id="Quantity-{{ section.id }}"
+                          aria-labelledby="quantity-label-{{ section.id }}"
                           data-cart-quantity="{{ cart_qty }}"
                           data-min="{{ product.selected_or_first_available_variant.quantity_rule.min }}"
                           min="{{ product.selected_or_first_available_variant.quantity_rule.min }}"
@@ -496,44 +498,15 @@
                     section_id: section.id,
                     show_pickup_availability: true
                   -%}
+                  {%- render 'sticky-atc', product: product, product_form_id: product_form_id, section_id: section.id -%}
                 {%- when 'rating' -%}
-                  {%- if product.metafields.reviews.rating.value != blank -%}
-                    <div class="rating-wrapper">
-                      {% liquid
-                        assign rating_decimal = 0
-                        assign decimal = product.metafields.reviews.rating.value.rating | modulo: 1
-                        if decimal >= 0.3 and decimal <= 0.7
-                          assign rating_decimal = 0.5
-                        elsif decimal > 0.7
-                          assign rating_decimal = 1
-                        endif
-                      %}
-                      <div
-                        class="rating"
-                        role="img"
-                        aria-label="{{ 'accessibility.star_reviews_info' | t: rating_value: product.metafields.reviews.rating.value, rating_max: product.metafields.reviews.rating.value.scale_max }}"
-                      >
-                        <span
-                          aria-hidden="true"
-                          class="rating-star"
-                          style="--rating: {{ product.metafields.reviews.rating.value.rating | floor }}; --rating-max: {{ product.metafields.reviews.rating.value.scale_max }}; --rating-decimal: {{ rating_decimal }};"
-                        ></span>
-                      </div>
-                      <p class="rating-text caption">
-                        <span aria-hidden="true">
-                          {{- product.metafields.reviews.rating.value }} /
-                          {{ product.metafields.reviews.rating.value.scale_max -}}
-                        </span>
-                      </p>
-                      <p class="rating-count caption">
-                        <span aria-hidden="true">({{ product.metafields.reviews.rating_count }})</span>
-                        <span class="visually-hidden">
-                          {{- product.metafields.reviews.rating_count }}
-                          {{ 'accessibility.total_reviews' | t -}}
-                        </span>
-                      </p>
-                    </div>
-                  {%- endif -%}
+                  {%- comment -%}
+                    Standard review metafields only (written by reviews apps such as Judge.me);
+                    without data it shows the localized "No reviews yet" line, never invented stars.
+                  {%- endcomment -%}
+                  <div class="rating-wrapper" {{ block.shopify_attributes }}>
+                    {% render 'rating-stars', product: product, show_empty: true, class: 'product__rating' %}
+                  </div>
                 {%- when 'complementary' -%}
                   <product-recommendations
                     class="complementary-products quick-add-hidden{% if block.settings.make_collapsible_row %} is-accordion{% endif %}{% if block.settings.enable_quick_add %} complementary-products-contains-quick-add{% endif %}"
@@ -611,8 +584,7 @@
                                           skip_styles: skip_card_product_styles,
                                           quick_add: quick_add,
                                           section_id: section.id,
-                                          horizontal_class: true,
-                                          horizontal_quick_add: true
+                                          horizontal_class: true
                                         %}
                                       </li>
                                       {%- assign skip_card_product_styles = true -%}

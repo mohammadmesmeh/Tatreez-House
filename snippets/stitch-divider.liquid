@@ -1,0 +1,32 @@
+{% doc %}
+  Decorative cross-stitch border used between or above sections: a running chevron of
+  cross-stitches drawn on a 4 px stitch grid as one SVG pattern (original artwork).
+  Purely decorative, so it is hidden from assistive technology.
+
+  @param {string} id - Unique id suffix for the SVG pattern (for example section.id). Required.
+  @param {string} [tone] - accent | ink | action | border. Defaults to accent.
+  @param {string} [class] - Extra classes for spacing/alignment.
+
+  @example
+  {% render 'stitch-divider', id: section.id, tone: section.settings.divider_tone %}
+{% enddoc %}
+{%- liquid
+  assign divider_tone = tone | default: 'accent'
+  assign pattern_id = 'StitchDivider-' | append: id
+-%}
+<div class="stitch-divider stitch-divider--{{ divider_tone }}{% if class != blank %} {{ class }}{% endif %}" aria-hidden="true">
+  <svg class="stitch-divider__svg" width="100%" height="12" focusable="false">
+    <defs>
+      <pattern id="{{ pattern_id }}" width="16" height="12" patternUnits="userSpaceOnUse">
+        <path
+          d="M.8 8.8l2.4 2.4M3.2 8.8l-2.4 2.4M4.8 4.8l2.4 2.4M7.2 4.8l-2.4 2.4M8.8.8l2.4 2.4M11.2.8l-2.4 2.4M12.8 4.8l2.4 2.4M15.2 4.8l-2.4 2.4"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.2"
+          stroke-linecap="round"
+        />
+      </pattern>
+    </defs>
+    <rect width="100%" height="12" fill="url(#{{ pattern_id }})" />
+  </svg>
+</div>

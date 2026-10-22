@@ -55,6 +55,26 @@
     "cards": {
       "name": "Product cards",
       "settings": {
+        "card_uncropped_product_type": {
+          "label": "Show uncropped images for product type",
+          "info": "Cards of this product type show the whole image on the linen surface, so pattern charts are never cropped."
+        },
+        "card_hidden_title_suffix": {
+          "label": "Hide title suffix on cards",
+          "info": "A trailing text such as (PDF) is hidden visually on cards; screen readers still announce it."
+        },
+        "card_new_tag": {
+          "label": "\"New\" badge tag",
+          "info": "Products with this tag show a New badge on cards."
+        },
+        "card_swatch_option_names": {
+          "label": "Swatch option names",
+          "info": "Comma-separated option names whose values show as colour dots on cards, for example Color, Colour, اللون."
+        },
+        "card_swatch_colors": {
+          "label": "Swatch colours",
+          "info": "One per line as Name: #hex, for example Warm Ivory: #F7F3EB. Values linked to a colour metafield use that colour automatically."
+        },
         "style": {
           "options__1": {
             "label": "Standard"
@@ -386,9 +406,266 @@
     }
   },
   "sections": {
+    "hero-slideshow": {
+      "name": "Hero slideshow",
+      "settings": {
+        "height": {
+          "label": "Height",
+          "options__1": {
+            "label": "Medium (70% of screen)"
+          },
+          "options__2": {
+            "label": "Large (85% of screen)"
+          },
+          "options__3": {
+            "label": "Full screen"
+          }
+        },
+        "autoplay": {
+          "label": "Autoplay",
+          "info": "Visitors who prefer reduced motion start paused. A pause button is always shown."
+        },
+        "duration": {
+          "label": "Time per slide"
+        },
+        "show_progress": {
+          "label": "Show progress bars"
+        },
+        "header_overlay": {
+          "label": "Header overlays the hero",
+          "info": "Transparent header with light text over the first slide; it turns solid on scroll and on every other page."
+        },
+        "color_scheme": {
+          "info": "Used for slides without an image."
+        }
+      },
+      "blocks": {
+        "slide": {
+          "name": "Slide",
+          "settings": {
+            "role": {
+              "label": "Default text",
+              "info": "Welcome, Learn and Patterns come with translated text. Any field you fill in replaces it.",
+              "options__1": {
+                "label": "Welcome"
+              },
+              "options__2": {
+                "label": "Learn"
+              },
+              "options__3": {
+                "label": "Patterns"
+              },
+              "options__4": {
+                "label": "Custom"
+              }
+            },
+            "image": {
+              "label": "Image",
+              "info": "Landscape, at least 2400 x 1350 px. Set the focal point in Files."
+            },
+            "mobile_image": {
+              "label": "Mobile image",
+              "info": "Optional portrait crop for phones, at least 1100 x 1650 px."
+            },
+            "image_alt": {
+              "label": "Image alt text",
+              "info": "Leave blank to use the image's own alt text."
+            },
+            "button_label_1": {
+              "label": "Primary button label"
+            },
+            "button_link_1": {
+              "label": "Primary button link"
+            },
+            "button_label_2": {
+              "label": "Secondary button label"
+            },
+            "button_link_2": {
+              "label": "Secondary button link"
+            },
+            "content_position": {
+              "label": "Content position",
+              "options__1": {
+                "label": "Start"
+              },
+              "options__2": {
+                "label": "Center"
+              },
+              "options__3": {
+                "label": "End"
+              }
+            },
+            "overlay": {
+              "label": "Overlay strength",
+              "info": "Values below 30% are raised to 30% so text stays readable."
+            }
+          }
+        }
+      },
+      "presets": {
+        "name": "Hero slideshow"
+      }
+    },
+    "path-cards": {
+      "name": "Choose your path",
+      "settings": {
+        "eyebrow": {
+          "label": "Eyebrow"
+        },
+        "title": {
+          "label": "Heading"
+        },
+        "lede": {
+          "label": "Text"
+        },
+        "default_copy": {
+          "info": "Leave blank to use the default, translated text."
+        }
+      },
+      "blocks": {
+        "path": {
+          "name": "Path card",
+          "settings": {
+            "role": {
+              "label": "Path",
+              "info": "Shop and Learn come with translated default text; Shop links to all products by default.",
+              "options__1": {
+                "label": "Shop"
+              },
+              "options__2": {
+                "label": "Learn"
+              },
+              "options__3": {
+                "label": "Custom"
+              }
+            },
+            "image": {
+              "label": "Image"
+            },
+            "heading": {
+              "label": "Heading"
+            },
+            "text": {
+              "label": "Text"
+            },
+            "button_label": {
+              "label": "Button label"
+            },
+            "link": {
+              "label": "Link",
+              "info": "The card is not clickable until a link is set."
+            }
+          }
+        }
+      },
+      "presets": {
+        "name": "Choose your path"
+      }
+    },
+    "editorial": {
+      "settings": {
+        "image": {
+          "label": "Image"
+        },
+        "image_position": {
+          "label": "Image position",
+          "options__1": {
+            "label": "Start"
+          },
+          "options__2": {
+            "label": "End"
+          }
+        },
+        "eyebrow": {
+          "label": "Eyebrow"
+        },
+        "heading": {
+          "label": "Heading"
+        },
+        "text": {
+          "label": "Text"
+        },
+        "button_label": {
+          "label": "Button label"
+        },
+        "link": {
+          "label": "Button link",
+          "info": "The button shows only when a link is set."
+        },
+        "default_copy": {
+          "info": "Leave blank to use the default, translated text."
+        }
+      }
+    },
+    "brand-story": {
+      "name": "Brand story",
+      "presets": {
+        "name": "Brand story"
+      }
+    },
+    "workshops-teaser": {
+      "name": "Workshops teaser",
+      "presets": {
+        "name": "Workshops teaser"
+      }
+    },
+    "learn-teaser": {
+      "name": "Learn teaser",
+      "settings": {
+        "blog": {
+          "label": "Blog",
+          "info": "Shows the latest 3 articles. Hidden in the store while the blog has no articles."
+        },
+        "show_date": {
+          "label": "Show date"
+        }
+      },
+      "presets": {
+        "name": "Learn teaser"
+      }
+    },
+    "collection-hero": {
+      "name": "Collection hero",
+      "settings": {
+        "show_description": { "label": "Show collection description" },
+        "show_collection_image": { "label": "Show collection image" },
+        "image": {
+          "label": "Image",
+          "info": "Overrides the collection image."
+        },
+        "image_position": {
+          "label": "Image position",
+          "options__1": { "label": "End" },
+          "options__2": { "label": "Start" }
+        },
+        "heading_size": {
+          "label": "Heading size",
+          "options__1": { "label": "Medium" },
+          "options__2": { "label": "Large" },
+          "options__3": { "label": "Extra large" }
+        }
+      }
+    },
     "hero": {
       "name": "Hero",
       "settings": {
+        "layout": {
+          "label": "Layout",
+          "options__1": { "label": "Full-bleed image" },
+          "options__2": { "label": "Split: image beside text" }
+        },
+        "split_image_position": {
+          "label": "Split image position",
+          "options__1": { "label": "Start" },
+          "options__2": { "label": "End" }
+        },
+        "show_eyebrow": {
+          "label": "Show eyebrow"
+        },
+        "eyebrow": {
+          "label": "Eyebrow",
+          "info": "Leave blank to use the default, translated text."
+        },
         "image": {
           "label": "Image"
         },
@@ -543,6 +820,23 @@
       }
     },
     "all": {
+      "columns_mobile_auto": {
+        "label": "Auto: 1 column on small phones, 2 from 480 px"
+      },
+      "divider_tone": {
+        "label": "Stitch divider colour",
+        "options__1": { "label": "Embroidery red" },
+        "options__2": { "label": "Text colour" },
+        "options__3": { "label": "Button colour" },
+        "options__4": { "label": "Linen" }
+      },
+      "show_divider": {
+        "label": "Show stitch divider"
+      },
+      "linen_surface": {
+        "label": "Linen surface",
+        "info": "Woven linen background. Use with a light colour scheme."
+      },
       "animation": {
         "content": "Animations",
         "image_behavior": {
@@ -1202,8 +1496,34 @@
         }
       },
       "settings": {
+        "show_demo_note": {
+          "label": "Show demo brand note",
+          "info": "A short line saying this is a fictional demo brand."
+        },
         "newsletter_enable": {
           "label": "Email signup"
+        },
+        "header_brand": {
+          "content": "Brand"
+        },
+        "show_brand": {
+          "label": "Show logo or store name"
+        },
+        "logo": {
+          "label": "Footer logo",
+          "info": "A small or light version of the logo. Without one, the store name is shown as a wordmark."
+        },
+        "logo_width": {
+          "label": "Logo width"
+        },
+        "brand_text": {
+          "label": "Brand line"
+        },
+        "translated_default": {
+          "info": "Leave empty to use the translated default text."
+        },
+        "newsletter_text": {
+          "label": "Newsletter text"
         },
         "newsletter_heading": {
           "label": "Heading",
@@ -1279,6 +1599,28 @@
           "options__3": {
             "label": "Drawer"
           }
+        },
+        "logo_over_hero": {
+          "label": "Logo over hero",
+          "info": "Optional light version of the logo, shown while the header is transparent over the homepage hero. Without it, the logo is shown in ivory."
+        },
+        "mega_feature": {
+          "content": "Mega menu feature",
+          "info": "A card shown as the last column of one mega menu (image optional). Requires the mega menu type on desktop."
+        },
+        "mega_feature_menu_handle": {
+          "label": "Show in menu item",
+          "info": "Handle of the top-level menu item, for example shop."
+        },
+        "mega_feature_image": {
+          "label": "Image"
+        },
+        "mega_feature_heading": {
+          "label": "Heading",
+          "info": "Leave empty to use the linked collection's title."
+        },
+        "mega_feature_link": {
+          "label": "Link"
         },
         "show_line_separator": {
           "label": "Separator line"

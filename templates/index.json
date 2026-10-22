@@ -9,57 +9,12 @@
  */
 {
   "sections": {
-    "hero_YjYFq6": {
-      "type": "hero",
-      "blocks": {
-        "heading_q6jUjq": {
-          "type": "heading",
-          "settings": {
-            "heading": ""
-          }
-        },
-        "text_Ymr4jm": {
-          "type": "text",
-          "settings": {
-            "text": ""
-          }
-        },
-        "buttons_XXh399": {
-          "type": "buttons",
-          "settings": {
-            "button_label_1": "Explore the Collection",
-            "button_link_1": "shopify://collections/all",
-            "button_style_secondary_1": false,
-            "button_label_2": "Discover Tatreez",
-            "button_link_2": "shopify://pages/tatreez",
-            "button_style_secondary_2": true
-          }
-        }
-      },
-      "block_order": [
-        "heading_q6jUjq",
-        "text_Ymr4jm",
-        "buttons_XXh399"
-      ],
-      "name": "t:sections.hero.presets.name",
-      "settings": {
-        "image": "shopify://shop_images/shutterstock_2380757597.jpg",
-        "image_alt": "",
-        "image_height": "large",
-        "image_overlay_opacity": 40,
-        "color_scheme": "scheme-3",
-        "desktop_content_position": "middle-center",
-        "desktop_content_alignment": "center",
-        "mobile_content_alignment": "center",
-        "heading_size": "h1"
-      }
-    },
     "featured_collection": {
       "type": "featured-collection",
       "settings": {
         "collection": "all",
-        "products_to_show": 8,
-        "title": "&nbsp;Our Signature Pieces&nbsp;",
+        "products_to_show": 4,
+        "title": "Our Signature Pieces",
         "heading_size": "h2",
         "description": "",
         "show_description": false,
@@ -69,22 +24,208 @@
         "full_width": false,
         "show_view_all": true,
         "view_all_style": "solid",
+        "view_all_label": "",
         "color_scheme": "scheme-80059332-ff5c-4f81-a22c-80e5aab949f5",
-        "image_ratio": "adapt",
+        "image_ratio": "portrait",
         "image_shape": "default",
         "show_secondary_image": true,
         "show_vendor": false,
-        "show_rating": false,
-        "quick_add": "none",
+        "show_rating": true,
+        "quick_add": "standard",
         "columns_mobile": "2",
-        "swipe_on_mobile": false,
+        "swipe_on_mobile": true,
         "padding_top": 44,
         "padding_bottom": 36
+      }
+    },
+    "path_cards": {
+      "type": "path-cards",
+      "blocks": {
+        "path_shop": {
+          "type": "path",
+          "settings": {
+            "role": "shop",
+            "image": "shopify://shop_images/pexels-asal-hoseini-179881644-11326482.jpg",
+            "heading": "",
+            "text": "",
+            "button_label": "",
+            "link": "shopify://collections/all"
+          }
+        },
+        "path_learn": {
+          "type": "path",
+          "settings": {
+            "role": "learn",
+            "image": "shopify://shop_images/chapter-1-hands-hYJoJgKC.jpg",
+            "heading": "",
+            "text": "",
+            "button_label": "",
+            "link": "shopify://pages/tatreez-101"
+          }
+        }
+      },
+      "block_order": [
+        "path_shop",
+        "path_learn"
+      ],
+      "settings": {
+        "eyebrow": "",
+        "title": "",
+        "lede": "",
+        "color_scheme": "scheme-1",
+        "linen_surface": false
+      }
+    },
+    "brand_story": {
+      "type": "brand-story",
+      "settings": {
+        "image_position": "start",
+        "eyebrow": "",
+        "heading": "",
+        "text": "",
+        "button_label": "",
+        "link": "shopify://pages/about",
+        "show_divider": true,
+        "divider_tone": "accent",
+        "color_scheme": "scheme-1",
+        "linen_surface": false
+      }
+    },
+    "digital_patterns": {
+      "type": "featured-collection",
+      "settings": {
+        "collection": "digital-patterns",
+        "products_to_show": 3,
+        "title": "Digital patterns",
+        "heading_size": "h2",
+        "description": "<p>Instant download. Stitch the motifs yourself, at your own pace.</p>",
+        "show_description": true,
+        "description_style": "body",
+        "columns_desktop": 3,
+        "enable_desktop_slider": false,
+        "full_width": false,
+        "show_view_all": true,
+        "view_all_style": "link",
+        "view_all_label": "All patterns",
+        "color_scheme": "scheme-80059332-ff5c-4f81-a22c-80e5aab949f5",
+        "image_ratio": "portrait",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": true,
+        "quick_add": "standard",
+        "columns_mobile": "2",
+        "swipe_on_mobile": true,
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
+    },
+    "learn_teaser": {
+      "type": "learn-teaser",
+      "settings": {
+        "blog": "journal",
+        "eyebrow": "",
+        "heading": "",
+        "show_date": true,
+        "color_scheme": "scheme-1",
+        "linen_surface": false
+      }
+    },
+    "workshops_teaser": {
+      "type": "workshops-teaser",
+      "settings": {
+        "image_position": "end",
+        "eyebrow": "",
+        "heading": "",
+        "text": "",
+        "button_label": "",
+        "link": "shopify://pages/workshops",
+        "show_divider": true,
+        "divider_tone": "accent",
+        "color_scheme": "scheme-1",
+        "linen_surface": false
+      }
+    },
+    "hero_slideshow": {
+      "type": "hero-slideshow",
+      "blocks": {
+        "slide_welcome": {
+          "type": "slide",
+          "settings": {
+            "role": "welcome",
+            "image": "shopify://shop_images/chapter-3-journey-BwnLN4JW.jpg",
+            "mobile_image": "",
+            "image_alt": "",
+            "eyebrow": "",
+            "heading": "",
+            "text": "",
+            "button_label_1": "",
+            "button_link_1": "shopify://collections/all",
+            "button_label_2": "",
+            "button_link_2": "shopify://pages/tatreez-101",
+            "content_position": "start",
+            "overlay": 40
+          }
+        },
+        "slide_learn": {
+          "type": "slide",
+          "settings": {
+            "role": "learn",
+            "image": "shopify://shop_images/chapter-1-hands-hYJoJgKC.jpg",
+            "mobile_image": "",
+            "image_alt": "",
+            "eyebrow": "",
+            "heading": "",
+            "text": "",
+            "button_label_1": "",
+            "button_link_1": "shopify://pages/tatreez-101",
+            "button_label_2": "",
+            "button_link_2": "",
+            "content_position": "start",
+            "overlay": 40
+          }
+        },
+        "slide_patterns": {
+          "type": "slide",
+          "settings": {
+            "role": "patterns",
+            "image": "shopify://shop_images/chapter-4-thobe-CgiVbfOp.jpg",
+            "mobile_image": "",
+            "image_alt": "",
+            "eyebrow": "",
+            "heading": "",
+            "text": "",
+            "button_label_1": "",
+            "button_link_1": "shopify://collections/digital-patterns",
+            "button_label_2": "",
+            "button_link_2": "",
+            "content_position": "start",
+            "overlay": 40
+          }
+        }
+      },
+      "block_order": [
+        "slide_welcome",
+        "slide_learn",
+        "slide_patterns"
+      ],
+      "settings": {
+        "height": "large",
+        "autoplay": true,
+        "duration": 6,
+        "show_progress": true,
+        "header_overlay": true,
+        "color_scheme": "scheme-3"
       }
     }
   },
   "order": [
-    "hero_YjYFq6",
-    "featured_collection"
+    "hero_slideshow",
+    "path_cards",
+    "featured_collection",
+    "brand_story",
+    "digital_patterns",
+    "learn_teaser",
+    "workshops_teaser"
   ]
 }

@@ -9,34 +9,34 @@
  */
 {
   "current": {
-    "logo_width": 90,
+    "logo_width": 130,
     "type_header_font": "assistant_n4",
     "heading_scale": 100,
     "type_body_font": "assistant_n4",
     "body_scale": 100,
-    "page_width": 1200,
+    "page_width": 1400,
     "spacing_sections": 0,
-    "spacing_grid_horizontal": 8,
-    "spacing_grid_vertical": 8,
+    "spacing_grid_horizontal": 24,
+    "spacing_grid_vertical": 40,
     "animations_reveal_on_scroll": true,
     "animations_hover_elements": "none",
     "buttons_border_thickness": 1,
     "buttons_border_opacity": 100,
-    "buttons_radius": 0,
+    "buttons_radius": 2,
     "buttons_shadow_opacity": 0,
     "buttons_shadow_horizontal_offset": 0,
     "buttons_shadow_vertical_offset": 4,
     "buttons_shadow_blur": 5,
     "variant_pills_border_thickness": 1,
     "variant_pills_border_opacity": 55,
-    "variant_pills_radius": 40,
+    "variant_pills_radius": 2,
     "variant_pills_shadow_opacity": 0,
     "variant_pills_shadow_horizontal_offset": 0,
     "variant_pills_shadow_vertical_offset": 4,
     "variant_pills_shadow_blur": 5,
     "inputs_border_thickness": 1,
     "inputs_border_opacity": 55,
-    "inputs_radius": 0,
+    "inputs_radius": 2,
     "inputs_shadow_opacity": 0,
     "inputs_shadow_horizontal_offset": 0,
     "inputs_shadow_vertical_offset": 4,
@@ -52,6 +52,8 @@
     "card_shadow_horizontal_offset": 0,
     "card_shadow_vertical_offset": 4,
     "card_shadow_blur": 5,
+    "card_swatch_option_names": "Color, Colour",
+    "card_swatch_colors": "Warm Ivory: #F7F3EB\nOlive Green: #667052\nEmbroidery Red: #8E3038\nTatreez Black: #292820\nLinen Beige: #D9C8AD",
     "collection_card_style": "standard",
     "collection_card_image_padding": 0,
     "collection_card_text_alignment": "left",
@@ -102,7 +104,7 @@
     "drawer_shadow_vertical_offset": 4,
     "drawer_shadow_blur": 5,
     "badge_position": "bottom left",
-    "badge_corner_radius": 40,
+    "badge_corner_radius": 2,
     "sale_badge_color_scheme": "scheme-4",
     "sold_out_badge_color_scheme": "scheme-3",
     "brand_headline": "",
@@ -121,7 +123,7 @@
     "predictive_search_show_vendor": false,
     "predictive_search_show_price": false,
     "currency_code_enabled": true,
-    "cart_type": "notification",
+    "cart_type": "drawer",
     "show_vendor": false,
     "show_cart_note": false,
     "cart_drawer_collection": "",
@@ -145,60 +147,62 @@
     "color_schemes": {
       "scheme-1": {
         "settings": {
-          "background": "#F7F2E8",
+          "background": "#f7f2e8",
           "background_gradient": "",
           "text": "#252722",
-          "button": "#17352B",
+          "button": "#17352b",
           "button_label": "#ffffff",
-          "secondary_button_label": "#17352B",
+          "secondary_button_label": "#17352b",
           "shadow": "#252722"
         }
       },
       "scheme-2": {
         "settings": {
-          "background": "#FFFFFF",
+          "background": "#ffffff",
           "background_gradient": "",
           "text": "#252722",
-          "button": "#17352B",
-          "button_label": "#FFFFFF",
-          "secondary_button_label": "#17352B",
+          "button": "#17352b",
+          "button_label": "#ffffff",
+          "secondary_button_label": "#17352b",
           "shadow": "#252722"
         }
       },
       "scheme-3": {
         "settings": {
-          "background": "#17352B",
+          "background": "#17352b",
           "background_gradient": "",
           "text": "#ffffff",
-          "button": "#F7F2E8",
-          "button_label": "#17352B",
+          "button": "#f7f2e8",
+          "button_label": "#17352b",
           "secondary_button_label": "#ffffff",
           "shadow": "#252722"
         }
       },
       "scheme-4": {
         "settings": {
-          "background": "#8C2633",
+          "background": "#8c2633",
           "background_gradient": "",
           "text": "#ffffff",
           "button": "#ffffff",
-          "button_label": "#8C2633",
+          "button_label": "#8c2633",
           "secondary_button_label": "#ffffff",
           "shadow": "#252722"
         }
       },
       "scheme-80059332-ff5c-4f81-a22c-80e5aab949f5": {
         "settings": {
-          "background": "#F0E8D9",
+          "background": "#f0e8d9",
           "background_gradient": "",
           "text": "#252722",
-          "button": "#17352B",
+          "button": "#17352b",
           "button_label": "#ffffff",
-          "secondary_button_label": "#17352B",
+          "secondary_button_label": "#17352b",
           "shadow": "#252722"
         }
       }
-    }
+    },
+    "favicon": "shopify://shop_images/tatreez-house-square.png",
+    "logo": "shopify://shop_images/tatreez-house-logo.png"
   },
   "presets": {
     "Dawn": {

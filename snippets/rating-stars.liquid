@@ -1,0 +1,49 @@
+{% doc %}
+  Star rating from Shopify's standard review metafields (reviews.rating, reviews.rating_count),
+  which reviews apps such as Judge.me write. Never renders invented data: without a rating it
+  outputs nothing, or the localized "No reviews yet" line when show_empty is true.
+  Stars are decorative (aria-hidden); the accessible text reads "Rated 4.5 out of 5, 12 reviews".
+
+  @param {product} product - The product whose metafields are read. Required.
+  @param {boolean} [show_empty] - Show the empty-state message when there is no rating. Defaults to false.
+  @param {string} [class] - Extra classes for the wrapper.
+
+  @example
+  {% render 'rating-stars', product: card_product %}
+{% enddoc %}
+{%- liquid
+  assign rating = product.metafields.reviews.rating.value
+  assign rating_count = product.metafields.reviews.rating_count.value | default: 0
+-%}
+{%- if rating != blank -%}
+  {%- liquid
+    assign rating_value = rating.rating
+    assign rating_max = rating.scale_max
+    assign rating_decimal = 0
+    assign decimal = rating_value | modulo: 1
+    if decimal >= 0.3 and decimal <= 0.7
+      assign rating_decimal = 0.5
+    elsif decimal > 0.7
+      assign rating_decimal = 1
+    endif
+    assign rating_display = rating_value | round: 1
+  -%}
+  <div class="rating-stars{% if class != blank %} {{ class }}{% endif %}">
+    <span
+      class="rating rating-star"
+      aria-hidden="true"
+      style="--rating: {{ rating_value | floor }}; --rating-max: {{ rating_max }}; --rating-decimal: {{ rating_decimal }};"
+    ></span>
+    <span class="rating-stars__value" aria-hidden="true">{{ rating_display }}</span>
+    {%- if rating_count > 0 -%}
+      <span class="rating-stars__count" aria-hidden="true">({{ rating_count }})</span>
+    {%- endif -%}
+    <span class="visually-hidden">
+      {{- 'products.rating.summary' | t: rating: rating_display, max: rating_max, count: rating_count -}}
+    </span>
+  </div>
+{%- elsif show_empty -%}
+  <p class="rating-stars rating-stars--empty{% if class != blank %} {{ class }}{% endif %}">
+    {{- 'products.rating.empty' | t -}}
+  </p>
+{%- endif -%}

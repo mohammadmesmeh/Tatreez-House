@@ -124,6 +124,26 @@
               {{- 'icon-caret.svg' | inline_asset_content -}}
             </span>
           </button>
+          {%- comment -%}
+            Pause/play control (WCAG 2.2.2) for auto-rotating messages. Dawn's slideshow-component
+            wires any .slideshow__autoplay button: click toggles, aria-label switches pause/play.
+          {%- endcomment -%}
+          {%- if section.settings.auto_rotate -%}
+            <script src="{{ 'announcement-autoplay.js' | asset_url }}" defer="defer"></script>
+            <button
+              type="button"
+              class="slideshow__autoplay slider-button announcement-bar__autoplay"
+              aria-label="{{ 'sections.slideshow.pause_slideshow' | t }}"
+              aria-controls="Slider-{{ section.id }}"
+            >
+              <span class="svg-wrapper">
+                {{- 'icon-pause.svg' | inline_asset_content -}}
+              </span>
+              <span class="svg-wrapper">
+                {{- 'icon-play.svg' | inline_asset_content -}}
+              </span>
+            </button>
+          {%- endif -%}
         </div>
       </slideshow-component>
       {%- if request.design_mode -%}

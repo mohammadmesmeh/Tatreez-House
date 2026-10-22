@@ -1,61 +1,60 @@
 {% doc %}
-  Renders card-product's quick add "standard" experience.
+  The product card's action row: always visible, one button, same size and position on every
+  card (pinned to the bottom of the card by component-card-tatreez.css).
+  - Sold out: a disabled "Sold out" button.
+  - Several variants, quantity rules or volume pricing: "Choose options", which opens Dawn's
+    quick-add modal (variant chips + Add to cart, focus trapped, Escape closes).
+  - One variant: "Add to cart", added through Dawn's product-form (opens the cart drawer).
+  Each button has a full and a short label; compact cards show the short one, the accessible
+  name always uses the full label plus the product title.
+  card-quick-add.js only announces adding / added / error in the live region.
 
-  Three paths, chosen from real product data (no title-based detection):
-  - Inline variant picker (card-variant-picker + card-inline-add-form) when the
-    product has multiple variants and no quantity rules or quantity price
-    breaks: shoppers pick options and add to cart directly in the card.
-  - Dawn's choose-options modal for products with quantity rules or quantity
-    price breaks (the full product form context is required), and for very
-    large variant catalogs.
-  - Direct single-variant add-to-cart form when the product has one purchasable
-    variant — no unnecessary selectors.
-
-  Cart behaviour always goes through Dawn's product-form element
-  (/cart/add.js + cart notification/drawer + cart-count pubsub).
-
-  @param {product} card_product - The product being quick-added. Required.
-  @param {string} section_id - The section ID used to namespace IDs and aria references.
-  @param {string} product_form_id - The unique product form ID.
-  @param {boolean} horizontal_quick_add - Whether the card is a horizontal quick-add card.
-  @param {boolean} inline_variant_picker - Whether the inline picker path applies (precomputed by card-product).
-  @param {boolean} qty_rules - Whether the variant has quantity rules (precomputed by card-product).
+  @param {product} card_product - The product. Required.
+  @param {string} section_id - The section ID used to namespace IDs. Required.
+  @param {string} product_form_id - The unique product form ID. Required.
+  @param {boolean} [qty_rules] - Whether the variant has quantity rules (precomputed by card-product).
 
   @example
-  {% render 'card-quick-add', card_product: product, section_id: section.id, product_form_id: product_form_id, horizontal_quick_add: false, inline_variant_picker: true, qty_rules: false %}
+  {% render 'card-quick-add', card_product: product, section_id: section.id, product_form_id: product_form_id, qty_rules: false %}
 {% enddoc %}
-{%- if inline_variant_picker -%}
-  <div class="quick-add quick-add--inline no-js-hidden">
-    {% render 'card-variant-picker',
-      card_product: card_product,
-      section_id: section_id,
-      product_form_id: product_form_id
-    %}
-    {% render 'card-inline-add-form',
-      card_product: card_product,
-      section_id: section_id,
-      product_form_id: product_form_id
-    %}
-  </div>
-{%- else -%}
+{%- liquid
+  assign title_id = 'title-' | append: section_id | append: '-' | append: card_product.id
+  assign label_id = product_form_id | append: '-label'
+  assign needs_options = false
+  if card_product.variants_count > 1 or qty_rules or card_product.quantity_price_breaks_configured?
+    assign needs_options = true
+  endif
+-%}
+<card-quick-add
+  class="card-quick-add"
+  data-adding="{{ 'products.card.adding' | t: product: card_product.title | escape }}"
+  data-added="{{ 'products.card.added' | t: product: card_product.title | escape }}"
+  data-error="{{ 'products.card.error' | t: product: card_product.title | escape }}"
+>
   <div class="quick-add no-js-hidden">
-    {%- if card_product.variants_count > 1 or qty_rules -%}
+    {%- if card_product.available == false -%}
+      <button
+        type="button"
+        class="quick-add__submit button button--secondary button--full-width card-action"
+        aria-labelledby="{{ label_id }} {{ title_id }}"
+        disabled
+      >
+        <span class="card-action__label" id="{{ label_id }}">{{ 'products.product.sold_out' | t }}</span>
+        <span class="card-action__label--short" aria-hidden="true">{{ 'products.product.sold_out' | t }}</span>
+      </button>
+    {%- elsif needs_options -%}
       <modal-opener data-modal="#QuickAdd-{{ card_product.id }}">
         <button
           id="{{ product_form_id }}-submit"
-          type="submit"
+          type="button"
           name="add"
-          class="quick-add__submit button button--full-width button--secondary{% if horizontal_quick_add %} card--horizontal__quick-add animate-arrow{% endif %}"
+          class="quick-add__submit button button--secondary button--full-width card-action"
           aria-haspopup="dialog"
-          aria-labelledby="{{ product_form_id }}-submit title-{{ section_id }}-{{ card_product.id }}"
+          aria-labelledby="{{ label_id }} {{ title_id }}"
           data-product-url="{{ card_product.url }}"
         >
-          {{ 'products.product.choose_options' | t }}
-          {%- if horizontal_quick_add -%}
-            <span class="icon-wrap">
-              {{- 'icon-arrow.svg' | inline_asset_content -}}
-            </span>
-          {%- endif -%}
+          <span class="card-action__label" id="{{ label_id }}">{{ 'products.product.choose_options' | t }}</span>
+          <span class="card-action__label--short" aria-hidden="true">{{ 'products.card.options_short' | t }}</span>
           {%- render 'loading-spinner' -%}
         </button>
       </modal-opener>
@@ -92,42 +91,25 @@
             name="id"
             value="{{ card_product.selected_or_first_available_variant.id }}"
             class="product-variant-id"
-            {% if card_product.selected_or_first_available_variant.available == false %}
-              disabled
-            {% endif %}
           >
           <button
             id="{{ product_form_id }}-submit"
             type="submit"
             name="add"
-            class="quick-add__submit button button--full-width button--secondary{% if horizontal_quick_add %} card--horizontal__quick-add{% endif %}"
+            class="quick-add__submit button button--secondary button--full-width card-action"
             aria-haspopup="dialog"
-            aria-labelledby="{{ product_form_id }}-submit title-{{ section_id }}-{{ card_product.id }}"
+            aria-labelledby="{{ label_id }} {{ title_id }}"
             aria-live="polite"
             data-sold-out-message="true"
-            {% if card_product.selected_or_first_available_variant.available == false %}
-              disabled
-            {% endif %}
           >
-            <span>
-              {%- if card_product.selected_or_first_available_variant.available -%}
-                {{ 'products.product.add_to_cart' | t }}
-              {%- else -%}
-                {{ 'products.product.sold_out' | t }}
-              {%- endif -%}
-            </span>
-            <span class="sold-out-message hidden">
-              {{ 'products.product.sold_out' | t }}
-            </span>
-            {%- if horizontal_quick_add -%}
-              <span class="icon-wrap">
-                {{- 'icon-plus.svg' | inline_asset_content -}}
-              </span>
-            {%- endif -%}
+            <span class="card-action__label" id="{{ label_id }}">{{ 'products.product.add_to_cart' | t }}</span>
+            <span class="card-action__label--short" aria-hidden="true">{{ 'products.card.add_short' | t }}</span>
+            <span class="sold-out-message hidden">{{ 'products.product.sold_out' | t }}</span>
             {%- render 'loading-spinner' -%}
           </button>
         {%- endform -%}
       </product-form>
     {%- endif -%}
   </div>
-{%- endif -%}
+  <p class="visually-hidden" role="status" data-card-quick-add-status></p>
+</card-quick-add>

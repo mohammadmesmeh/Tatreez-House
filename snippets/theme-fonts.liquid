@@ -3,7 +3,8 @@
   templates/gift_card.liquid.
 
   Outputs, in order:
-    1. one font preload: the Arabic body face on the Arabic storefront, Nunito otherwise;
+    1. two font preloads per locale: body + heading face (Zain 400 + Amiri 400 for Arabic,
+       Nunito + Fraunces otherwise; headings render at 400–500, which Amiri serves from 400);
     2. the fonts.css stylesheet (self-hosted @font-face rules, see docs/fonts/README.md);
     3. the Dawn font custom properties every component already reads.
 
@@ -16,13 +17,18 @@
   {% render 'theme-fonts' %}
 {% enddoc %}
 {%- liquid
+  # Body face for the locale, plus the heading face (the hero heading is usually the LCP
+  # element). Preloading the heading face also shortens the swap period in which headings
+  # would show the fallback serif.
   if request.locale.iso_code == 'ar'
-    assign preload_font = 'zain-arabic-400.woff2'
+    assign preload_fonts = 'zain-arabic-400.woff2,amiri-arabic-400.woff2' | split: ','
   else
-    assign preload_font = 'nunito-latin.woff2'
+    assign preload_fonts = 'nunito-latin.woff2,fraunces-latin.woff2' | split: ','
   endif
 -%}
-{{ preload_font | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+{%- for preload_font in preload_fonts -%}
+  {{ preload_font | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+{%- endfor -%}
 {{ 'fonts.css' | asset_url | stylesheet_tag }}
 {% style %}
   :root {
@@ -31,9 +37,9 @@
     --font-body-weight: 400;
     --font-body-weight-bold: 700;
 
-    --font-heading-family: 'Nunito', 'Amiri', 'Times New Roman', serif;
+    --font-heading-family: 'Fraunces', 'Amiri', Georgia, serif;
     --font-heading-style: normal;
-    --font-heading-weight: 700;
+    --font-heading-weight: 500;
 
     --font-accent-family: 'Playwrite NZ Basic', 'Nunito', cursive;
   }

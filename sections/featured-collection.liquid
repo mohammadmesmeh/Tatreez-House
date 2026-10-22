@@ -92,13 +92,16 @@
       {%- endif -%}
     </div>
 
-    <slider-component class="slider-mobile-gutter{% if section.settings.full_width %} slider-component-full-width{% endif %}{% if show_mobile_slider == false %} page-width{% endif %}{% if show_desktop_slider == false and section.settings.full_width == false %} page-width-desktop{% endif %}{% if show_desktop_slider %} slider-component-desktop{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+    <slider-component class="slider-mobile-gutter{% if show_mobile_slider %} th-swipe-mobile{% endif %}{% if section.settings.full_width %} slider-component-full-width{% endif %}{% if show_mobile_slider == false %} page-width{% endif %}{% if show_desktop_slider == false and section.settings.full_width == false %} page-width-desktop{% endif %}{% if show_desktop_slider %} slider-component-desktop{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
       <ul
         id="Slider-{{ section.id }}"
         data-id="{{ section.id }}"
         class="grid product-grid contains-card contains-card--product{% if settings.card_style == 'standard' %} contains-card--standard{% endif %} grid--{{ section.settings.columns_desktop }}-col-desktop{% if section.settings.collection == blank %} grid--2-col-tablet-down{% else %} grid--{{ section.settings.columns_mobile }}-col-tablet-down{% endif %}{% if show_mobile_slider or show_desktop_slider %} slider{% if show_desktop_slider %} slider--desktop{% endif %}{% if show_mobile_slider %} slider--tablet grid--peek{% endif %}{% endif %}"
         role="list"
         aria-label="{{ 'general.slider.name' | t }}"
+        {% if show_mobile_slider %}
+          tabindex="0"
+        {% endif %}
       >
         {% assign skip_card_product_styles = false %}
 
@@ -203,9 +206,17 @@
         <a
           href="{{ section.settings.collection.url }}"
           class="{% if section.settings.view_all_style == 'link' %}link underlined-link{% elsif section.settings.view_all_style == 'solid' %}button{% else %}button button--secondary{% endif %}"
-          aria-label="{{ 'sections.featured_collection.view_all_label' | t: collection_name: section.settings.collection.title | escape }}"
         >
-          {{ section.settings.view_all_label | default: 'sections.featured_collection.view_all' | t }}
+          {%- comment -%}
+            The accessible name is the visible label plus the collection name (hidden), so it always
+            contains the visible text (WCAG 2.5.3), also when the label is custom or untranslated.
+          {%- endcomment -%}
+          {%- if section.settings.view_all_label != blank -%}
+            {{- section.settings.view_all_label | escape -}}
+          {%- else -%}
+            {{- 'sections.featured_collection.view_all' | t -}}
+          {%- endif -%}
+          <span class="visually-hidden">: {{ section.settings.collection.title | escape }}</span>
         </a>
       </div>
     {%- endif -%}

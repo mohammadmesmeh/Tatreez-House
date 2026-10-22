@@ -1,0 +1,43 @@
+/*
+  section-learn-teaser.css — latest journal articles (sections/learn-teaser.liquid).
+*/
+
+.learn-teaser__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--th-space-2) var(--th-space-4);
+}
+
+.learn-teaser__all {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--th-target);
+  font-weight: 600;
+  color: rgb(var(--color-foreground));
+}
+
+.learn-teaser__grid {
+  display: grid;
+  gap: var(--th-space-5) var(--th-space-3);
+  margin: 0;
+}
+
+@media screen and (min-width: 750px) {
+  .learn-teaser__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.learn-teaser .article-card .card__heading {
+  font-family: var(--font-heading-family);
+  font-size: var(--th-step-h6);
+  font-weight: 500;
+}
+
+.learn-teaser__editor-note {
+  padding: var(--th-space-3);
+  border: var(--th-border-width) dashed rgb(var(--th-border));
+  border-radius: var(--th-radius);
+}

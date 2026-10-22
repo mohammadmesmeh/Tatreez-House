@@ -1,0 +1,296 @@
+/*
+  section-footer-tatreez.css — the minimal footer: stitch divider, brand + newsletter row,
+  bottom row (language selector, policy links), copyright and the demo-brand note.
+  Loaded by sections/footer.liquid after Dawn's section-footer.css; layout uses its own classes,
+  so only the newsletter field and the localization form are inherited from Dawn.
+*/
+
+.footer--minimal {
+  --footer-muted: rgba(var(--color-foreground), 0.75);
+}
+
+.footer__stitch {
+  margin-block-end: var(--th-space-5);
+}
+
+.footer--minimal .footer__heading {
+  margin: 0 0 var(--th-space-1);
+  font-family: var(--font-heading-family);
+  font-size: var(--th-step-h6);
+  font-weight: 500;
+  letter-spacing: var(--th-tracking-heading);
+}
+
+/* Brand + newsletter: stacked and centred on phones, two balanced columns from 750px. */
+.footer__main {
+  display: grid;
+  gap: var(--th-space-5);
+  justify-items: center;
+  text-align: center;
+}
+
+@media screen and (min-width: 750px) {
+  .footer__main {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 42rem);
+    align-items: start;
+    justify-items: stretch;
+    column-gap: var(--th-space-8);
+    text-align: start;
+  }
+}
+
+.footer__brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--th-space-2);
+}
+
+@media screen and (min-width: 750px) {
+  .footer__brand {
+    align-items: flex-start;
+  }
+}
+
+.footer__brand-link {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--th-target);
+  color: rgb(var(--color-foreground));
+  text-decoration: none;
+}
+
+.footer__logo {
+  display: block;
+  inline-size: var(--footer-logo-width);
+  max-inline-size: 100%;
+  block-size: auto;
+}
+
+.footer__wordmark {
+  font-family: var(--font-heading-family);
+  font-size: var(--th-step-h4);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: var(--th-tracking-heading);
+}
+
+.footer__brand-text,
+.footer__newsletter-text {
+  margin: 0;
+  max-inline-size: 38ch;
+  color: var(--footer-muted);
+  font-size: 1.5rem;
+  line-height: 1.6;
+}
+
+.footer__newsletter-text {
+  margin-block-end: var(--th-space-2);
+}
+
+.footer--minimal .footer__list-social {
+  justify-content: center;
+  margin: 0;
+}
+
+@media screen and (min-width: 750px) {
+  .footer--minimal .footer__list-social {
+    justify-content: flex-start;
+    margin-inline-start: -1.1rem;
+  }
+}
+
+.footer__newsletter-block {
+  inline-size: 100%;
+  max-inline-size: 42rem;
+}
+
+.footer--minimal .newsletter-form,
+.footer--minimal .newsletter-form__field-wrapper {
+  max-inline-size: none;
+  max-width: none;
+  margin: 0;
+  align-items: stretch;
+}
+
+/* Newsletter states: error (red ring + message, announced via role=alert) and success. */
+.footer__form-message {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--th-space-1);
+  margin: var(--th-space-2) 0 0;
+  font-size: 1.4rem;
+  line-height: 1.5;
+  text-align: start;
+}
+
+.footer__form-message .svg-wrapper {
+  flex: none;
+  inline-size: 1.6rem;
+  block-size: 1.6rem;
+  margin-block-start: 0.2rem;
+}
+
+.footer__form-message--error {
+  color: rgb(var(--th-red));
+}
+
+.footer__form-message--success {
+  padding: var(--th-space-1) var(--th-space-2);
+  border-inline-start: 0.3rem solid rgb(var(--th-green));
+  background-color: rgba(var(--th-green), 0.08);
+  color: rgb(var(--th-green));
+  font-weight: 500;
+}
+
+.footer__form-message--success:focus {
+  outline: none;
+}
+
+.footer__form-message--success:focus-visible {
+  outline: 0.2rem solid rgb(var(--color-foreground));
+  outline-offset: 0.3rem;
+}
+
+.footer--minimal .field:has(.field__input[aria-invalid='true'])::after {
+  box-shadow: 0 0 0 var(--inputs-border-width) rgb(var(--th-red));
+}
+
+.footer__follow-on-shop {
+  display: flex;
+  justify-content: center;
+}
+
+@media screen and (min-width: 750px) {
+  .footer__follow-on-shop {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+  }
+}
+
+.footer__blocks {
+  display: grid;
+  gap: var(--th-space-4);
+  margin-block-start: var(--th-space-5);
+}
+
+/* Bottom: hairline (inside the page container), then language selector + policy links, then
+   copyright + demo note. */
+.footer__bottom {
+  margin-block-start: var(--th-space-6);
+}
+
+.footer__bottom-row {
+  padding-block-start: var(--th-space-3);
+  border-block-start: var(--th-border-width) solid rgba(var(--color-foreground), 0.12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--th-space-2);
+}
+
+@media screen and (min-width: 750px) {
+  .footer__bottom-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--th-space-2) var(--th-space-4);
+  }
+}
+
+.footer--minimal .footer__localization {
+  padding: 0;
+  justify-content: center;
+}
+
+.footer--minimal .footer__localization:empty {
+  display: none;
+}
+
+.footer--minimal .localization-form {
+  padding: 0;
+  margin: 0;
+}
+
+.footer--minimal .localization-form > div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--th-space-1) var(--th-space-2);
+}
+
+.footer--minimal .localization-form h2 {
+  margin: 0;
+  color: var(--footer-muted);
+}
+
+.footer--minimal .localization-form .localization-form__select,
+.footer--minimal .localization-form:only-child .localization-form__select {
+  margin: 0;
+  min-block-size: var(--th-target);
+}
+
+.footer__inline-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0 var(--th-space-3);
+  margin: 0;
+}
+
+@media screen and (min-width: 750px) {
+  .footer__policies {
+    margin-inline-start: auto;
+  }
+
+  .footer__inline-links {
+    justify-content: flex-end;
+  }
+}
+
+.footer__inline-link {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--th-target);
+  color: var(--footer-muted);
+  font-size: 1.3rem;
+  text-underline-offset: 0.3rem;
+}
+
+.footer__inline-link:hover {
+  color: rgb(var(--color-foreground));
+}
+
+.footer--minimal .footer__payment {
+  margin: 0;
+}
+
+.footer__legal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--th-space-1);
+  margin-block-start: var(--th-space-3);
+  text-align: center;
+}
+
+@media screen and (min-width: 750px) {
+  .footer__legal {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    text-align: start;
+  }
+}
+
+.footer--minimal .copyright__content {
+  color: var(--footer-muted);
+}
+
+.footer__copyright-line {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0 var(--th-space-2);
+}

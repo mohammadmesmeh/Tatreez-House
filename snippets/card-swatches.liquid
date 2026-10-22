@@ -1,0 +1,74 @@
+{% doc %}
+  Small, non-interactive colour dots under the card price. The colour option is found by name
+  (theme setting "Swatch option names"); each value's colour comes from Shopify's swatch data
+  (option value linked to a colour metafield) or the theme setting "Swatch colours"
+  ("Name: #hex" per line). A colour with neither shows a neutral outlined dot, never an empty
+  one. Dots are aria-hidden; the visually hidden text names every colour ("Available in
+  2 colours: Warm Ivory, Olive Green"), so an unmapped colour is still announced.
+  Always renders the row (empty when there is no colour option) so every card keeps the same
+  height. Compact cards show at most 4 dots plus "+N".
+
+  @param {product} product - The product. Required.
+
+  @example
+  {% render 'card-swatches', product: card_product %}
+{% enddoc %}
+{%- liquid
+  assign option_names = settings.card_swatch_option_names | downcase | split: ','
+  assign swatch_option = null
+  for option in product.options_with_values
+    assign this_name = option.name | downcase | strip
+    for wanted in option_names
+      assign wanted_name = wanted | strip
+      if wanted_name != blank and wanted_name == this_name
+        assign swatch_option = option
+      endif
+    endfor
+  endfor
+
+  assign color_lines = settings.card_swatch_colors | newline_to_br | split: '<br />'
+-%}
+<div class="card-swatches">
+  {%- if swatch_option != null and swatch_option.values.size > 1 -%}
+    {%- liquid
+      assign total = swatch_option.values.size
+      assign extra_compact = total | minus: 4
+      assign extra_full = total | minus: 8
+      assign color_names = swatch_option.values | map: 'name' | join: '|||'
+      assign color_separator = 'products.card.color_separator' | t
+      assign color_names = color_names | replace: '|||', color_separator
+    -%}
+    <span class="card-swatches__dots" aria-hidden="true">
+      {%- for value in swatch_option.values limit: 8 -%}
+        {%- liquid
+          assign swatch_color = value.swatch.color
+          if swatch_color == blank
+            assign value_name = value.name | downcase | strip
+            for line in color_lines
+              assign pair = line | strip | split: ':'
+              assign pair_name = pair.first | downcase | strip
+              if pair.size > 1 and pair_name == value_name
+                assign swatch_color = pair.last | strip
+              endif
+            endfor
+          endif
+        -%}
+        <span
+          class="card-swatch{% if swatch_color == blank %} card-swatch--unknown{% endif %}{% if forloop.index > 4 %} card-swatch--overflow{% endif %}"
+          {% if swatch_color != blank %}
+            style="--swatch: {{ swatch_color }};"
+          {% endif %}
+        ></span>
+      {%- endfor -%}
+      {%- if extra_compact > 0 -%}
+        <span class="card-swatches__more card-swatches__more--compact">+{{ extra_compact }}</span>
+      {%- endif -%}
+      {%- if extra_full > 0 -%}
+        <span class="card-swatches__more card-swatches__more--full">+{{ extra_full }}</span>
+      {%- endif -%}
+    </span>
+    <span class="visually-hidden">
+      {{- 'products.card.colors_available' | t: count: total, colors: color_names -}}
+    </span>
+  {%- endif -%}
+</div>

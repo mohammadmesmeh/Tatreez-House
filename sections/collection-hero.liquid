@@ -1,0 +1,148 @@
+{{ 'section-collection-hero.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign hero_image = section.settings.image
+  if hero_image == blank and section.settings.show_collection_image
+    assign hero_image = collection.image
+  endif
+  assign hero_alt = hero_image.alt | default: ''
+-%}
+
+<div class="collection-hero color-{{ section.settings.color_scheme }} gradient{% if section.settings.linen_surface %} th-linen{% endif %}">
+  <div class="page-width collection-hero__grid{% if hero_image == blank %} collection-hero__grid--text-only{% else %} collection-hero__grid--image-{{ section.settings.image_position }}{% endif %}">
+    <div class="collection-hero__text">
+      <p class="th-eyebrow">{{ 'sections.collection_template.title' | t }}</p>
+      <h1 class="collection-hero__title {{ section.settings.heading_size }}">{{ collection.title | escape }}</h1>
+      {%- if section.settings.show_collection_description and collection.description != blank -%}
+        <div class="collection-hero__description rte">{{ collection.description }}</div>
+      {%- endif -%}
+      {%- if section.settings.show_divider -%}
+        {% render 'stitch-divider', id: section.id, tone: section.settings.divider_tone, class: 'collection-hero__divider' %}
+      {%- endif -%}
+    </div>
+    {%- if hero_image != blank -%}
+      <div class="collection-hero__media">
+        {{
+          hero_image
+          | image_url: width: 1600
+          | image_tag:
+            class: 'collection-hero__image',
+            widths: '375, 550, 750, 1100, 1400, 1600',
+            sizes: '(min-width: 990px) 50vw, 100vw',
+            fetchpriority: 'high',
+            alt: hero_alt
+        }}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.collection-hero.name",
+  "tag": "section",
+  "class": "section",
+  "enabled_on": {
+    "templates": ["collection"]
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_collection_description",
+      "default": true,
+      "label": "t:sections.collection-hero.settings.show_description.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_image",
+      "default": true,
+      "label": "t:sections.collection-hero.settings.show_collection_image.label"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.collection-hero.settings.image.label",
+      "info": "t:sections.collection-hero.settings.image.info"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "options": [
+        {
+          "value": "end",
+          "label": "t:sections.collection-hero.settings.image_position.options__1.label"
+        },
+        {
+          "value": "start",
+          "label": "t:sections.collection-hero.settings.image_position.options__2.label"
+        }
+      ],
+      "default": "end",
+      "label": "t:sections.collection-hero.settings.image_position.label"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h1",
+          "label": "t:sections.collection-hero.settings.heading_size.options__1.label"
+        },
+        {
+          "value": "h0",
+          "label": "t:sections.collection-hero.settings.heading_size.options__2.label"
+        },
+        {
+          "value": "hxl",
+          "label": "t:sections.collection-hero.settings.heading_size.options__3.label"
+        }
+      ],
+      "default": "h0",
+      "label": "t:sections.collection-hero.settings.heading_size.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_divider",
+      "default": true,
+      "label": "t:sections.all.show_divider.label"
+    },
+    {
+      "type": "select",
+      "id": "divider_tone",
+      "options": [
+        {
+          "value": "accent",
+          "label": "t:sections.all.divider_tone.options__1.label"
+        },
+        {
+          "value": "ink",
+          "label": "t:sections.all.divider_tone.options__2.label"
+        },
+        {
+          "value": "action",
+          "label": "t:sections.all.divider_tone.options__3.label"
+        },
+        {
+          "value": "border",
+          "label": "t:sections.all.divider_tone.options__4.label"
+        }
+      ],
+      "default": "accent",
+      "label": "t:sections.all.divider_tone.label"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme-1",
+      "label": "t:sections.all.colors.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "linen_surface",
+      "default": false,
+      "label": "t:sections.all.linen_surface.label",
+      "info": "t:sections.all.linen_surface.info"
+    }
+  ]
+}
+{% endschema %}

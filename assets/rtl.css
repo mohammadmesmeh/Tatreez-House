@@ -52,6 +52,21 @@
 }
 
 /* ---------------------------------------------------------------------------
+   Sliders (global.js SliderComponent / SlideshowComponent): the scroll maths uses LTR
+   scrollLeft/offsetLeft, which breaks in an RTL scroll container (half-scrolled slides). For the
+   JS-driven announcement bar and slideshow, keep the track LTR and restore RTL inside each slide.
+   Product rows on phones are CSS-only scroll-snap carousels (component-card-tatreez.css), so they
+   keep native RTL scrolling and reading order.
+*/
+[dir='rtl'] :is(.announcement-bar-slider, slideshow-component) .slider {
+  direction: ltr;
+}
+
+[dir='rtl'] :is(.announcement-bar-slider, slideshow-component) .slider > * {
+  direction: rtl;
+}
+
+/* ---------------------------------------------------------------------------
    Header (base.css)
 */
 [dir='rtl'] .header__icon--cart {
@@ -181,6 +196,18 @@
   transform: translateX(-100%);
   border-right: 0.1rem solid rgba(var(--color-foreground), 0.2);
   border-left: 0;
+}
+
+/* Close button sits at the inline-end of the drawer header (Dawn: right: -10px / 5px), so it no
+   longer covers the "Your cart" title in RTL. */
+[dir='rtl'] .drawer__close {
+  right: auto;
+  left: -10px;
+}
+
+[dir='rtl'] .cart-drawer__warnings .drawer__close {
+  right: auto;
+  left: 5px;
 }
 
 [dir='rtl'] .cart-drawer .tax-note {

@@ -11,7 +11,8 @@
  *   - button label on button            (primary button)
  *   - secondary button label on background (outline button, links)
  * Thresholds: AA normal text 4.5:1, AA large text / UI components 3:1.
- * Also flags scheme colours that are not in the brand palette.
+ * Also checks the design-token pairs used outside schemes (accent, linen surface) read from
+ * assets/tatreez-tokens.css, and flags scheme colours that are not in the brand palette.
  *
  * Read-only: never edits settings_data.json. Exit code 1 when a pair fails AA large/UI (3:1).
  */
@@ -28,6 +29,8 @@ const BRAND = {
   'Embroidery Red': '#8E3038',
   'Olive Green': '#667052',
   'Linen Beige': '#D9C8AD',
+  Linen: '#F0E8D9',
+  'Deep Green': '#17352B',
   White: '#FFFFFF',
 };
 const BODY_TEXT_ALPHA = 0.75; // layout/theme.liquid: body { color: rgba(var(--color-foreground), 0.75) }
@@ -103,6 +106,30 @@ for (const [id, { settings: s }] of Object.entries(schemes)) {
   }
 }
 
+// Design-token pairs (assets/tatreez-tokens.css): colours used outside the colour schemes.
+const tokenCss = readFileSync(path.join(root, 'assets', 'tatreez-tokens.css'), 'utf8');
+const token = (name) => {
+  const m = tokenCss.match(new RegExp(`--th-${name}:\\s*(\\d+),\\s*(\\d+),\\s*(\\d+)`));
+  if (!m) throw new Error(`token --th-${name} not found`);
+  return m.slice(1).map(Number);
+};
+const tokenPairs = [
+  ['accent text (sale price) / ivory', 'red', 'ivory', 4.5],
+  ['accent text / linen', 'red', 'linen', 4.5],
+  ['accent text / white', 'red', 'white', 4.5],
+  ['white text / accent (sale badge)', 'white', 'red', 4.5],
+  ['ink text / linen', 'ink', 'linen', 4.5],
+  ['muted ink 75% / linen', 'ink@0.75', 'linen', 4.5],
+  ['deep green action / linen (UI)', 'green', 'linen', 3],
+];
+for (const [pair, fgName, bgName, need] of tokenPairs) {
+  const bg = token(bgName);
+  const [base, alpha] = fgName.split('@');
+  const fg = alpha ? blend(token(base), bg, Number(alpha)) : token(base);
+  const r = ratio(fg, bg);
+  rows.push({ scheme: 'tokens', pair, fg: rgbToHex(fg), bg: rgbToHex(bg), ratio: r, need, grade: grade(r) });
+}
+
 const short = (id) => (id.length > 12 ? id.slice(0, 12) + '…' : id);
 const header = ['Scheme', 'Pair', 'Foreground', 'Background', 'Ratio', 'Result'];
 const table = rows.map((r) => [short(r.scheme), r.pair, r.fg, r.bg, r.ratio.toFixed(2) + ':1', r.grade]);
@@ -115,9 +142,9 @@ console.log('|' + widths.map((w) => '-'.repeat(w + 2)).join('|') + '|');
 table.forEach((row) => console.log(line(row)));
 
 const below = rows.filter((r) => r.ratio < r.need);
-console.log(`\n${rows.length} pairs, ${rows.length - below.length} pass AA 4.5:1, ${below.length} below 4.5:1.`);
+console.log(`\n${rows.length} pairs, ${rows.length - below.length} meet their requirement, ${below.length} below it.`);
 below.forEach((r) =>
-  console.log(`  - ${r.scheme}: ${r.pair} ${r.fg} on ${r.bg} = ${r.ratio.toFixed(2)}:1 (${r.grade})`)
+  console.log(`  - ${r.scheme}: ${r.pair} ${r.fg} on ${r.bg} = ${r.ratio.toFixed(2)}:1 (needs ${r.need}:1)`)
 );
 
 if (offBrand.size) {
@@ -125,4 +152,4 @@ if (offBrand.size) {
   for (const [hex, note] of offBrand) console.log(`  - ${hex}: ${note}`);
 }
 
-process.exit(rows.some((r) => r.ratio < 3) ? 1 : 0);
+process.exit(below.length ? 1 : 0);

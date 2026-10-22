@@ -1,0 +1,379 @@
+/*
+  tatreez-tokens.css — Tatreez House design system ("Editorial heritage").
+  Loaded after base.css on every page. Documentation: docs/DESIGN_SYSTEM.md.
+
+  Colour schemes (theme editor) remain the source of truth for surfaces, text and buttons.
+  This file adds only what schemes cannot express — brand accent, linen surface, type scale,
+  spacing, shape and motion — and is the ONLY place where brand colour values live.
+*/
+
+/* ---------------------------------------------------------------------------
+   1. Tokens
+*/
+:root {
+  /* Brand palette as RGB triplets, Dawn's rgb(var(--x)) convention. */
+  --th-ivory: 247, 243, 235;
+  --th-linen: 240, 232, 217;
+  --th-linen-deep: 217, 200, 173;
+  --th-ink: 41, 40, 32;
+  --th-green: 23, 53, 43;
+  --th-red: 142, 48, 56;
+  --th-olive: 102, 112, 82;
+  --th-white: 255, 255, 255;
+
+  /* Semantic roles. Scheme-driven where a scheme can express them. */
+  --th-accent: var(--th-red);
+  --th-surface-alt: var(--th-linen);
+  --th-border: var(--th-linen-deep);
+
+  /* Type scale: modular, 1.15 at 360px -> 1.25 at 1440px, base 16px (1rem = 10px in Dawn). */
+  --th-step-h6: clamp(1.84rem, 1.787rem + 0.148vw, 2rem);
+  --th-step-h5: clamp(2.12rem, 1.988rem + 0.356vw, 2.5rem);
+  --th-step-h4: clamp(2.43rem, 2.203rem + 0.64vw, 3.12rem);
+  --th-step-h3: clamp(2.8rem, 2.429rem + 1.026vw, 3.91rem);
+  --th-step-h2: clamp(3.22rem, 2.663rem + 1.541vw, 4.88rem);
+  --th-step-h1: clamp(3.7rem, 2.9rem + 2.225vw, 6.1rem);
+  --th-step-display: clamp(4.26rem, 3.132rem + 3.123vw, 7.63rem);
+  --th-step-small: 1.4rem;
+  --th-step-eyebrow: 1.2rem;
+
+  --th-tracking-display: -0.02em;
+  --th-tracking-heading: -0.01em;
+  --th-tracking-eyebrow: 0.14em;
+  --th-measure: 68ch;
+
+  /* 8px spacing scale. */
+  --th-space-1: 0.8rem;
+  --th-space-2: 1.6rem;
+  --th-space-3: 2.4rem;
+  --th-space-4: 3.2rem;
+  --th-space-5: 4rem;
+  --th-space-6: 4.8rem;
+  --th-space-8: 6.4rem;
+  --th-space-10: 8rem;
+  --th-space-12: 9.6rem;
+  --th-space-14: 11.2rem;
+
+  /* Section rhythm: 64px on mobile -> 112px on desktop. */
+  --th-section-y: clamp(6.4rem, 4.8rem + 4.444vw, 11.2rem);
+
+  /* Layout and shape. Content width follows the editor's "Page width" setting (Dawn's
+     --page-width, set to 1400 = 1300px of content inside the 5rem desktop gutters; the setting
+     moves in 100px steps, so this is the closest step to the 1320px design target). */
+  --th-content-max: calc(var(--page-width) - 10rem);
+  --th-radius: 0.2rem;
+  --th-border-width: 0.1rem;
+  --th-target: 4.4rem;
+
+  /* Motion. */
+  --th-duration: 240ms;
+  --th-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+}
+
+/* ---------------------------------------------------------------------------
+   2. Typography — Dawn's heading classes mapped onto the scale (docs/DESIGN_SYSTEM.md).
+*/
+h1,
+h2,
+h3,
+h4,
+h5,
+.h0,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.hxl,
+.hxxl {
+  letter-spacing: 0;
+  line-height: 1.15;
+  font-optical-sizing: auto;
+  text-wrap: balance;
+}
+
+.hxxl {
+  font-size: calc(var(--font-heading-scale) * var(--th-step-display));
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: var(--th-tracking-display);
+}
+
+.hxl {
+  font-size: calc(var(--font-heading-scale) * var(--th-step-h1));
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: var(--th-tracking-display);
+}
+
+.h0 {
+  font-size: calc(var(--font-heading-scale) * var(--th-step-h2));
+  font-weight: 400;
+  letter-spacing: var(--th-tracking-display);
+}
+
+h1,
+.h1 {
+  font-size: calc(var(--font-heading-scale) * var(--th-step-h3));
+  font-weight: 400;
+  letter-spacing: var(--th-tracking-heading);
+}
+
+h2,
+.h2 {
+  font-size: calc(var(--font-heading-scale) * var(--th-step-h4));
+  letter-spacing: var(--th-tracking-heading);
+}
+
+h3,
+.h3 {
+  font-size: calc(var(--font-heading-scale) * var(--th-step-h5));
+}
+
+h4,
+.h4 {
+  font-size: calc(var(--font-heading-scale) * var(--th-step-h6));
+}
+
+.rte p,
+.rte li {
+  max-inline-size: var(--th-measure);
+}
+
+/* Arabic: never tracked or uppercased; Amiri keeps the taller M0 line-heights (fonts.css). */
+:lang(ar) :is(h1, h2, h3, h4, h5, .h0, .h1, .h2, .h3, .h4, .h5, .hxl, .hxxl) {
+  letter-spacing: 0;
+  line-height: 1.55;
+}
+
+:lang(ar) :is(.h0, .hxl, .hxxl) {
+  line-height: 1.45;
+}
+
+/* Eyebrow: short category label above a heading, preceded by a cross-stitch. */
+.th-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin: 0 0 var(--th-space-2);
+  font-family: var(--font-body-family);
+  font-size: var(--th-step-eyebrow);
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: var(--th-tracking-eyebrow);
+  text-transform: uppercase;
+  color: rgba(var(--color-foreground), 0.8);
+}
+
+.th-eyebrow::before {
+  content: '';
+  flex: none;
+  inline-size: 0.8rem;
+  block-size: 0.8rem;
+  background-color: rgb(var(--th-accent));
+  -webkit-mask: url('icon-stitch-x.svg') center / contain no-repeat;
+  mask: url('icon-stitch-x.svg') center / contain no-repeat;
+}
+
+/* On dark scheme backgrounds the red stitch loses contrast; follow the text colour instead. */
+.th-on-dark .th-eyebrow::before,
+.th-eyebrow--plain::before {
+  background-color: currentColor;
+}
+
+:lang(ar) .th-eyebrow {
+  font-size: var(--th-step-small);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* List with cross-stitch bullets. */
+.th-list {
+  list-style: none;
+  padding-inline-start: 0;
+}
+
+.th-list > li {
+  position: relative;
+  padding-inline-start: 2rem;
+}
+
+.th-list > li::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 0.6em;
+  inline-size: 0.8rem;
+  block-size: 0.8rem;
+  background-color: rgb(var(--th-accent));
+  -webkit-mask: url('icon-stitch-x.svg') center / contain no-repeat;
+  mask: url('icon-stitch-x.svg') center / contain no-repeat;
+}
+
+/* ---------------------------------------------------------------------------
+   3. Stitched link underline — a dashed "running stitch" drawn with gradients. Shown on hover
+   AND focus; the focus outline from section 5 always stays, so focus never depends on it.
+*/
+.th-link {
+  text-decoration: none;
+  background-image: repeating-linear-gradient(
+    to right,
+    currentColor 0 0.5rem,
+    transparent 0.5rem 0.8rem
+  );
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 0.15rem;
+  padding-block-end: 0.3rem;
+  transition: background-size var(--th-duration) var(--th-ease);
+}
+
+[dir='rtl'] .th-link {
+  background-position: 100% 100%;
+}
+
+.th-link:hover,
+.th-link:focus-visible,
+.th-link[aria-current='page'] {
+  background-size: 100% 0.15rem;
+}
+
+/* ---------------------------------------------------------------------------
+   4. Surfaces and ornaments
+*/
+/* Linen: warp and weft hairlines, a woven grain without image bytes. */
+.th-linen {
+  background-color: rgb(var(--th-surface-alt));
+  background-image:
+    repeating-linear-gradient(0deg, rgba(var(--th-ink), 0.025) 0 0.1rem, transparent 0.1rem 0.3rem),
+    repeating-linear-gradient(90deg, rgba(var(--th-ink), 0.02) 0 0.1rem, transparent 0.1rem 0.4rem);
+}
+
+.stitch-divider {
+  display: block;
+  color: rgb(var(--th-accent));
+  line-height: 0;
+}
+
+.stitch-divider--ink {
+  color: rgba(var(--color-foreground), 0.75);
+}
+
+.stitch-divider--action {
+  color: rgb(var(--color-button));
+}
+
+.stitch-divider--border {
+  color: rgb(var(--th-border));
+}
+
+.stitch-divider__svg {
+  display: block;
+}
+
+/* ---------------------------------------------------------------------------
+   5. Accessibility baseline
+*/
+/* Dawn draws focus at 50% foreground (~3:1 on ivory); use the full foreground colour. */
+*:focus-visible {
+  outline-color: rgb(var(--color-foreground));
+}
+
+.th-target {
+  min-block-size: var(--th-target);
+  min-inline-size: var(--th-target);
+}
+
+/* Dawn controls below 44px (filters/sort on collection and search, announcement link). */
+.facets__summary,
+.mobile-facets__open-wrapper,
+.mobile-facets__open,
+.facet-filters__sort,
+.announcement-bar__link {
+  min-block-size: var(--th-target);
+}
+
+.facets__summary,
+.mobile-facets__open,
+.announcement-bar__link {
+  display: flex;
+  align-items: center;
+}
+
+/* Dawn sets min-height: auto on these selects at (0,2,0) in a later stylesheet. */
+.facet-filters__field .select__select.facet-filters__sort,
+.mobile-facets__sort .select__select.select__select {
+  min-block-size: var(--th-target);
+}
+
+/* ---------------------------------------------------------------------------
+   6. Section rhythm for new sections
+*/
+.th-section {
+  padding-block: var(--th-section-y);
+}
+
+.th-section--tight {
+  padding-block: calc(var(--th-section-y) / 2);
+}
+
+.th-section__header {
+  margin-block-end: var(--th-space-5);
+}
+
+.th-section__header > :last-child {
+  margin-block-end: 0;
+}
+
+.th-section__title {
+  margin-block: 0 var(--th-space-2);
+}
+
+.th-section__lede {
+  margin: 0;
+  max-inline-size: 56ch;
+  color: rgba(var(--color-foreground), 0.75);
+}
+
+/* ---------------------------------------------------------------------------
+   7. Motion
+*/
+/*
+  Scroll reveal (Dawn's .scroll-trigger, assets/animations.js). Content is ALWAYS visible by
+  default: Dawn's base.css starts these elements at opacity 0.01 and relies on JS to reveal them,
+  so a late, failed or never-scrolled page (preview, crawlers, Lighthouse) kept content hidden.
+  Now the entrance animation only runs once animations.js has added html.js-reveal-ready AND
+  marked the element .th-reveal-run just before it scrolls into view. Elements already on screen
+  at load are never animated. Reduced motion: never animated.
+  (0,3,1) / (0,4,1) selectors outrank base.css's (0,3,0) rules.
+*/
+html .scroll-trigger.animate--fade-in:not(.th-reveal-run),
+html .scroll-trigger.animate--slide-in:not(.th-reveal-run) {
+  opacity: 1;
+  transform: none;
+  animation: none;
+}
+
+html .scroll-trigger:not(.th-reveal-run) .slider {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html.js-reveal-ready .scroll-trigger.th-reveal-run.animate--slide-in {
+    animation: var(--animation-slide-in);
+    animation-delay: calc(var(--animation-order, 0) * 75ms);
+    animation-fill-mode: both;
+  }
+
+  html.js-reveal-ready .scroll-trigger.th-reveal-run.animate--fade-in {
+    animation: var(--animation-fade-in);
+    animation-fill-mode: both;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .th-link {
+    transition: none;
+  }
+}

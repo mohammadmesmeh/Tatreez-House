@@ -1,0 +1,73 @@
+/*
+  section-editorial-split.css — image + text editorial layout (snippets/editorial-split.liquid),
+  used by the brand story and workshops teaser sections.
+*/
+
+.editorial-split__grid {
+  display: grid;
+  gap: var(--th-space-5);
+  align-items: center;
+}
+
+.editorial-split__media {
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: var(--th-radius);
+  background-color: rgb(var(--th-surface-alt));
+}
+
+.editorial-split__image {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.editorial-split__text {
+  max-inline-size: 56rem;
+}
+
+.editorial-split__grid--text-only .editorial-split__text {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.editorial-split__grid--text-only .th-eyebrow {
+  justify-content: center;
+}
+
+.editorial-split__divider {
+  max-inline-size: 16rem;
+  margin-block-end: var(--th-space-4);
+}
+
+.editorial-split__grid--text-only .editorial-split__divider {
+  margin-inline: auto;
+}
+
+.editorial-split__heading {
+  margin: 0 0 var(--th-space-3);
+}
+
+.editorial-split__body {
+  color: rgba(var(--color-foreground), 0.75);
+}
+
+.editorial-split__body > :first-child {
+  margin-block-start: 0;
+}
+
+.editorial-split__cta {
+  margin-block-start: var(--th-space-3);
+}
+
+@media screen and (min-width: 750px) {
+  .editorial-split__grid--image-start,
+  .editorial-split__grid--image-end {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--th-space-10);
+  }
+
+  .editorial-split__grid--image-end .editorial-split__media {
+    order: 2;
+  }
+}

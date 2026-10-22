@@ -263,6 +263,7 @@
     {% endstyle %}
 
     {{ 'base.css' | asset_url | stylesheet_tag }}
+    {{ 'tatreez-tokens.css' | asset_url | stylesheet_tag }}
     {%- if dir == 'rtl' -%}
       {{ 'rtl.css' | asset_url | stylesheet_tag }}
     {%- endif -%}

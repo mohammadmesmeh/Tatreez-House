@@ -2,6 +2,11 @@
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
 {{ 'component-price.css' | asset_url | stylesheet_tag }}
 {{ 'component-search.css' | asset_url | stylesheet_tag }}
+{%- if section.settings.quick_add == 'standard' -%}
+  {{ 'quick-add.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
 
 {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
   {{ 'component-facets.css' | asset_url | stylesheet_tag }}
@@ -278,6 +283,8 @@
                           show_secondary_image: section.settings.show_secondary_image,
                           show_vendor: section.settings.show_vendor,
                           show_rating: section.settings.show_rating,
+                          quick_add: section.settings.quick_add,
+                          section_id: section.id,
                           lazy_load: lazy_load,
                           skip_styles: skip_card_product_styles,
                           product_view_context: 'search'
@@ -351,9 +358,13 @@
     {
       "type": "select",
       "id": "columns_mobile",
-      "default": "2",
+      "default": "auto",
       "label": "t:sections.main-search.settings.columns_mobile.label",
       "options": [
+        {
+          "value": "auto",
+          "label": "t:sections.all.columns_mobile_auto.label"
+        },
         {
           "value": "1",
           "label": "t:sections.main-search.settings.columns_mobile.options__1.label"
@@ -439,6 +450,22 @@
       "id": "show_vendor",
       "default": false,
       "label": "t:sections.main-search.settings.show_vendor.label"
+    },
+    {
+      "type": "select",
+      "id": "quick_add",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:sections.main-collection-product-grid.settings.quick_add.options.option_1"
+        },
+        {
+          "value": "standard",
+          "label": "t:sections.main-collection-product-grid.settings.quick_add.options.option_2"
+        }
+      ],
+      "default": "standard",
+      "label": "t:sections.main-collection-product-grid.settings.quick_add.label"
     },
     {
       "type": "checkbox",

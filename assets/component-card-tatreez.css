@@ -1,0 +1,375 @@
+/*
+  component-card-tatreez.css — product card design (docs/DESIGN_SYSTEM.md, M2).
+  Loaded by snippets/card-product.liquid. Builds on Dawn's component-card.css: media ratio comes
+  from the section's image ratio setting (portrait = 4:5), the stretched title link and the
+  secondary image on hover are Dawn's.
+*/
+
+/* ---------------------------------------------------------------------------
+   Media
+*/
+.product-card-wrapper .card__inner {
+  border-radius: var(--th-radius);
+  overflow: hidden;
+}
+
+.product-card-wrapper .card__media .media {
+  background-color: rgb(var(--th-surface-alt));
+}
+
+/* Uncropped media (theme setting, e.g. Digital Pattern): whole chart on the linen surface. */
+.card--uncropped .card__media .media {
+  background-color: rgb(var(--th-surface-alt));
+  background-image:
+    repeating-linear-gradient(0deg, rgba(var(--th-ink), 0.025) 0 0.1rem, transparent 0.1rem 0.3rem),
+    repeating-linear-gradient(90deg, rgba(var(--th-ink), 0.02) 0 0.1rem, transparent 0.1rem 0.4rem);
+}
+
+.card--uncropped .card__media .media img {
+  object-fit: contain;
+  padding: 8%;
+}
+
+/* Hover: gentle zoom, ≤ 300ms ease-out (Dawn's default is slower). Desktop pointers only. */
+@media (hover: hover) and (pointer: fine) {
+  .product-card-wrapper .media.media--hover-effect > img {
+    transition:
+      transform var(--th-duration) var(--th-ease),
+      opacity var(--th-duration) var(--th-ease);
+  }
+
+  .product-card-wrapper:hover .media.media--hover-effect > img:first-child:only-child,
+  .product-card-wrapper:hover .media.media--hover-effect > img + img {
+    transform: scale(1.04);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Information
+*/
+.product-card-wrapper .card__information {
+  padding-block: var(--th-space-2) 0;
+  row-gap: 0.4rem;
+}
+
+.product-card-wrapper .card__eyebrow {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.product-card-wrapper .card__heading.h5 {
+  font-family: var(--font-heading-family);
+  font-size: calc(var(--font-heading-scale) * clamp(1.7rem, 1.6rem + 0.25vw, 2rem));
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: 0;
+}
+
+.product-card-wrapper .card__heading a {
+  text-decoration: none;
+}
+
+/* Stitched underline on the title when the card is hovered or the link is focused. */
+.product-card-wrapper .card__heading a {
+  background-image: repeating-linear-gradient(to right, currentColor 0 0.5rem, transparent 0.5rem 0.8rem);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 0.15rem;
+  transition: background-size var(--th-duration) var(--th-ease);
+}
+
+[dir='rtl'] .product-card-wrapper .card__heading a {
+  background-position: 100% 100%;
+}
+
+.product-card-wrapper:hover .card__heading a,
+.product-card-wrapper .card__heading a:focus-visible {
+  background-size: 100% 0.15rem;
+}
+
+.product-card-wrapper .price {
+  font-size: 1.5rem;
+  letter-spacing: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   Badges — from product data (snippets/card-badges.liquid)
+*/
+.product-card-wrapper .card__badge {
+  pointer-events: none;
+}
+
+.card-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0;
+}
+
+.card-badge {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--th-radius);
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgb(var(--th-white));
+  background-color: rgb(var(--th-green));
+}
+
+/* Sale and Sold out follow the merchant's badge colour-scheme settings. */
+.card-badge--sale,
+.card-badge--sold-out {
+  color: rgb(var(--color-foreground));
+  background-color: rgb(var(--color-background));
+}
+
+.card-badge--digital {
+  color: rgb(var(--th-ink));
+  background-color: rgb(var(--th-linen));
+  box-shadow: inset 0 0 0 var(--th-border-width) rgb(var(--th-linen-deep));
+}
+
+:lang(ar) .card-badge {
+  letter-spacing: 0;
+  text-transform: none;
+  font-size: 1.2rem;
+}
+
+/* ---------------------------------------------------------------------------
+   Equal-height cards with one action baseline. Every element from the grid item down is a
+   full-height flex column; the information grows (flex: 1) and the action row is pinned to the
+   bottom (margin-block-start: auto), so all buttons in a row line up whatever the title length.
+*/
+.grid__item > product-component {
+  display: block;
+  block-size: 100%;
+}
+
+.product-card-wrapper,
+.product-card-wrapper > .card {
+  block-size: 100%;
+}
+
+.product-card-wrapper > .card {
+  display: flex;
+  flex-direction: column;
+}
+
+.product-card-wrapper > .card > .card__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-card-wrapper > .card > .card__content > .card__information {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Colour dots: the row always exists (fixed height) so cards with and without colours match. */
+.card-swatches {
+  min-block-size: 1.6rem;
+  margin-block-start: 0.4rem;
+}
+
+.card-swatches__dots {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* The ring keeps light colours (Warm Ivory on an ivory card) distinguishable from the card. */
+.card-swatch {
+  display: block;
+  flex: none;
+  inline-size: 1.4rem;
+  block-size: 1.4rem;
+  border-radius: 50%;
+  background-color: var(--swatch, rgba(var(--color-foreground), 0.15));
+  box-shadow: inset 0 0 0 var(--th-border-width) rgba(var(--color-foreground), 0.35);
+}
+
+/* No colour data: a neutral tinted dot with a stronger ring; the name is in the hidden text. */
+.card-swatch--unknown {
+  background-color: rgba(var(--color-foreground), 0.15);
+  box-shadow: inset 0 0 0 var(--th-border-width) rgba(var(--color-foreground), 0.6);
+}
+
+.card-swatches__more {
+  font-size: 1.2rem;
+  color: rgba(var(--color-foreground), 0.75);
+}
+
+.card-swatches__more--compact {
+  display: none;
+}
+
+.card__rating {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 1.3rem;
+  color: rgba(var(--color-foreground), 0.75);
+}
+
+/* ---------------------------------------------------------------------------
+   Action row: always visible, same size and style on every card.
+*/
+.card-quick-add {
+  display: block;
+  position: relative;
+  z-index: 2;
+  margin-block-start: auto;
+  padding-block-start: var(--th-space-2);
+}
+
+.card-quick-add .quick-add {
+  margin: 0;
+}
+
+.card-action.quick-add__submit {
+  min-block-size: var(--th-target);
+  border-radius: var(--th-radius);
+}
+
+.card-action__label--short {
+  display: none;
+}
+
+/* Dawn's quick-add modal (opened by "Choose options"): token radius and spacing. Focus trap,
+   Escape and focus return are Dawn's ModalDialog. */
+.quick-add-modal__content {
+  border-radius: var(--th-radius);
+}
+
+.quick-add-modal__toggle {
+  min-inline-size: var(--th-target);
+  min-block-size: var(--th-target);
+}
+
+/* ---------------------------------------------------------------------------
+   Compact cards: on phone-width screens, a card at most 320px wide (the 2-column grid, the
+   peeking carousel) gets the compact layout. A one-column phone grid (cards > 320px) and every
+   desktop/tablet grid keep the full layout.
+*/
+.product-card-wrapper {
+  container-type: inline-size;
+  container-name: product-card;
+}
+
+@media screen and (max-width: 749px) {
+  @container product-card (max-width: 32rem) {
+    .card__eyebrow {
+      display: none;
+    }
+
+    .card__heading.h5 a {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      overflow: hidden;
+    }
+
+    .card-swatch--overflow,
+    .card-swatches__more--full {
+      display: none;
+    }
+
+    .card-swatches__more--compact {
+      display: inline;
+    }
+
+    .card-action__label {
+      position: absolute;
+      inline-size: 1px;
+      block-size: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    .card-action__label--short {
+      display: inline;
+    }
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Grid columns. Mobile: Dawn's "Mobile columns" setting (1 or 2), or "auto" = 1 column below
+   480px and 2 columns from 480px. Tablet: 3 columns. Desktop: from the section setting.
+*/
+@media screen and (max-width: 479px) {
+  .product-grid.grid--auto-col-tablet-down .grid__item {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+@media screen and (min-width: 480px) and (max-width: 749px) {
+  .product-grid.grid--auto-col-tablet-down .grid__item {
+    width: calc(50% - var(--grid-mobile-horizontal-spacing) / 2);
+    max-width: calc(50% - var(--grid-mobile-horizontal-spacing) / 2);
+  }
+}
+
+@media screen and (min-width: 750px) and (max-width: 989px) {
+  .product-grid:is(.grid--2-col-tablet-down, .grid--1-col-tablet-down, .grid--auto-col-tablet-down) .grid__item {
+    width: calc(33.33% - var(--grid-desktop-horizontal-spacing) * 2 / 3);
+    max-width: calc(33.33% - var(--grid-desktop-horizontal-spacing) * 2 / 3);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Homepage product rows on phones: a CSS scroll-snap carousel showing ~1.25 cards so the next
+   card peeks. No JavaScript; the list is focusable, so keyboard users scroll it with the arrow
+   keys. Native scrolling follows the reading direction in RTL.
+*/
+@media screen and (max-width: 749px) {
+  .th-swipe-mobile .product-grid {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: var(--grid-mobile-horizontal-spacing);
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: inline mandatory;
+    scroll-padding-inline: 1.5rem;
+    margin-inline: -1.5rem;
+    padding-inline: 1.5rem;
+    padding-block-end: var(--th-space-1);
+    scrollbar-width: thin;
+  }
+
+  .th-swipe-mobile .product-grid .grid__item {
+    flex: 0 0 82%;
+    width: 82%;
+    max-width: 82%;
+    scroll-snap-align: start;
+  }
+
+  .th-swipe-mobile .product-grid:focus-visible {
+    outline: 0.2rem solid rgb(var(--color-foreground));
+    outline-offset: 0.3rem;
+  }
+
+  .th-swipe-mobile .slider-buttons {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-card-wrapper .media.media--hover-effect > img,
+  .product-card-wrapper .card__heading a {
+    transition: none;
+  }
+
+  .product-card-wrapper:hover .media.media--hover-effect > img:first-child:only-child,
+  .product-card-wrapper:hover .media.media--hover-effect > img + img {
+    transform: none;
+  }
+}
