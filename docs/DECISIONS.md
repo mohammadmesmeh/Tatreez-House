@@ -2,6 +2,23 @@
 
 Short, dated record of project decisions and why they were made. Newest milestone first.
 
+## 2026-10-22 — Milestone M4 (events: workshops and community circles), branch `m4-events`
+
+| # | Decision | Reason |
+|---|---|---|
+| 1 | **Events are ordinary products, not a booking app.** Each workshop or circle is a product, each date is a variant (option `Date`, `YYYY-MM-DD HH:MM`, Palestine time), seats are inventory, `requires_shipping` is off, free circles are $0 products. | No monthly app subscription for the client; booking runs through Shopify's own cart and checkout (payments, taxes, order emails, refunds); "seats left" is real inventory; a non-technical owner adds a date in under a minute. See `docs/store-setup/EVENTS-SETUP.md`. |
+| 2 | Limits accepted with #1: no automatic Zoom links, reminders, waitlists or attendee lists beyond orders. The owner sends the Zoom link by email (docs/OWNER_GUIDE.md); see who booked under Orders filtered by product. | Fine for a small studio. If volume grows, add a free app later (e.g. order-tagging or email automations via Shopify Flow / Shopify Email) without changing the theme. |
+| 3 | **Time zone rule** (`snippets/event-date.liquid`): Palestine summer time (+03:00) from the last Saturday of March to the day before the last Saturday of October, otherwise +02:00. Dates are parsed with that explicit offset, so "upcoming" and the `<time datetime>` are correct whatever the shop's time zone setting is. | Liquid has no time zone database. Palestine sometimes moves the change (e.g. around Ramadan); in those weeks the offset can be one hour off, so the owner should avoid scheduling in change weeks or double-check the `.ics`. The Google Calendar link uses `ctz=Asia/Hebron` and is always right. |
+| 4 | Dates are formatted from the option value's parts, not with `| date`, with weekday/month names and patterns in the locales (EN "Sat, 7 Nov 2026 · 6:00 PM", AR "السبت، 7 نوفمبر 2026 · 6:00 م"), always followed by "Palestine time" / "بتوقيت فلسطين". Latin digits in both languages. | `| date` formats in the shop's time zone and English month names; the value is already Palestine wall time. |
+| 5 | Past dates are never offered (listing, chips, cards, teaser); sold-out upcoming dates show "Fully booked" and are disabled. A malformed date value renders as raw text and is logged in the theme editor only. | Honest availability; the page never breaks on owner typos. |
+| 6 | Events page filters are links (`?type=workshop`) with `aria-current`, applied by a small script; without JS every session shows. | Shareable filtered views; Liquid cannot read query strings, so filtering is client-side. Links + `aria-current` is the correct pattern for navigation-like filters. |
+| 7 | Session lookups use sort keys `timestamp:product_index:variant_index` from `snippets/event-session-keys.liquid`. | Liquid cannot sort objects; index keys avoid nested scans over every product and variant (code review finding). |
+| 8 | Free circles: no dynamic checkout ("Buy it now") button, "Reserve my free spot" adds to cart, the cart checkout completes with no payment. | Express wallets are not meant for $0 orders; Shopify checkout shows "Your order is free. No payment is required." |
+| 9 | The booking label and the session info are restored/swapped after each date change by `event-session.js`, loaded by the buy buttons (not by an optional block). | Dawn's product-form resets the label to "Add to cart" on every variant change; tying the fix to an optional block would break when the block is removed (code review finding). |
+| 10 | The newsletter form is one snippet (`newsletter-form`) used by the footer and the events empty states. | No duplicated form markup. Shopify's posted state is not scoped per form, so two forms on one page both show the result (documented limitation). |
+| 11 | Featured collection skips the product being viewed (used for "Other upcoming sessions"). | A product never recommends itself; no effect on pages without a product. |
+| 12 | The events suite runs on the real store domain through a theme preview (`--preview-theme`). | The `shopify theme dev` proxy cannot reach checkout, and a password login on the real domain invalidates the proxy's storefront session. |
+
 ## 2026-10-21 — Milestone M2.1 (wiring and verification), branch `m2-wiring`
 
 | # | Decision | Reason |
