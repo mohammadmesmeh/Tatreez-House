@@ -143,7 +143,9 @@
         "show_divider": true,
         "divider_tone": "accent",
         "color_scheme": "scheme-1",
-        "linen_surface": false
+        "linen_surface": false,
+        "collection": "events",
+        "sessions_count": 2
       }
     },
     "hero_slideshow": {

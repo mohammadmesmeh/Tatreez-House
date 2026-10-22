@@ -4,6 +4,8 @@
   @param {product_option} option - The product option whose values are rendered.
   @param {string} picker_type - The picker markup to render: `swatch`, `button`, `dropdown`, or `swatch_dropdown`.
   @param {block} [block] - The variant-picker block, required for swatch settings.
+  @param {boolean} [event_dates] - The option holds event dates: past dates are skipped, each
+    chip shows the formatted date and seats left, sold-out dates read "Fully booked".
   @param {object} [section] - The current product section context, supplied implicitly when rendered from that section and used to namespace option inputs.
 
   @example
@@ -11,9 +13,17 @@
 {%- enddoc -%}
 {%- liquid
   assign product_form_id = 'product-form-' | append: section.id
+  assign now = 'now' | date: '%s' | plus: 0
 -%}
 
 {%- for value in option.values -%}
+  {%- if event_dates -%}
+    {%- capture value_ts -%}{% render 'event-date', value: value.name, output: 'timestamp' %}{%- endcapture -%}
+    {%- assign value_ts = value_ts | strip | plus: 0 -%}
+    {%- if value_ts <= now -%}
+      {%- continue -%}
+    {%- endif -%}
+  {%- endif -%}
   {%- liquid
     assign swatch_focal_point = null
     if value.swatch.image
@@ -85,12 +95,35 @@
       {% endif %}
       {% if option_disabled %}
         class="disabled"
+        {% if event_dates %}
+          disabled
+        {% endif %}
       {% endif %}
       {{ input_dataset }}
     >
     <label for="{{ input_id }}">
-      {{ value -}}
-      {{ label_unavailable }}
+      {%- if event_dates -%}
+        {%- liquid
+          assign seats_note = ''
+          assign date_variant = value.variant
+          if option_disabled
+            assign seats_note = 'events.seats.full' | t
+          elsif date_variant.inventory_management == 'shopify' and date_variant.inventory_policy != 'continue'
+            if date_variant.inventory_quantity <= 3
+              assign seats_note = 'events.seats.few' | t: count: date_variant.inventory_quantity
+            else
+              assign seats_note = 'events.seats.left' | t: count: date_variant.inventory_quantity
+            endif
+          endif
+        -%}
+        <span class="event-chip__date">{% render 'event-date', value: value.name, output: 'short' %}</span>
+        {%- if seats_note != blank -%}
+          <span class="event-chip__seats">{{ seats_note }}</span>
+        {%- endif -%}
+      {%- else -%}
+        {{ value -}}
+        {{ label_unavailable }}
+      {%- endif -%}
     </label>
   {%- elsif picker_type == 'dropdown' or picker_type == 'swatch_dropdown' -%}
     <option

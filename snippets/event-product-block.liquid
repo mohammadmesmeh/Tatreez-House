@@ -1,0 +1,183 @@
+{% doc %}
+  Event blocks for the main product section (workshop template):
+  - event_summary: type badge and level · duration · format (custom.event_* metafields);
+  - event_session: the selected date with "Palestine time", seats left (tracked inventory only),
+    Add to calendar (Google Calendar link built here with ctz=Asia/Hebron; .ics built by
+    event-session.js) and a short policy line. Re-rendered on every date change
+    (event-session.js, loaded by buy-buttons, swaps #EventSession-<section id> from Dawn's
+    variant-change HTML);
+  - event_list: "What's included" / "What to bring" from a multi-line metafield, one list item per
+    line; renders nothing when the metafield is empty.
+
+  @param {product} product - The product. Required.
+  @param {block} block - The block (event_summary, event_session or event_list). Required.
+  @param {string} section_id - The main-product section id. Required.
+
+  @example
+  {% render 'event-product-block', product: product, block: block, section_id: section.id %}
+{% enddoc %}
+{%- liquid
+  capture date_index
+    render 'event-date-index', product: product
+  endcapture
+  assign date_index = date_index | strip | plus: 0
+  assign variant = product.selected_or_first_available_variant
+  assign product_type = product.type | downcase
+  assign event_type = 'workshop'
+  if product_type contains 'circle'
+    assign event_type = 'circle'
+  endif
+-%}
+{%- case block.type -%}
+  {%- when 'event_summary' -%}
+    {%- liquid
+      if event_type == 'circle' and product.price_max == 0
+        assign badge = 'events.type.free_circle' | t
+      elsif event_type == 'circle'
+        assign badge = 'events.type.circle' | t
+      else
+        assign badge = 'events.type.workshop' | t
+      endif
+      assign meta_parts = ''
+      assign meta_keys = 'event_level,event_duration,event_format' | split: ','
+      for key in meta_keys
+        assign meta_value = product.metafields.custom[key].value
+        if meta_value != blank
+          assign meta_parts = meta_parts | append: meta_value | append: '|'
+        endif
+      endfor
+      assign meta_parts = meta_parts | split: '|'
+    -%}
+    <div class="event-summary" {{ block.shopify_attributes }}>
+      <p class="event-session__badge event-session__badge--{{ event_type }}">{{ badge }}</p>
+      {%- if meta_parts.size > 0 -%}
+        <p class="event-session__meta">{{ meta_parts | join: ' · ' | escape }}</p>
+      {%- endif -%}
+    </div>
+
+  {%- when 'event_session' -%}
+    {%- liquid
+      assign raw_date = ''
+      if date_index >= 0
+        assign raw_date = variant.options[date_index]
+      endif
+      capture start_ts
+        render 'event-date', value: raw_date, output: 'timestamp'
+      endcapture
+      assign start_ts = start_ts | strip | plus: 0
+      assign now = 'now' | date: '%s' | plus: 0
+      assign upcoming = false
+      if start_ts > now
+        assign upcoming = true
+      endif
+      assign duration = block.settings.duration_minutes | default: 120
+
+      assign policy = block.settings.policy
+      if policy == blank
+        assign policy = 'events.product.policy' | t
+      endif
+
+      if upcoming
+        capture iso_start
+          render 'event-date', value: raw_date, output: 'iso'
+        endcapture
+        assign iso_start = iso_start | strip
+
+        # Google Calendar: local wall time + ctz, so no time zone arithmetic is needed here.
+        assign date_part = raw_date | slice: 0, 10
+        assign start_minutes = raw_date | slice: 11, 2 | plus: 0 | times: 60
+        assign start_minutes = raw_date | slice: 14, 2 | plus: 0 | plus: start_minutes
+        assign end_minutes = start_minutes | plus: duration
+        assign end_day = date_part | remove: '-'
+        if end_minutes >= 1440
+          assign end_minutes = end_minutes | minus: 1440
+          assign end_day = date_part | date: '%s' | plus: 86400 | date: '%Y%m%d'
+        endif
+        assign end_hour = end_minutes | divided_by: 60 | prepend: '0' | slice: -2, 2
+        assign end_minute = end_minutes | modulo: 60 | prepend: '0' | slice: -2, 2
+        assign start_hour = raw_date | slice: 11, 2
+        assign start_minute = raw_date | slice: 14, 2
+        assign start_stamp = date_part | remove: '-' | append: 'T' | append: start_hour | append: start_minute | append: '00'
+        assign end_stamp = end_day | append: 'T' | append: end_hour | append: end_minute | append: '00'
+        assign event_url = shop.url | append: product.url | append: '?variant=' | append: variant.id
+        assign google_title = product.title | url_param_escape
+        assign google_details = event_url | url_param_escape
+        assign google_url = 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=' | append: google_title
+        assign google_url = google_url | append: '&dates=' | append: start_stamp | append: '/' | append: end_stamp
+        assign google_url = google_url | append: '&ctz=Asia%2FHebron&details=' | append: google_details
+
+        capture seats_text
+          render 'event-seats', variant: variant
+        endcapture
+        assign seats_text = seats_text | strip
+      endif
+    -%}
+    {{ 'component-event-session.css' | asset_url | stylesheet_tag }}
+    <div class="event-session-info" {{ block.shopify_attributes }}>
+      <div id="EventSession-{{ section_id }}" class="event-session-info__content">
+        {%- if upcoming -%}
+          <p class="event-session-info__date">
+            <span class="visually-hidden">{{ 'events.product.selected_date' | t }}:</span>
+            {% render 'event-date', value: raw_date %}
+          </p>
+          {%- if seats_text != blank -%}
+            <p class="event-session-info__seats">{{ seats_text }}</p>
+          {%- endif -%}
+          {%- if block.settings.show_calendar -%}
+            <div class="event-calendar" role="group" aria-label="{{ 'events.product.add_to_calendar' | t }}">
+              <span class="event-calendar__label" aria-hidden="true">{{ 'events.product.add_to_calendar' | t }}</span>
+              <a
+                class="link underlined-link event-calendar__link"
+                href="{{ google_url }}"
+                target="_blank"
+                rel="noopener"
+              >
+                {{- 'events.product.google_calendar' | t -}}
+                <span class="visually-hidden">({{ 'accessibility.link_messages.new_window' | t }})</span>
+              </a>
+              <button
+                type="button"
+                class="link underlined-link event-calendar__link no-js-hidden"
+                data-ics
+                data-title="{{ product.title | escape }}"
+                data-start="{{ iso_start }}"
+                data-duration="{{ duration }}"
+                data-url="{{ event_url }}"
+                data-filename="{{ product.handle }}-{{ raw_date | slice: 0, 10 }}.ics"
+              >
+                {{- 'events.product.ics' | t -}}
+              </button>
+            </div>
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+      {%- if policy != blank -%}
+        <p class="event-session-info__policy">{{ policy | escape }}</p>
+      {%- endif -%}
+    </div>
+
+  {%- when 'event_list' -%}
+    {%- liquid
+      assign list_key = 'event_includes'
+      assign list_heading = 'events.product.includes' | t
+      if block.settings.content == 'bring'
+        assign list_key = 'event_bring'
+        assign list_heading = 'events.product.bring' | t
+      endif
+      assign list_value = product.metafields.custom[list_key].value
+    -%}
+    {%- if list_value != blank -%}
+      {%- assign list_lines = list_value | newline_to_br | split: '<br />' -%}
+      <div class="event-list" {{ block.shopify_attributes }}>
+        <h2 class="event-list__heading h5">{{ list_heading }}</h2>
+        <ul class="event-list__items">
+          {%- for line in list_lines -%}
+            {%- assign line_text = line | strip -%}
+            {%- if line_text != blank -%}
+              <li>{{ line_text | escape }}</li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      </div>
+    {%- endif -%}
+{%- endcase -%}

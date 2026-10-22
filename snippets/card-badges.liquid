@@ -19,6 +19,14 @@
   if shipped_variants.size == 0
     assign is_digital = true
   endif
+  # Workshops and circles don't ship either, but they are not downloads.
+  capture badge_date_index
+    render 'event-date-index', product: card_product
+  endcapture
+  assign badge_date_index = badge_date_index | strip | plus: 0
+  if badge_date_index >= 0
+    assign is_digital = false
+  endif
 
   assign on_sale = false
   if card_product.compare_at_price > card_product.price and card_product.available

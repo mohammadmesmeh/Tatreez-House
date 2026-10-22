@@ -607,6 +607,18 @@
       "name": "Workshops teaser",
       "presets": {
         "name": "Workshops teaser"
+      },
+      "settings": {
+        "header_sessions": {
+          "content": "Upcoming sessions",
+          "info": "When the collection has bookable dates, the next sessions replace the text."
+        },
+        "collection": {
+          "label": "Events collection"
+        },
+        "sessions_count": {
+          "label": "Sessions shown"
+        }
       }
     },
     "learn-teaser": {
@@ -627,22 +639,36 @@
     "collection-hero": {
       "name": "Collection hero",
       "settings": {
-        "show_description": { "label": "Show collection description" },
-        "show_collection_image": { "label": "Show collection image" },
+        "show_description": {
+          "label": "Show collection description"
+        },
+        "show_collection_image": {
+          "label": "Show collection image"
+        },
         "image": {
           "label": "Image",
           "info": "Overrides the collection image."
         },
         "image_position": {
           "label": "Image position",
-          "options__1": { "label": "End" },
-          "options__2": { "label": "Start" }
+          "options__1": {
+            "label": "End"
+          },
+          "options__2": {
+            "label": "Start"
+          }
         },
         "heading_size": {
           "label": "Heading size",
-          "options__1": { "label": "Medium" },
-          "options__2": { "label": "Large" },
-          "options__3": { "label": "Extra large" }
+          "options__1": {
+            "label": "Medium"
+          },
+          "options__2": {
+            "label": "Large"
+          },
+          "options__3": {
+            "label": "Extra large"
+          }
         }
       }
     },
@@ -651,13 +677,21 @@
       "settings": {
         "layout": {
           "label": "Layout",
-          "options__1": { "label": "Full-bleed image" },
-          "options__2": { "label": "Split: image beside text" }
+          "options__1": {
+            "label": "Full-bleed image"
+          },
+          "options__2": {
+            "label": "Split: image beside text"
+          }
         },
         "split_image_position": {
           "label": "Split image position",
-          "options__1": { "label": "Start" },
-          "options__2": { "label": "End" }
+          "options__1": {
+            "label": "Start"
+          },
+          "options__2": {
+            "label": "End"
+          }
         },
         "show_eyebrow": {
           "label": "Show eyebrow"
@@ -825,10 +859,18 @@
       },
       "divider_tone": {
         "label": "Stitch divider colour",
-        "options__1": { "label": "Embroidery red" },
-        "options__2": { "label": "Text colour" },
-        "options__3": { "label": "Button colour" },
-        "options__4": { "label": "Linen" }
+        "options__1": {
+          "label": "Embroidery red"
+        },
+        "options__2": {
+          "label": "Text colour"
+        },
+        "options__3": {
+          "label": "Button colour"
+        },
+        "options__4": {
+          "label": "Linen"
+        }
       },
       "show_divider": {
         "label": "Show stitch divider"
@@ -921,11 +963,11 @@
           "label": "Change every"
         },
         "heading_utilities": {
-         "content": "Utilities"
+          "content": "Utilities"
         },
         "paragraph": {
           "content": "Appear only on large screens"
-        },                     
+        },
         "show_social": {
           "label": "Social media icons",
           "info": "[Manage social accounts](/editor?context=theme&category=social%20media)"
@@ -989,7 +1031,7 @@
         },
         "header_layout": {
           "content": "Layout"
-        },            
+        },
         "desktop_layout": {
           "label": "Layout",
           "options__1": {
@@ -1080,9 +1122,9 @@
           "default": "Collections",
           "label": "Heading"
         },
-         "header_layout": {
-        "content": "Layout"
-        },        
+        "header_layout": {
+          "content": "Layout"
+        },
         "image_ratio": {
           "label": "Image ratio",
           "options__1": {
@@ -1164,17 +1206,17 @@
           "label": "Heading"
         },
         "layout_header": {
-        "content": "Layout"
+          "content": "Layout"
         },
         "text_header": {
-        "content": "Text"
-        },        
+          "content": "Text"
+        },
         "blog": {
           "label": "Blog"
         },
         "post_limit": {
           "label": "Post count"
-        }, 
+        },
         "columns_desktop": {
           "label": "Columns"
         },
@@ -1200,7 +1242,7 @@
       "name": "Featured collection",
       "settings": {
         "header_text": {
-        "content": "Text"
+          "content": "Text"
         },
         "title": {
           "label": "Heading",
@@ -1228,8 +1270,8 @@
           "content": "Collection layout"
         },
         "header_mobile": {
-        "content": "Mobile layout"
-        },                 
+          "content": "Mobile layout"
+        },
         "collection": {
           "label": "Collection"
         },
@@ -1700,7 +1742,7 @@
           "options__4": {
             "label": "Large"
           }
-          },
+        },
         "content": {
           "content": "Content"
         },
@@ -1805,9 +1847,9 @@
         "buttons": {
           "name": "Buttons",
           "settings": {
-          "header_1":{
-          "content": "Button 1"
-          },
+            "header_1": {
+              "content": "Button 1"
+            },
             "button_label_1": {
               "label": "Label",
               "info": "Leave blank to hide",
@@ -1819,7 +1861,7 @@
             "button_style_secondary_1": {
               "label": "Outline style"
             },
-            "header_2":{
+            "header_2": {
               "content": "Button 2"
             },
             "button_label_2": {
@@ -1843,12 +1885,12 @@
     "image-with-text": {
       "name": "Image with text",
       "settings": {
-      "header": {
-      "content": "Content"
-      },
-      "header_colors": {
-      "content": "Colors" 
-      },
+        "header": {
+          "content": "Content"
+        },
+        "header_colors": {
+          "content": "Colors"
+        },
         "image": {
           "label": "Image"
         },
@@ -2019,15 +2061,15 @@
         "image": {
           "label": "Image"
         },
-        "header":{
-        "content": "Image"
+        "header": {
+          "content": "Image"
         },
-        "header_2":{
-        "content": "Content"
+        "header_2": {
+          "content": "Content"
         },
-        "header_3":{
-        "content": "Colors"
-        },        
+        "header_3": {
+          "content": "Colors"
+        },
         "image_height": {
           "options__1": {
             "label": "Adapt to image"
@@ -2800,7 +2842,7 @@
             },
             "pairing_2": {
               "label": "Pairing 2"
-            },            
+            },
             "icon_2": {
               "label": "Icon"
             },
@@ -2812,8 +2854,8 @@
               "default": "Heading"
             },
             "pairing_3": {
-            "label": "Pairing 3"
-            },             
+              "label": "Pairing 3"
+            },
             "icon_3": {
               "label": "Icon"
             },
@@ -2823,6 +2865,45 @@
             "heading_3": {
               "label": "Heading",
               "default": "Heading"
+            }
+          }
+        },
+        "event_summary": {
+          "name": "Event summary",
+          "settings": {
+            "paragraph": {
+              "content": "Shows the event type and the level, duration and format metafields (custom.event_level, event_duration, event_format)."
+            }
+          }
+        },
+        "event_session": {
+          "name": "Event date and calendar",
+          "settings": {
+            "show_calendar": {
+              "label": "Show Add to calendar"
+            },
+            "duration_minutes": {
+              "label": "Session length",
+              "info": "Used for calendar entries."
+            },
+            "policy": {
+              "label": "Policy note",
+              "info": "Leave empty to use the translated default text."
+            }
+          }
+        },
+        "event_list": {
+          "name": "Event details list",
+          "settings": {
+            "content": {
+              "label": "Content",
+              "info": "Hidden when the metafield is empty. One list item per line.",
+              "options__1": {
+                "label": "What's included (custom.event_includes)"
+              },
+              "options__2": {
+                "label": "What to bring (custom.event_bring)"
+              }
             }
           }
         }
@@ -2928,7 +3009,7 @@
           "options__2": {
             "label": "2"
           }
-        },        
+        },
         "image_ratio": {
           "label": "Image ratio",
           "options__1": {
@@ -2980,10 +3061,10 @@
         },
         "header_layout": {
           "content": "Layout"
-        },                            
+        },
         "header_button": {
           "content": "Button"
-        }, 
+        },
         "image_width": {
           "label": "Width",
           "options__1": {
@@ -3190,7 +3271,7 @@
         },
         "content_header": {
           "content": "Content"
-        },        
+        },
         "desktop_content_alignment": {
           "options__1": {
             "label": "Left"
@@ -3422,8 +3503,8 @@
           "name": "Buttons",
           "settings": {
             "header_button1": {
-            "content": "Button 1"
-            }, 
+              "content": "Button 1"
+            },
             "button_label_1": {
               "label": "Label",
               "info": "Leave blank to hide",
@@ -3437,7 +3518,7 @@
             },
             "header_button2": {
               "content": "Button 2"
-            },             
+            },
             "button_label_2": {
               "label": "Label",
               "info": "Leave label blank to hide"
@@ -3577,7 +3658,7 @@
               "default": "Tell your brand's story through images"
             },
             "header_button": {
-            "content": "Button"      
+              "content": "Button"
             },
             "button_label": {
               "label": "Label",
@@ -3591,7 +3672,7 @@
               "label": "Outline style"
             },
             "box_align": {
-              "label": "Content position",              
+              "label": "Content position",
               "options__1": {
                 "label": "Top left"
               },
@@ -3621,7 +3702,7 @@
               }
             },
             "header_layout": {
-            "content": "Layout"                 
+              "content": "Layout"
             },
             "show_text_box": {
               "label": "Container"
@@ -3642,11 +3723,11 @@
               "label": "Overlay opacity"
             },
             "header_text": {
-            "content": "Text"      
+              "content": "Text"
             },
             "header_colors": {
-            "content": "Colors"                 
-            },            
+              "content": "Colors"
+            },
             "text_alignment_mobile": {
               "label": "Mobile content alignment",
               "options__1": {
@@ -3707,8 +3788,8 @@
           "label": "Container color scheme"
         },
         "section_color_scheme": {
-        "label": "Section color scheme"
-        },        
+          "label": "Section color scheme"
+        },
         "open_first_collapsible_row": {
           "label": "Open first row"
         },
@@ -3908,6 +3989,84 @@
         "open_by_default": {
           "label": "Open by default"
         }
+      }
+    },
+    "events-listing": {
+      "name": "Events listing",
+      "settings": {
+        "header_hero": {
+          "content": "Hero",
+          "info": "On a page, the page title is the heading and the page content is the intro (Online Store › Pages)."
+        },
+        "translated_default": {
+          "info": "Leave empty to use the translated default text."
+        },
+        "eyebrow": {
+          "label": "Eyebrow"
+        },
+        "title": {
+          "label": "Heading",
+          "info": "Used only when the section is not on a page."
+        },
+        "text": {
+          "label": "Intro"
+        },
+        "image": {
+          "label": "Image"
+        },
+        "image_position": {
+          "label": "Image position",
+          "options__1": {
+            "label": "Start"
+          },
+          "options__2": {
+            "label": "End"
+          }
+        },
+        "linen_surface": {
+          "label": "Linen background"
+        },
+        "header_sessions": {
+          "content": "Sessions"
+        },
+        "collection": {
+          "label": "Events collection",
+          "info": "Every future date of every product in this collection is listed. Products need an option named Date with values like 2026-11-07 18:00 (Palestine time)."
+        },
+        "max_sessions": {
+          "label": "Sessions shown"
+        },
+        "show_filters": {
+          "label": "Show filters",
+          "info": "Shown when the collection has both workshops and community circles."
+        }
+      },
+      "blocks": {
+        "step": {
+          "name": "Booking step",
+          "settings": {
+            "title": {
+              "label": "Title"
+            },
+            "text": {
+              "label": "Text"
+            }
+          }
+        },
+        "faq": {
+          "name": "Question",
+          "settings": {
+            "question": {
+              "label": "Question"
+            },
+            "answer": {
+              "label": "Answer"
+            }
+          }
+        }
+      },
+      "presets": {
+        "name": "Events listing"
       }
     }
   }

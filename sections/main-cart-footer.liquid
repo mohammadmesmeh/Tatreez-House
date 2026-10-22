@@ -64,7 +64,12 @@
                 </div>
 
                 <small class="tax-note caption-large rte">
-                  {%- if cart.duties_included and cart.taxes_included -%}
+                  {%- comment -%} Nothing ships (e.g. only workshops): no shipping wording. {%- endcomment -%}
+                  {%- if cart.requires_shipping == false and cart.taxes_included -%}
+                    {{ 'events.cart.taxes_included_no_shipping' | t }}
+                  {%- elsif cart.requires_shipping == false -%}
+                    {{ 'events.cart.taxes_at_checkout_no_shipping' | t }}
+                  {%- elsif cart.duties_included and cart.taxes_included -%}
                     {%- if shop.shipping_policy.body == blank -%}
                       {{ 'sections.cart.duties_and_taxes_included_shipping_at_checkout_without_policy' | t }}
                     {%- else -%}

@@ -1,0 +1,383 @@
+{{ 'component-event-session.css' | asset_url | stylesheet_tag }}
+{{ 'section-events.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'events-filter.js' | asset_url }}" defer="defer"></script>
+
+{%- comment -%}
+  Events page: hero (page title as the only h1 + page content), upcoming sessions from the
+  events collection (every future "Date" variant, sorted by date, see snippets/event-session-keys),
+  filters (links with ?type=, applied by events-filter.js; without JS everything shows), an empty
+  state with the newsletter, "How booking works" steps and FAQ blocks.
+{%- endcomment -%}
+{%- liquid
+  assign events_collection = section.settings.collection
+  assign max_sessions = section.settings.max_sessions
+  if events_collection != blank
+    capture session_keys
+      render 'event-session-keys', products: events_collection.products
+    endcapture
+    assign session_keys = session_keys | strip | split: ','
+  else
+    assign session_keys = ''
+  endif
+
+  assign eyebrow = section.settings.eyebrow
+  if eyebrow == blank
+    assign eyebrow = 'events.page.eyebrow' | t
+  endif
+  assign hero_title = page.title | default: section.settings.title
+  if hero_title == blank
+    assign hero_title = 'events.page.title' | t
+  endif
+  assign hero_text = page.content | default: section.settings.text
+
+  assign count_all = 0
+  assign count_workshop = 0
+  assign count_circle = 0
+-%}
+
+{% render 'editorial-split',
+  section: section,
+  eyebrow: eyebrow,
+  heading: hero_title,
+  heading_tag: 'h1',
+  text: hero_text
+%}
+
+{%- capture session_items -%}
+  {%- for key in session_keys -%}
+    {%- liquid
+      assign key_parts = key | split: ':'
+      assign product_index = key_parts[1] | plus: 0
+      assign variant_index = key_parts[2] | plus: 0
+      assign event_product = events_collection.products[product_index]
+      assign event_variant = event_product.variants[variant_index]
+      assign product_type = event_product.type | downcase
+      assign event_type = 'workshop'
+      if product_type contains 'circle'
+        assign event_type = 'circle'
+      endif
+      assign count_all = count_all | plus: 1
+      if event_type == 'circle'
+        assign count_circle = count_circle | plus: 1
+      else
+        assign count_workshop = count_workshop | plus: 1
+      endif
+    -%}
+    <li
+      class="events-listing__item{% if count_all > max_sessions %} is-beyond-limit{% endif %}"
+      data-event-item
+      data-event-type="{{ event_type }}"
+    >
+      {% render 'event-session-card', product: event_product, variant: event_variant, heading_tag: 'h3' %}
+    </li>
+  {%- endfor -%}
+{%- endcapture -%}
+
+<div class="events-listing color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width th-section">
+    {%- if count_all > 0 -%}
+      <events-filter class="events-listing__sessions" data-max="{{ max_sessions }}">
+        <div class="events-listing__head">
+          <h2 class="events-listing__heading h2" id="EventsHeading-{{ section.id }}">{{ 'events.page.upcoming' | t }}</h2>
+          {%- if section.settings.show_filters and count_workshop > 0 and count_circle > 0 -%}
+            {%- liquid
+              assign shown_all = count_all | at_most: max_sessions
+              assign shown_workshop = count_workshop | at_most: max_sessions
+              assign shown_circle = count_circle | at_most: max_sessions
+            -%}
+            <nav class="events-filter" aria-label="{{ 'events.page.filter_label' | t }}">
+              <ul class="events-filter__list list-unstyled" role="list">
+                <li>
+                  <a
+                    href="{{ request.path }}"
+                    class="events-filter__link"
+                    data-filter="all"
+                    data-status="{{ 'events.page.filter_status' | t: count: shown_all | escape }}"
+                    aria-current="true"
+                  >
+                    {{- 'events.page.filter_all' | t -}}
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="{{ request.path }}?type=workshop"
+                    class="events-filter__link"
+                    data-filter="workshop"
+                    data-status="{{ 'events.page.filter_status' | t: count: shown_workshop | escape }}"
+                  >
+                    {{- 'events.page.filter_workshops' | t -}}
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="{{ request.path }}?type=circle"
+                    class="events-filter__link"
+                    data-filter="circle"
+                    data-status="{{ 'events.page.filter_status' | t: count: shown_circle | escape }}"
+                  >
+                    {{- 'events.page.filter_circles' | t -}}
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          {%- endif -%}
+        </div>
+        <p class="visually-hidden" role="status" data-filter-status></p>
+        <ol class="events-listing__list list-unstyled" role="list" aria-labelledby="EventsHeading-{{ section.id }}">
+          {{ session_items }}
+        </ol>
+        <p class="events-listing__filter-empty" data-filter-empty hidden>{{ 'events.page.filter_empty' | t }}</p>
+        {%- if count_all > max_sessions -%}
+          <a href="{{ events_collection.url }}" class="button button--secondary events-listing__all">
+            {{- 'events.actions.show_all' | t -}}
+          </a>
+        {%- endif -%}
+      </events-filter>
+    {%- else -%}
+      <div class="events-empty">
+        <h2 class="events-empty__heading h2">{{ 'events.page.empty_heading' | t }}</h2>
+        <p class="events-empty__text" id="EventsEmptyText-{{ section.id }}">{{ 'events.page.empty_text' | t }}</p>
+        {%- assign empty_form_id = 'ContactEvents-' | append: section.id -%}
+        {%- assign empty_text_id = 'EventsEmptyText-' | append: section.id -%}
+        {% render 'newsletter-form', form_id: empty_form_id, described_by: empty_text_id %}
+      </div>
+    {%- endif -%}
+
+    {%- assign step_blocks = section.blocks | where: 'type', 'step' -%}
+    {%- if step_blocks.size > 0 -%}
+      <div class="events-steps">
+        <h2 class="events-steps__heading h3">{{ 'events.steps.heading' | t }}</h2>
+        <ol class="events-steps__list list-unstyled" role="list">
+          {%- for block in step_blocks -%}
+            {%- liquid
+              assign step_title = block.settings.title
+              assign step_text = block.settings.text
+              assign step_n = forloop.index | at_most: 3
+              if step_title == blank
+                assign step_key = 'events.steps.step_' | append: step_n | append: '_title'
+                assign step_title = step_key | t
+              endif
+              if step_text == blank
+                assign step_key = 'events.steps.step_' | append: step_n | append: '_text'
+                assign step_text = step_key | t
+              endif
+            -%}
+            <li class="events-steps__item" {{ block.shopify_attributes }}>
+              <span class="events-steps__number" aria-hidden="true">{{ forloop.index }}</span>
+              <h3 class="events-steps__title h5">{{ step_title | escape }}</h3>
+              <p class="events-steps__text">{{ step_text | escape }}</p>
+            </li>
+          {%- endfor -%}
+        </ol>
+      </div>
+    {%- endif -%}
+
+    {%- assign faq_blocks = section.blocks | where: 'type', 'faq' -%}
+    {%- if faq_blocks.size > 0 -%}
+      <div class="events-faq">
+        <h2 class="events-faq__heading h3">{{ 'events.faq.heading' | t }}</h2>
+        {%- for block in faq_blocks -%}
+          {%- liquid
+            assign question = block.settings.question
+            assign answer = block.settings.answer
+            assign faq_n = forloop.index | at_most: 4
+            if question == blank
+              assign faq_key = 'events.faq.q' | append: faq_n
+              assign question = faq_key | t
+            endif
+            if answer == blank
+              assign faq_key = 'events.faq.a' | append: faq_n
+              assign answer = faq_key | t | prepend: '<p>' | append: '</p>'
+            endif
+          -%}
+          <details class="events-faq__item" {{ block.shopify_attributes }}>
+            <summary class="events-faq__question">
+              <span>{{ question | escape }}</span>
+              <span class="events-faq__icon" aria-hidden="true"></span>
+            </summary>
+            <div class="events-faq__answer rte">{{ answer }}</div>
+          </details>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.events-listing.name",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.events-listing.settings.header_hero.content",
+      "info": "t:sections.events-listing.settings.header_hero.info"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:sections.events-listing.settings.eyebrow.label",
+      "info": "t:sections.events-listing.settings.translated_default.info"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:sections.events-listing.settings.title.label",
+      "info": "t:sections.events-listing.settings.title.info"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "t:sections.events-listing.settings.text.label",
+      "info": "t:sections.events-listing.settings.title.info"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.events-listing.settings.image.label"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "options": [
+        {
+          "value": "start",
+          "label": "t:sections.events-listing.settings.image_position.options__1.label"
+        },
+        {
+          "value": "end",
+          "label": "t:sections.events-listing.settings.image_position.options__2.label"
+        }
+      ],
+      "default": "end",
+      "label": "t:sections.events-listing.settings.image_position.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_divider",
+      "default": true,
+      "label": "t:sections.all.show_divider.label"
+    },
+    {
+      "type": "select",
+      "id": "divider_tone",
+      "options": [
+        {
+          "value": "accent",
+          "label": "t:sections.all.divider_tone.options__1.label"
+        },
+        {
+          "value": "ink",
+          "label": "t:sections.all.divider_tone.options__2.label"
+        },
+        {
+          "value": "action",
+          "label": "t:sections.all.divider_tone.options__3.label"
+        },
+        {
+          "value": "border",
+          "label": "t:sections.all.divider_tone.options__4.label"
+        }
+      ],
+      "default": "accent",
+      "label": "t:sections.all.divider_tone.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "linen_surface",
+      "default": true,
+      "label": "t:sections.events-listing.settings.linen_surface.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.events-listing.settings.header_sessions.content"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "t:sections.events-listing.settings.collection.label",
+      "info": "t:sections.events-listing.settings.collection.info"
+    },
+    {
+      "type": "range",
+      "id": "max_sessions",
+      "min": 2,
+      "max": 48,
+      "step": 2,
+      "default": 12,
+      "label": "t:sections.events-listing.settings.max_sessions.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_filters",
+      "default": true,
+      "label": "t:sections.events-listing.settings.show_filters.label",
+      "info": "t:sections.events-listing.settings.show_filters.info"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "t:sections.events-listing.blocks.step.name",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.events-listing.blocks.step.settings.title.label",
+          "info": "t:sections.events-listing.settings.translated_default.info"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "t:sections.events-listing.blocks.step.settings.text.label",
+          "info": "t:sections.events-listing.settings.translated_default.info"
+        }
+      ]
+    },
+    {
+      "type": "faq",
+      "name": "t:sections.events-listing.blocks.faq.name",
+      "limit": 8,
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "t:sections.events-listing.blocks.faq.settings.question.label",
+          "info": "t:sections.events-listing.settings.translated_default.info"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "t:sections.events-listing.blocks.faq.settings.answer.label",
+          "info": "t:sections.events-listing.settings.translated_default.info"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.events-listing.presets.name",
+      "blocks": [
+        { "type": "step" },
+        { "type": "step" },
+        { "type": "step" },
+        { "type": "faq" },
+        { "type": "faq" },
+        { "type": "faq" },
+        { "type": "faq" }
+      ]
+    }
+  ]
+}
+{% endschema %}

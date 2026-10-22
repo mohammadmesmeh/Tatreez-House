@@ -1,0 +1,112 @@
+{% doc %}
+  One bookable session (a product variant whose "Date" option is a future date): date tile, type
+  badge, title, level · duration · format (custom.event_* metafields), price or "Free", seats
+  left (only when Shopify tracks the inventory), "Book a seat" / "Reserve a free spot" to the
+  product page with the date preselected, and a "Details" link. A sold-out upcoming date shows
+  "Fully booked" instead of the booking button. Seats are never invented: without tracked
+  inventory nothing is shown.
+
+  @param {product} product - The event product. Required.
+  @param {variant} variant - The session (variant). Required.
+  @param {string} [heading_tag] - Heading level for the title, following the page outline (default 'h3').
+  @param {boolean} [compact] - Smaller card without the details line (homepage teaser).
+
+  @example
+  {% render 'event-session-card', product: product, variant: variant, heading_tag: 'h3' %}
+{% enddoc %}
+{%- liquid
+  assign heading_tag = heading_tag | default: 'h3'
+  capture date_index
+    render 'event-date-index', product: product
+  endcapture
+  assign date_index = date_index | strip | plus: 0 | at_least: 0
+  assign raw_date = variant.options[date_index]
+
+  assign product_type = product.type | downcase
+  assign event_type = 'workshop'
+  if product_type contains 'circle'
+    assign event_type = 'circle'
+  endif
+  if event_type == 'circle' and variant.price == 0
+    assign badge = 'events.type.free_circle' | t
+  elsif event_type == 'circle'
+    assign badge = 'events.type.circle' | t
+  else
+    assign badge = 'events.type.workshop' | t
+  endif
+
+  assign fully_booked = false
+  if variant.available == false
+    assign fully_booked = true
+  endif
+  capture seats_text
+    render 'event-seats', variant: variant
+  endcapture
+  assign seats_text = seats_text | strip
+  assign few_seats = false
+  if fully_booked == false and variant.inventory_management == 'shopify' and variant.inventory_quantity <= 3
+    assign few_seats = true
+  endif
+
+  if variant.price == 0
+    assign book_label = 'events.actions.reserve_free' | t
+  else
+    assign book_label = 'events.actions.book' | t
+  endif
+
+  capture short_date
+    render 'event-date', value: raw_date, output: 'short'
+  endcapture
+  assign short_date = short_date | strip
+
+  assign meta_parts = ''
+  assign meta_keys = 'event_level,event_duration,event_format' | split: ','
+  for key in meta_keys
+    assign meta_value = product.metafields.custom[key].value
+    if meta_value != blank
+      assign meta_parts = meta_parts | append: meta_value | append: '|'
+    endif
+  endfor
+  assign meta_parts = meta_parts | split: '|'
+  assign title_id = 'EventSession-' | append: variant.id
+-%}
+<article
+  class="event-session{% if compact %} event-session--compact{% endif %}{% if fully_booked %} event-session--full{% endif %}"
+  data-event-type="{{ event_type }}"
+  aria-labelledby="{{ title_id }}"
+>
+  {% render 'event-date', value: raw_date, output: 'tile' %}
+  <div class="event-session__body">
+    <p class="event-session__badge event-session__badge--{{ event_type }}">{{ badge }}</p>
+    <{{ heading_tag }} class="event-session__title h4" id="{{ title_id }}">{{ product.title | escape }}</{{ heading_tag }}>
+    {%- if meta_parts.size > 0 and compact != true -%}
+      <p class="event-session__meta">{{ meta_parts | join: ' · ' | escape }}</p>
+    {%- endif -%}
+    <p class="event-session__facts">
+      <span class="event-session__price">
+        {%- if variant.price == 0 -%}
+          {{ 'events.free' | t }}
+        {%- else -%}
+          {{ variant.price | money }}
+        {%- endif -%}
+      </span>
+      {%- if seats_text != blank -%}
+        <span class="event-session__seats{% if fully_booked %} event-session__seats--full{% elsif few_seats %} event-session__seats--few{% endif %}">
+          {{- seats_text -}}
+        </span>
+      {%- endif -%}
+    </p>
+    <div class="event-session__actions">
+      {%- unless fully_booked -%}
+        <a href="{{ product.url }}?variant={{ variant.id }}" class="button event-session__book">
+          {{- book_label -}}
+          <span class="visually-hidden">: {{ product.title | escape }}, {{ short_date }}</span>
+        </a>
+      {%- endunless -%}
+      <a href="{{ product.url }}" class="link underlined-link event-session__details">
+        {{- 'events.actions.details' | t -}}
+        <span class="visually-hidden">: {{ product.title | escape }}</span>
+      </a>
+    </div>
+  </div>
+</article>

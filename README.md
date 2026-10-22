@@ -35,6 +35,31 @@ patterns, workshops, and learning content about motifs and technique.
 - **Merchant-editable throughout.** Every value is a section or theme setting, and the theme
   editor is kept in sync with the repository (pull before every push).
 
+## Events & workshops
+
+People can book paid online workshops and reserve a free spot in the monthly stitch circle, with
+no booking app: each workshop is a product, each **date is a variant**, **seats are inventory**,
+and free circles go through a $0 checkout. The owner adds a date in under a minute
+([`docs/OWNER_GUIDE.md`](docs/OWNER_GUIDE.md)).
+
+- **Workshops page:** every upcoming session from the events collection, sorted by date, with
+  a stitched date tile, type, level · duration · format, price or "Free", and real seats left.
+  Filters (All / Workshops / Community circles) are shareable links. When there are no dates,
+  the page offers the newsletter instead of fake dates. It also has "How booking works" steps
+  and an FAQ, all editable.
+- **Workshop page:** upcoming dates as chips (sold-out dates disabled as "Fully booked"),
+  "Book a seat" or "Reserve my free spot", add to calendar (Google Calendar, `.ics`), what's
+  included and what to bring from product metafields.
+- **Everywhere:** cards show the next date and "From $45" / "Free"; the cart shows the formatted
+  date; the homepage shows the next two sessions. Dates are written per language (Arabic weekday
+  and month names) and always say "Palestine time" / "بتوقيت فلسطين".
+
+| Workshops page (English) | Workshop page (Arabic) |
+|---|---|
+| ![Workshops page with upcoming sessions at 1440 px](docs/screenshots/m4/events-1440-en.jpg) | ![Workshop product page in Arabic at 1440 px](docs/screenshots/m4/workshop-1440-ar.jpg) |
+
+Why products instead of a booking app, and the time zone rule: [`docs/DECISIONS.md`](docs/DECISIONS.md) (M4).
+
 ## Quality and verification
 
 Accessibility (WCAG 2.2 AA) and behaviour are acceptance criteria, checked against the real store:
@@ -45,12 +70,14 @@ Accessibility (WCAG 2.2 AA) and behaviour are acceptance criteria, checked again
 | Cards and grids suite (baselines, add to cart, quick-add modal focus trap, mobile columns, carousels, quick add in every grid) | 40 pass, 1 skipped (needs a sold-out product; passed when one existed) |
 | Keyboard suite (skip link, mega menu, focus indicators, drawer, language selector) | 12 / 12 |
 | Layout suite (4 pages × 6 widths × EN / AR: no horizontal scroll, correct direction, one h1) | 50 / 50 |
+| Events suite (sorting, past dates, filters with and without JS, seats, empty state, date chips, calendar links, `.ics`, booking, Buy it now, $0 checkout, EN + `/ar`, 360–1440 px, keyboard booking) | 39 / 40 (the $0 checkout passed in a separate run; see `specs/m4-events-untested.md`) |
 | Lighthouse accessibility (home, collection, product, Arabic home; live store) | 100 |
 | `shopify theme check` | 0 errors |
 
 Mobile performance is measured but not yet tuned: Lighthouse scores 30–59 on the live store, with
-main-thread blocking as the main cost. That work is planned for milestone M6. Open items and their
-reasons are listed in [`specs/m2-wiring-untested.md`](specs/m2-wiring-untested.md).
+main-thread blocking as the main cost. That work is planned for milestone M7. Open items and their
+reasons are listed in [`specs/m2-wiring-untested.md`](specs/m2-wiring-untested.md) and
+[`specs/m4-events-untested.md`](specs/m4-events-untested.md).
 
 ## Screenshots
 
@@ -73,9 +100,10 @@ The storefront runs on a password-protected Shopify development store.
 
 ```
 layout/      theme.liquid (lang/dir, rtl.css for Arabic), password.liquid
-sections/    Dawn sections + hero-slideshow, path-cards, collection-hero, brand-story,
+sections/    Dawn sections + hero-slideshow, events-listing, path-cards, collection-hero, brand-story,
              workshops-teaser, learn-teaser, minimal footer
-snippets/    Dawn snippets + card-quick-add, card-swatches, rating-stars, card-badges,
+snippets/    Dawn snippets + event-date, event-session-keys, event-session-card, event-product-block,
+             newsletter-form, card-quick-add, card-swatches, rating-stars, card-badges,
              mega-menu-feature, header-logo-over-hero, stitch-divider, editorial-split, sticky-atc
 templates/   JSON templates
 assets/      Dawn CSS/JS + tatreez-tokens.css (design tokens), component and section CSS,
@@ -147,6 +175,8 @@ python -X utf8 scripts/tests/hero_slideshow_test.py http://127.0.0.1:9393 out/he
 python -X utf8 scripts/tests/cards_grids_test.py   http://127.0.0.1:9393 out/cards
 python -X utf8 scripts/tests/keyboard_test.py      http://127.0.0.1:9393 out/kbd
 python -X utf8 scripts/tests/wired_screens_test.py http://127.0.0.1:9393 docs/screenshots/m2/wired
+# Events: runs on the real store domain through a theme preview (the dev proxy can't reach checkout)
+STORE_PW=... python -X utf8 scripts/tests/events_test.py unused out/events --preview-theme <theme-id>
 ```
 
 ## Product reviews
@@ -166,9 +196,10 @@ review widget as an **app block** in the product template. Never import or creat
 | M2 | Design system and UX: tokens, Fraunces, header/mega menu, product cards, collection hero, homepage story sections, sticky add to cart | Done |
 | M2.1 | Hero slideshow, consistent card actions + quick add in every grid, swatch palette, minimal footer, store wiring, acceptance suites, live theme | Done |
 | M3 | Garment product template (metafields); digital pattern template | Planned |
-| M4 | Pattern library (`motif` metaobjects, filtering) | Planned |
-| M5 | Workshops (products as events) and community circles; Learn hub, blog and article templates | Planned |
-| M6 | Performance and accessibility audit on production, owner handoff guide, case study | Planned |
+| M4 | Events: paid workshops and free monthly community circles (products as events), owner guide | Done |
+| M5 | Pattern library (`motif` metaobjects, filtering) | Planned |
+| M6 | Learn hub, blog and article templates | Planned |
+| M7 | Performance and accessibility audit on production, owner handoff guide, case study | Planned |
 
 Decisions and their reasons: [`docs/DECISIONS.md`](docs/DECISIONS.md). Full brief:
 [`docs/PROJECT_BRIEF.md`](docs/PROJECT_BRIEF.md).

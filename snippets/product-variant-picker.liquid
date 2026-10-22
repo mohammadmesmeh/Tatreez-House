@@ -48,14 +48,28 @@
           %}
         </fieldset>
       {%- elsif picker_type == 'button' -%}
-        <fieldset class="js product-form__input product-form__input--pill">
-          <legend class="form__label">{{ option.name }}</legend>
-          {% render 'product-variant-options',
-            option: option,
-            block: block,
-            picker_type: picker_type
-          %}
-        </fieldset>
+        {%- assign option_handle = option.name | downcase | strip -%}
+        {%- if option_handle == 'date' -%}
+          {%- comment -%} Event dates: upcoming dates only, formatted per locale (snippets/event-date). {%- endcomment -%}
+          <fieldset class="js product-form__input product-form__input--pill product-form__input--event-dates" data-event-dates>
+            <legend class="form__label">{{ 'events.product.choose_date' | t }}</legend>
+            {% render 'product-variant-options',
+              option: option,
+              block: block,
+              picker_type: picker_type,
+              event_dates: true
+            %}
+          </fieldset>
+        {%- else -%}
+          <fieldset class="js product-form__input product-form__input--pill">
+            <legend class="form__label">{{ option.name }}</legend>
+            {% render 'product-variant-options',
+              option: option,
+              block: block,
+              picker_type: picker_type
+            %}
+          </fieldset>
+        {%- endif -%}
       {%- else -%}
         <div class="product-form__input product-form__input--dropdown">
           <label class="form__label" for="Option-{{ section.id }}-{{ forloop.index0 }}">
