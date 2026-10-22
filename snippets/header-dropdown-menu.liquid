@@ -1,5 +1,7 @@
 {% doc %}
-  Renders the header menu in the dropdown style.
+  Renders the header menu in the dropdown style: each item with children opens a compact card
+  under its own trigger (component-header-tatreez.css). Behaviour (hover, click/Enter/Space,
+  Escape, outside click, focus leaving, one open at a time) lives in details-disclosure.js.
 
   @param {object} [section] - The current header section context, supplied implicitly when rendered from that section and used for menu settings.
 
@@ -29,7 +31,7 @@
               </summary>
               <ul
                 id="HeaderMenu-MenuList-{{ forloop.index }}"
-                class="header__submenu list-menu list-menu--disclosure color-{{ section.settings.menu_color_scheme }} gradient caption-large motion-reduce global-settings-popup"
+                class="header__submenu th-dropdown list-menu list-menu--disclosure color-{{ section.settings.menu_color_scheme }} gradient motion-reduce"
                 role="list"
                 tabindex="-1"
               >
@@ -44,7 +46,7 @@
                           aria-current="page"
                         {% endif %}
                       >
-                        {{ childlink.title | escape }}
+                        <span class="th-dropdown__label">{{ childlink.title | escape }}</span>
                       </a>
                     {%- else -%}
                       <details id="Details-HeaderSubMenu-{{ link.handle }}-{{ childlink.handle }}">
@@ -69,7 +71,7 @@
                                   aria-current="page"
                                 {% endif %}
                               >
-                                {{ grandchildlink.title | escape }}
+                                <span class="th-dropdown__label">{{ grandchildlink.title | escape }}</span>
                               </a>
                             </li>
                           {%- endfor -%}
