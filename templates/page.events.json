@@ -1,0 +1,40 @@
+{
+  "sections": {
+    "events": {
+      "type": "events-listing",
+      "blocks": {
+        "step_choose": { "type": "step", "settings": { "title": "", "text": "" } },
+        "step_book": { "type": "step", "settings": { "title": "", "text": "" } },
+        "step_zoom": { "type": "step", "settings": { "title": "", "text": "" } },
+        "faq_refunds": { "type": "faq", "settings": { "question": "", "answer": "" } },
+        "faq_needs": { "type": "faq", "settings": { "question": "", "answer": "" } },
+        "faq_recordings": { "type": "faq", "settings": { "question": "", "answer": "" } },
+        "faq_timezones": { "type": "faq", "settings": { "question": "", "answer": "" } }
+      },
+      "block_order": [
+        "step_choose",
+        "step_book",
+        "step_zoom",
+        "faq_refunds",
+        "faq_needs",
+        "faq_recordings",
+        "faq_timezones"
+      ],
+      "settings": {
+        "eyebrow": "",
+        "title": "",
+        "text": "",
+        "image": "",
+        "image_position": "end",
+        "show_divider": true,
+        "divider_tone": "accent",
+        "linen_surface": true,
+        "collection": "events",
+        "max_sessions": 12,
+        "show_filters": true,
+        "color_scheme": "scheme-1"
+      }
+    }
+  },
+  "order": ["events"]
+}

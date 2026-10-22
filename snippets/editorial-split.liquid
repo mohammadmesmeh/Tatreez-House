@@ -8,6 +8,7 @@
   @param {string} text - Rich text (HTML from a richtext setting or a *_html locale key).
   @param {string} cta_label - Button label; the button renders only with a link.
   @param {string} cta_link - Button URL.
+  @param {string} [heading_tag] - 'h1' when the split is the page hero (default 'h2').
 
   @example
   {% render 'editorial-split', section: section, eyebrow: eyebrow, heading: heading, text: text, cta_label: cta_label, cta_link: section.settings.link %}
@@ -15,6 +16,7 @@
 {%- liquid
   assign image = section.settings.image
   assign image_alt = image.alt | default: ''
+  assign heading_tag = heading_tag | default: 'h2'
 -%}
 <div class="editorial-split color-{{ section.settings.color_scheme }} gradient{% if section.settings.linen_surface %} th-linen{% endif %}">
   <div class="page-width th-section">
@@ -40,7 +42,7 @@
         {%- if eyebrow != blank -%}
           <p class="th-eyebrow">{{ eyebrow | escape }}</p>
         {%- endif -%}
-        <h2 class="editorial-split__heading h0">{{ heading | escape }}</h2>
+        <{{ heading_tag }} class="editorial-split__heading h0">{{ heading | escape }}</{{ heading_tag }}>
         {%- if text != blank -%}
           <div class="editorial-split__body rte">{{ text }}</div>
         {%- endif -%}
