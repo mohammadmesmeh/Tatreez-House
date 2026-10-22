@@ -1,9 +1,9 @@
-"""M2.1 Step 7: keyboard pass over the wired header, mega menu, mobile drawer and footer.
+"""M2.1 Step 7: keyboard pass over the wired header, dropdown menus, mobile drawer and footer.
 
 usage: python -X utf8 scripts/tests/keyboard_test.py BASE_URL OUT_DIR
 
 Checks, in English and Arabic: the skip link is the first stop and moves focus to main; the Shop
-mega menu opens with Enter, its featured card is reachable, Escape closes it and focus returns
+dropdown opens with Enter, its first link is reachable, Escape closes it and focus returns
 to Shop; every Tab stop over the first 60 has a visible focus indicator; the mobile drawer opens
 from the keyboard and Escape closes it; the footer language selector opens with Enter and its
 options are reachable. Requires Playwright + Microsoft Edge.
@@ -47,15 +47,15 @@ with sync_playwright() as p:
         reached = False
         for _ in range(12):
             pg.keyboard.press('Tab')
-            if pg.evaluate("() => !!document.activeElement.closest('.mega-feature')"):
+            if pg.evaluate("() => !!document.activeElement.closest('#Details-HeaderMenu-1 .header__submenu')"):
                 reached = True; break
-        shot_name = f'{out}/kbd-mega-1440-{lang}.png'
+        shot_name = f'{out}/kbd-dropdown-1440-{lang}.png'
         pg.screenshot(path=shot_name, clip={'x': 0, 'y': 0, 'width': 1440, 'height': 440})
         pg.keyboard.press('Escape'); pg.wait_for_timeout(400)
         closed = not pg.evaluate("() => document.getElementById('Details-HeaderMenu-1').open")
         back = pg.evaluate("() => document.activeElement === document.querySelector('#Details-HeaderMenu-1 > summary')")
-        ok(f'{lang}: Shop mega menu opens with Enter, featured card reachable by Tab', opened and reached)
-        ok(f'{lang}: Escape closes the mega menu and focus returns to Shop', closed and back, pg.evaluate(ACTIVE))
+        ok(f'{lang}: Shop dropdown opens with Enter, its first link reachable by Tab', opened and reached)
+        ok(f'{lang}: Escape closes the dropdown and focus returns to Shop', closed and back, pg.evaluate(ACTIVE))
 
         pg.goto(base + prefix + '/', wait_until='load', timeout=120000); pg.wait_for_timeout(1000)
         missing = []

@@ -5,7 +5,7 @@ usage: python -X utf8 scripts/tests/wired_screens_test.py BASE_URL OUT_DIR
   OUT_DIR   where screenshots are written (docs/screenshots/m2/wired for the committed set)
 
 Per page, width and language: no horizontal scroll, correct document direction, exactly one h1.
-Also captures the open Shop mega menu and the footer. Requires Playwright + Microsoft Edge.
+Also captures the open Shop dropdown and the footer. Requires Playwright + Microsoft Edge.
 """
 import sys
 from playwright.sync_api import sync_playwright
@@ -49,8 +49,8 @@ with sync_playwright() as p:
             if w == 1440:
                 pg.goto(base + prefix + '/collections/all', wait_until='load', timeout=120000); pg.wait_for_timeout(600)
                 pg.locator('#Details-HeaderMenu-1 > summary').click(); pg.wait_for_timeout(500)
-                ok(f'{lang} 1440px: Shop mega menu shows the featured card', pg.locator('#Details-HeaderMenu-1 .mega-feature').is_visible())
-                shot(pg, f'mega-menu-1440-{lang}', clip={'x': 0, 'y': 0, 'width': 1440, 'height': 440})
+                ok(f'{lang} 1440px: Shop opens as a compact dropdown', pg.locator('#Details-HeaderMenu-1 .th-dropdown').is_visible())
+                shot(pg, f'dropdown-1440-{lang}', clip={'x': 0, 'y': 0, 'width': 1440, 'height': 440})
             ctx.close()
     b.close()
 
