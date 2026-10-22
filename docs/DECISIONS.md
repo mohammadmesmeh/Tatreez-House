@@ -19,6 +19,7 @@ Short, dated record of project decisions and why they were made. Newest mileston
 | 11 | New development store `tatreez-house.myshopify.com` (the previous store froze with HTTP 402). Theme code has no store-specific values; store data is recreated from `docs/store-setup/`. | Portability; the store can be rebuilt. |
 | 12 | Acceptance suites live in `scripts/tests/` and pick products by live availability (SKIP when no product is in the needed state). | Inventory changed during testing (all physical products briefly sold out). |
 | 13 | The `[shopify-account] Menu … not found in Storefront API` console message is left as is. | The menu exists for Liquid; the account component's API lookup does not find it and falls back to the same default items. Not fixable in theme code. |
+| 14 | **Permanent theme: "Tatreez House", ID `189100294237`** on `tatreez-house.myshopify.com` (live, published by the owner from the admin; Horizon is unpublished). 2026-10-22: editor state pulled first (logo, favicon, hero and path card images merged into the repo), then `m2-wiring` pushed with `--allow-live` at the owner's request; a pull-back showed the theme identical to the repo. | One long-lived theme that both the editor and the repo update; pull before every push (README) so editor changes are never overwritten. |
 
 ## 2026-10-20 — Milestone M2 (design system and UX), branch `m2-design-system`
 
