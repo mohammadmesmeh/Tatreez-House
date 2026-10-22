@@ -79,9 +79,9 @@
   {% render 'event-date', value: raw_date, start: event_start, output: 'tile' %}
   <div class="event-session__body">
     <p class="event-session__badge event-session__badge--{{ event_type }}">{{ badge }}</p>
-    <{{ heading_tag }} class="event-session__title h4" id="{{ title_id }}">{{ product.title | escape }}</{{ heading_tag }}>
+    <{{ heading_tag }} class="event-session__title h4" id="{{ title_id }}"><span dir="auto">{{ product.title | escape }}</span></{{ heading_tag }}>
     {%- if meta_parts.size > 0 and compact != true -%}
-      <p class="event-session__meta">{{ meta_parts | join: ' · ' | escape }}</p>
+      <p class="event-session__meta" dir="auto">{{ meta_parts | join: ' · ' | escape }}</p>
     {%- endif -%}
     <p class="event-session__facts">
       <span class="event-session__price">

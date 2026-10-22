@@ -44,7 +44,7 @@
         {%- endif -%}
         <{{ heading_tag }} class="editorial-split__heading h0">{{ heading | escape }}</{{ heading_tag }}>
         {%- if text != blank -%}
-          <div class="editorial-split__body rte">{{ text }}</div>
+          <div class="editorial-split__body rte" dir="auto">{{ text }}</div>
         {%- endif -%}
         {%- if cta_link != blank and cta_label != blank -%}
           <a href="{{ cta_link }}" class="button button--secondary editorial-split__cta">{{ cta_label | escape }}</a>

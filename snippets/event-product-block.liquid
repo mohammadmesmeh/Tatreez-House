@@ -51,7 +51,7 @@
     <div class="event-summary" {{ block.shopify_attributes }}>
       <p class="event-session__badge event-session__badge--{{ event_type }}">{{ badge }}</p>
       {%- if meta_parts.size > 0 -%}
-        <p class="event-session__meta">{{ meta_parts | join: ' · ' | escape }}</p>
+        <p class="event-session__meta" dir="auto">{{ meta_parts | join: ' · ' | escape }}</p>
       {%- endif -%}
     </div>
 
@@ -185,7 +185,7 @@
           {%- for line in list_lines -%}
             {%- assign line_text = line | strip -%}
             {%- if line_text != blank -%}
-              <li>{{ line_text | escape }}</li>
+              <li dir="auto">{{ line_text | escape }}</li>
             {%- endif -%}
           {%- endfor -%}
         </ul>

@@ -14,7 +14,7 @@
       <p class="th-eyebrow">{{ 'sections.collection_template.title' | t }}</p>
       <h1 class="collection-hero__title {{ section.settings.heading_size }}">{{ collection.title | escape }}</h1>
       {%- if section.settings.show_collection_description and collection.description != blank -%}
-        <div class="collection-hero__description rte">{{ collection.description }}</div>
+        <div class="collection-hero__description rte" dir="auto">{{ collection.description }}</div>
       {%- endif -%}
       {%- if section.settings.show_divider -%}
         {% render 'stitch-divider', id: section.id, tone: section.settings.divider_tone, class: 'collection-hero__divider' %}
