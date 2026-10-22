@@ -9,7 +9,7 @@
  */
 {
   "current": {
-    "logo_width": 90,
+    "logo_width": 130,
     "type_header_font": "assistant_n4",
     "heading_scale": 100,
     "type_body_font": "assistant_n4",
@@ -200,7 +200,9 @@
           "shadow": "#252722"
         }
       }
-    }
+    },
+    "favicon": "shopify://shop_images/tatreez-house-square.png",
+    "logo": "shopify://shop_images/tatreez-house-logo.png"
   },
   "presets": {
     "Dawn": {

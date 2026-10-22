@@ -45,7 +45,7 @@
           "type": "path",
           "settings": {
             "role": "shop",
-            "image": "",
+            "image": "shopify://shop_images/pexels-asal-hoseini-179881644-11326482.jpg",
             "heading": "",
             "text": "",
             "button_label": "",
@@ -56,7 +56,7 @@
           "type": "path",
           "settings": {
             "role": "learn",
-            "image": "",
+            "image": "shopify://shop_images/chapter-1-hands-hYJoJgKC.jpg",
             "heading": "",
             "text": "",
             "button_label": "",
@@ -153,7 +153,7 @@
           "type": "slide",
           "settings": {
             "role": "welcome",
-            "image": "",
+            "image": "shopify://shop_images/chapter-3-journey-BwnLN4JW.jpg",
             "mobile_image": "",
             "image_alt": "",
             "eyebrow": "",
@@ -171,7 +171,7 @@
           "type": "slide",
           "settings": {
             "role": "learn",
-            "image": "",
+            "image": "shopify://shop_images/chapter-1-hands-hYJoJgKC.jpg",
             "mobile_image": "",
             "image_alt": "",
             "eyebrow": "",
@@ -189,7 +189,7 @@
           "type": "slide",
           "settings": {
             "role": "patterns",
-            "image": "",
+            "image": "shopify://shop_images/chapter-4-thobe-CgiVbfOp.jpg",
             "mobile_image": "",
             "image_alt": "",
             "eyebrow": "",
