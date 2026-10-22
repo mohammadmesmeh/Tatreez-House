@@ -338,15 +338,23 @@ html.th-header-over-hero .hero-slide:not(.hero-slide--no-image)::before {
   background-color: rgba(var(--th-ivory), 0.35);
 }
 
+/* The fill grows with transform (compositor only). Animating inline-size re-ran layout on every
+   frame for the whole slide duration (Lighthouse: ~20 s of style & layout on a throttled phone). */
 .hero-progress__fill {
   display: block;
   block-size: 100%;
-  inline-size: 0;
+  inline-size: 100%;
   background-color: rgb(var(--th-ivory));
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+[dir='rtl'] .hero-progress__fill {
+  transform-origin: right center;
 }
 
 .hero-progress__step.is-done .hero-progress__fill {
-  inline-size: 100%;
+  transform: scaleX(1);
 }
 
 .hero-progress__step:focus-visible {
@@ -393,11 +401,11 @@ html.th-header-over-hero .hero-slide:not(.hero-slide--no-image)::before {
 
 @keyframes heroFill {
   from {
-    inline-size: 0;
+    transform: scaleX(0);
   }
 
   to {
-    inline-size: 100%;
+    transform: scaleX(1);
   }
 }
 
