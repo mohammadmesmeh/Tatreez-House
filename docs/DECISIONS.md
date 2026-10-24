@@ -2,6 +2,15 @@
 
 Short, dated record of project decisions and why they were made. Newest milestone first.
 
+## 2026-10-24 — One link underline: the shared stitch utility, branch `fix/stitch-underline`
+
+| # | Decision | Reason |
+|---|---|---|
+| 1 | **`.th-stitch` is the theme's only link underline** (in `assets/tatreez-tokens.css`). It goes on the inline element that wraps the words; it is drawn on hover and keyboard focus of the element or its link, on the current page (`aria-current`, `.header__active-menu-item`, the drawer's active section), on an open dropdown trigger, and always with `--persistent` (drawn heavier on hover/focus). It replaces the four separate stitch rules (header items, dropdown labels, card titles, `.th-link`). | The nav showed Dawn's solid underline stacked on the stitch (QA, "Workshops" current item): Dawn underlines `.header__menu-item:hover span`, `details[open] > .header__menu-item` and the active item, and a nested span had given those rules a new target. |
+| 2 | The utility removes `text-decoration` from the stitch, its descendants and the link/summary/button around it, with `!important`; the `:has()` part is a separate rule. | Text decorations propagate to the text, so every level must be cleared; Dawn's state selectors are more specific; a browser without `:has()` then only loses that one rule. |
+| 3 | Content links (rich text), the language selector and Dawn's "View all" link keep Dawn's single solid underline; footer, menu, card, Details and teaser links use the stitch. | One underline style per state everywhere; content links stay underlined at rest (WCAG 1.4.1). |
+| 4 | Guarded by `scripts/tests/underline_audit.py` (every audited element, EN + /ar) and the dropdown suite (stitch drawn and no text-decoration anywhere along it for current, hover, focus and open; neither at rest). | A future link cannot double up unnoticed. |
+
 ## 2026-10-22 — Header: compact dropdowns instead of mega menu panels, branch `header-dropdowns`
 
 | # | Decision | Reason |

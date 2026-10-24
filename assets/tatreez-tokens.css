@@ -212,31 +212,61 @@ h4,
 }
 
 /* ---------------------------------------------------------------------------
-   3. Stitched link underline — a dashed "running stitch" drawn with gradients. Shown on hover
-   AND focus; the focus outline from section 5 always stays, so focus never depends on it.
+   3. The stitch: the theme's one link underline (a dashed "running stitch").
+   Put .th-stitch on the inline element that wraps the words (not on a block link), so it follows
+   the text and repeats per line. It replaces Dawn's text-decoration underline: decorations
+   propagate to the text, so they are removed from the stitch, its descendants and the link /
+   summary / button around it (!important, because Dawn's state selectors are more specific).
+   Drawn on hover and keyboard focus of the element or its link, on the current page
+   ([aria-current], .header__active-menu-item), on an open dropdown trigger, and always with
+   .th-stitch--persistent. The focus outline from section 5 always stays.
 */
-.th-link {
-  text-decoration: none;
-  background-image: repeating-linear-gradient(
-    to right,
-    currentColor 0 0.5rem,
-    transparent 0.5rem 0.8rem
-  );
+.th-stitch,
+.header__menu-item .th-stitch {
+  background-image: repeating-linear-gradient(to right, currentColor 0 0.5rem, transparent 0.5rem 0.8rem);
   background-repeat: no-repeat;
   background-position: 0 100%;
   background-size: 0% 0.15rem;
   padding-block-end: 0.3rem;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
   transition: background-size var(--th-duration) var(--th-ease);
 }
 
-[dir='rtl'] .th-link {
+[dir='rtl'] .th-stitch {
   background-position: 100% 100%;
 }
 
-.th-link:hover,
-.th-link:focus-visible,
-.th-link[aria-current='page'] {
+.th-stitch--persistent,
+.th-stitch:is(:hover, :focus-visible, [aria-current]),
+:is(a, summary, button):is(:hover, :focus-visible) .th-stitch,
+[aria-current] .th-stitch,
+details[open] > summary .th-stitch,
+.th-stitch.header__active-menu-item,
+.menu-drawer__menu-item--active .th-stitch {
   background-size: 100% 0.15rem;
+}
+
+/* Persistent stitches still answer hover and focus: the same stitch, drawn heavier. */
+:is(a, summary, button):is(:hover, :focus-visible) .th-stitch--persistent,
+.th-stitch--persistent:is(:hover, :focus-visible) {
+  background-size: 100% 0.25rem;
+}
+
+.th-stitch,
+.th-stitch * {
+  text-decoration-line: none !important;
+}
+
+/* Separate rule: a browser without :has() drops only this one, not the rules above. */
+:is(a, summary, button):has(.th-stitch) {
+  text-decoration-line: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .th-stitch {
+    transition: none;
+  }
 }
 
 /* ---------------------------------------------------------------------------
@@ -416,8 +446,3 @@ html .scroll-trigger:not(.th-reveal-run) .slider {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .th-link {
-    transition: none;
-  }
-}

@@ -28,7 +28,7 @@
           <p class="th-eyebrow">{{ eyebrow | escape }}</p>
           <h2 class="th-section__title h0">{{ heading | escape }}</h2>
         </div>
-        <a href="{{ teaser_blog.url }}" class="th-link learn-teaser__all">{{ 'sections.learn_teaser.cta' | t }}</a>
+        <a href="{{ teaser_blog.url }}" class="learn-teaser__all"><span class="th-stitch th-stitch--persistent">{{ 'sections.learn_teaser.cta' | t }}</span></a>
       </header>
       <ul class="learn-teaser__grid list-unstyled" role="list">
         {%- for article in teaser_blog.articles limit: 3 -%}
