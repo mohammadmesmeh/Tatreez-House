@@ -18,13 +18,7 @@
                 id="HeaderMenu-{{ link.handle }}"
                 class="header__menu-item list-menu__item link focus-inset"
               >
-                <span
-                  {%- if link.child_active %}
-                    class="header__active-menu-item"
-                  {% endif %}
-                >
-                  <span dir="auto">{{- link.title | escape -}}</span>
-                </span>
+                <span class="th-stitch{% if link.child_active %} header__active-menu-item{% endif %}" dir="auto">{{- link.title | escape -}}</span>
                 {{- 'icon-caret.svg' | inline_asset_content -}}
               </summary>
               <div
@@ -46,7 +40,7 @@
                           aria-current="page"
                         {% endif %}
                       >
-                        <span dir="auto">{{ childlink.title | escape }}</span>
+                        <span class="th-stitch" dir="auto">{{ childlink.title | escape }}</span>
                       </a>
                       {%- if childlink.links != blank -%}
                         <ul class="list-unstyled" role="list">
@@ -60,7 +54,7 @@
                                   aria-current="page"
                                 {% endif %}
                               >
-                                <span dir="auto">{{ grandchildlink.title | escape }}</span>
+                                <span class="th-stitch" dir="auto">{{ grandchildlink.title | escape }}</span>
                               </a>
                             </li>
                           {%- endfor -%}
@@ -82,13 +76,7 @@
               aria-current="page"
             {% endif %}
           >
-            <span
-              {%- if link.current %}
-                class="header__active-menu-item"
-              {% endif %}
-            >
-              <span dir="auto">{{- link.title | escape -}}</span>
-            </span>
+            <span class="th-stitch{% if link.current %} header__active-menu-item{% endif %}" dir="auto">{{- link.title | escape -}}</span>
           </a>
         {%- endif -%}
       </li>

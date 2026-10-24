@@ -47,8 +47,8 @@
       {%- if feature_heading != blank -%}
         <p class="mega-feature__heading h4">
           {%- if settings.mega_feature_link != blank -%}
-            <a href="{{ settings.mega_feature_link }}" class="mega-feature__link th-link">
-              {{- feature_heading | escape -}}
+            <a href="{{ settings.mega_feature_link }}" class="mega-feature__link">
+              <span class="th-stitch" dir="auto">{{- feature_heading | escape -}}</span>
             </a>
           {%- else -%}
             {{- feature_heading | escape -}}

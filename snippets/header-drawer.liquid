@@ -39,7 +39,7 @@
                         id="HeaderDrawer-{{ link.handle }}"
                         class="menu-drawer__menu-item list-menu__item link link--text focus-inset{% if link.child_active %} menu-drawer__menu-item--active{% endif %}"
                       >
-                        <span dir="auto">{{ link.title | escape }}</span>
+                        <span class="th-stitch" dir="auto">{{ link.title | escape }}</span>
                         <span class="svg-wrapper">
                           {{- 'icon-arrow.svg' | inline_asset_content -}}
                         </span>
@@ -57,7 +57,7 @@
                             <span class="svg-wrapper">
                               {{- 'icon-arrow.svg' | inline_asset_content -}}
                             </span>
-                            <span dir="auto">{{ link.title | escape }}</span>
+                            <span class="th-stitch" dir="auto">{{ link.title | escape }}</span>
                           </button>
                           <ul class="menu-drawer__menu list-menu" role="list" tabindex="-1">
                             {%- for childlink in link.links -%}
@@ -71,7 +71,7 @@
                                       aria-current="page"
                                     {% endif %}
                                   >
-                                    <span dir="auto">{{ childlink.title | escape }}</span>
+                                    <span class="th-stitch" dir="auto">{{ childlink.title | escape }}</span>
                                   </a>
                                 {%- else -%}
                                   <details id="Details-menu-drawer-{{ link.handle }}-{{ childlink.handle }}">
@@ -79,7 +79,7 @@
                                       id="HeaderDrawer-{{ link.handle }}-{{ childlink.handle }}"
                                       class="menu-drawer__menu-item link link--text list-menu__item focus-inset"
                                     >
-                                      <span dir="auto">{{ childlink.title | escape }}</span>
+                                      <span class="th-stitch" dir="auto">{{ childlink.title | escape }}</span>
                                       <span class="svg-wrapper">
                                         {{- 'icon-arrow.svg' | inline_asset_content -}}
                                       </span>
@@ -98,7 +98,7 @@
                                         <span class="svg-wrapper">
                                           {{- 'icon-arrow.svg' | inline_asset_content -}}
                                         </span>
-                                        <span dir="auto">{{ childlink.title | escape }}</span>
+                                        <span class="th-stitch" dir="auto">{{ childlink.title | escape }}</span>
                                       </button>
                                       <ul
                                         class="menu-drawer__menu list-menu"
@@ -115,7 +115,7 @@
                                                 aria-current="page"
                                               {% endif %}
                                             >
-                                              <span dir="auto">{{ grandchildlink.title | escape }}</span>
+                                              <span class="th-stitch" dir="auto">{{ grandchildlink.title | escape }}</span>
                                             </a>
                                           </li>
                                         {%- endfor -%}
@@ -138,7 +138,7 @@
                         aria-current="page"
                       {% endif %}
                     >
-                      <span dir="auto">{{ link.title | escape }}</span>
+                      <span class="th-stitch" dir="auto">{{ link.title | escape }}</span>
                     </a>
                   {%- endif -%}
                 </li>

@@ -71,25 +71,8 @@
   text-decoration: none;
 }
 
-/* Stitched underline under the words only: an inline span (the link itself is a block that
-   carries the whole-card click area), cloned per line on 2-line titles. */
-.product-card-wrapper .card__title-text {
-  background-image: repeating-linear-gradient(to right, currentColor 0 0.5rem, transparent 0.5rem 0.8rem);
-  background-repeat: no-repeat;
-  background-position: 0 100%;
-  background-size: 0% 0.15rem;
-  padding-block-end: 0.2rem;
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
-  transition: background-size var(--th-duration) var(--th-ease);
-}
-
-.product-card-wrapper .card__title-text:dir(rtl) {
-  background-position: 100% 100%;
-}
-
-.product-card-wrapper:hover .card__title-text,
-.product-card-wrapper .card__heading a:focus-visible .card__title-text {
+/* Card title: the stitch (.th-stitch) also shows while the whole card is hovered. */
+.product-card-wrapper:hover .card__title-text.th-stitch {
   background-size: 100% 0.15rem;
 }
 
@@ -369,8 +352,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .product-card-wrapper .media.media--hover-effect > img,
-  .product-card-wrapper .card__title-text {
+  .product-card-wrapper .media.media--hover-effect > img {
     transition: none;
   }
 

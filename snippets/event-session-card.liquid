@@ -104,8 +104,8 @@
           <span class="visually-hidden">: {{ product.title | escape }}, {{ short_date }}</span>
         </a>
       {%- endunless -%}
-      <a href="{{ product.url }}" class="link underlined-link event-session__details">
-        {{- 'events.actions.details' | t -}}
+      <a href="{{ product.url }}" class="link event-session__details">
+        <span class="th-stitch th-stitch--persistent">{{- 'events.actions.details' | t -}}</span>
         <span class="visually-hidden">: {{ product.title | escape }}</span>
       </a>
     </div>

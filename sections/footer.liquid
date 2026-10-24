@@ -152,7 +152,7 @@
                   {%- for link in block.settings.menu.links -%}
                     <li>
                       <a href="{{ link.url }}" class="link link--text footer__inline-link">
-                        {{- link.title | escape -}}
+                        <span class="th-stitch" dir="auto">{{- link.title | escape -}}</span>
                       </a>
                     </li>
                   {%- endfor -%}
@@ -232,7 +232,7 @@
               {%- if policy != blank -%}
                 <li>
                   <a href="{{ policy.url }}" class="link link--text footer__inline-link">
-                    {{- policy.title | escape -}}
+                    <span class="th-stitch" dir="auto">{{- policy.title | escape -}}</span>
                   </a>
                 </li>
               {%- endif -%}
