@@ -120,6 +120,47 @@ with sync_playwright() as p:
     ok('mobile drawer still opens with the menu groups', pg.evaluate("() => document.querySelector('header-drawer details').hasAttribute('open')") and items >= 4, items)
     pg.screenshot(path=f'{out}/drawer-390-en.jpg', type='jpeg', quality=72)
     ctx.close()
+
+    # --- One underline style per state (stitch replaces Dawn's underline): EN + /ar ---
+    CHAIN = """(el) => { const s = el.matches('.th-stitch') ? el : el.querySelector('.th-stitch');
+      if (!s) return { stitch: false };
+      const drawn = parseFloat(getComputedStyle(s).backgroundSize) > 0;
+      const chain = [s, ...s.querySelectorAll('*')];
+      for (let a = s.parentElement; a && !a.matches('header, .header__inline-menu, body'); a = a.parentElement) chain.push(a);
+      const deco = chain.filter(n => getComputedStyle(n).textDecorationLine !== 'none').map(n => n.tagName + '.' + (n.getAttribute('class') || '').split(' ')[0]);
+      return { stitch: true, drawn, deco }; }"""
+    for lang, prefix in (('en', ''), ('ar', '/ar')):
+        for path, sel, states in (
+            ('/pages/workshops', '.header__inline-menu a[aria-current="page"]', ('current', 'hover', 'focus')),
+            ('/', '.header__inline-menu a.header__menu-item', ('rest', 'hover', 'focus')),
+            ('/', '#Details-HeaderMenu-1 > summary', ('open',)),
+            ('/collections/clothing', '#Details-HeaderMenu-1 > summary', ('current', 'hover')),
+            ('/', '#Details-HeaderMenu-1 .header__submenu a', ('open-hover', 'open-focus')),
+            ('/collections/clothing', '#Details-HeaderMenu-1 .header__submenu a[aria-current="page"]', ('open-current',)),
+        ):
+            ctx = b.new_context(viewport={'width': 1440, 'height': 900}); pg = ctx.new_page()
+            goto(pg, base + prefix + path); pg.wait_for_timeout(600)
+            for state in states:
+                pg.mouse.move(2, 880); pg.wait_for_timeout(200)
+                if state.startswith('open'):
+                    pg.locator('#Details-HeaderMenu-1 > summary').click(); pg.wait_for_timeout(400)
+                el = pg.locator(f'{sel} >> visible=true').first
+                if state.endswith('hover'):
+                    el.hover(); pg.wait_for_timeout(450)
+                if state.endswith('focus'):
+                    pg.keyboard.press('Shift'); el.focus(); pg.wait_for_timeout(450)
+                r = el.evaluate(CHAIN)
+                if state == 'rest':
+                    # Guards the state selectors: a plain item at rest has neither underline.
+                    ok(f'{lang} {path} {sel.split()[-1][:30]} [rest]: no stitch, no text-decoration',
+                       r['stitch'] and not r['drawn'] and not r['deco'], r)
+                    continue
+                ok(f'{lang} {path} {sel.split()[-1][:30]} [{state}]: stitch drawn, no text-decoration anywhere along it',
+                   r['stitch'] and r['drawn'] and not r['deco'], r)
+                if state.startswith('open'):
+                    pg.keyboard.press('Escape'); pg.wait_for_timeout(300)
+            ctx.close()
+
     b.close()
 
 for name, cond, detail in R:
